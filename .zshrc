@@ -100,7 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # Permanently add ssh identity
-ssh-add -K ~/.ssh/id_ed25519 > /dev/null
+ssh-add -K ~/.ssh/id_ed25519 > /dev/null 2>&1
 
 # Aliases
 
