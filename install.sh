@@ -1,3 +1,6 @@
+# NOTE!!!
+# This install script is used for Github Codespaces
+
 # Install oh-my-zsh
 # Uncomment next line when performing clean install of oh-my-zsh
 # sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
