@@ -11,6 +11,9 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 # Install zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 
+# Use zsh
+chsh -s $(which zsh)
+
 # Symlink oh-my-zsh
 mv ~/.zshrc ~/.zshrc.backup
 ln -s $(pwd)/.zshrc ~/.zshrc
