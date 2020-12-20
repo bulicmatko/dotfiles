@@ -12,13 +12,10 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 # Install zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 
-# Get current dir path
-PWD=$(pwd)
-
 # Symlink oh-my-zsh
 mv ~/.zshrc ~/.zshrc.backup
-ln -s $(PWD)/.zshrc ~/.zshrc
+ln -s $(pwd)/.zshrc ~/.zshrc
 
 # Symlink gitconfig
 mv ~/.gitconfig ~/.gitconfig.backup
-ln -s $(PWD)/.gitconfig ~/.gitconfig
+ln -s $(pwd)/.gitconfig ~/.gitconfig
