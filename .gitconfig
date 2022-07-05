@@ -217,3 +217,5 @@
 
     name = Matko Bulic
     email = bulicmatko@gmail.com
+[init]
+	defaultBranch = main
