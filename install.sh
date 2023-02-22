@@ -5,16 +5,19 @@
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Install Spacehip Theme
-git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
+git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
 ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 
-# Install zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+# Install zsh-nvm
+git clone https://github.com/lukechilds/zsh-nvm "$ZSH_CUSTOM/plugins/zsh-nvm"
 
-# Symlink oh-my-zsh
+# Install zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+
+# Symlink .zshrc
 mv ~/.zshrc ~/.zshrc.backup
 ln -s $(pwd)/.zshrc ~/.zshrc
 
-# Symlink gitconfig
+# Symlink .gitconfig
 mv ~/.gitconfig ~/.gitconfig.backup
 ln -s $(pwd)/.gitconfig ~/.gitconfig
