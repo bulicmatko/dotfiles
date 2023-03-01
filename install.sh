@@ -1,6 +1,10 @@
 # IMPORTANT NOTE!!!
 # This install script is used for Github Codespaces
 
+# Install keychain
+sudo apt-get update
+sudo apt-get install keychain
+
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 

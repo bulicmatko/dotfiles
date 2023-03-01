@@ -109,14 +109,12 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# Permanently add ssh identity
-# eval $(ssh-agent -s)
-# ssh-add ~/.ssh/id_ed25519
-# ssh-add -K ~/.ssh/id_rsa.pub &> /dev/null
-ssh-add -K ~/.ssh/id_ed25519 > /dev/null 2>&1
+# Permanently add ssh identity (Ubuntu)
+# keychain must be installed (sudo apt-get install keychain)
+{ eval `keychain --eval --agents ssh id_ed25519` } &> /dev/null
 
-# Permanently add ssh identity for macOS Keychain
-# { eval `keychain --eval --agents ssh id_ed25519` } &> /dev/null
+# Permanently add ssh identity (macOS)
+# ssh-add --apple-use-keychain -K ~/.ssh/id_ed25519 > /dev/null 2>&1
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Aliases
