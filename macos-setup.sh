@@ -1,3 +1,9 @@
+# Generate SSH Key
+ssh-keygen -t ed25519 -C "bulicmatko@gmail.com"
+
+# Add SSH Key to Keychain
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
