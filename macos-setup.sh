@@ -32,9 +32,11 @@ ln -s $(pwd)/.gitconfig ~/.gitconfig
 brew install nvm
 
 # Install Homebrew Casks
-brew install --cask visual-studio-code
+brew install --cask docker
 brew install --cask warp
+brew install --cask visual-studio-code
 brew install --cask moom
-brew install --cask google-chrome
 brew install --cask 1password
+brew install --cask google-chrome
+brew install --cask arc
 
