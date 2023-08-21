@@ -28,6 +28,13 @@ ln -s $(pwd)/.zshrc ~/.zshrc
 mv ~/.gitconfig ~/.gitconfig.backup
 ln -s $(pwd)/.gitconfig ~/.gitconfig
 
+# Add SSH Key to Keychain
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+
+# Symlink .ssh.config
+mv ~/.ssh/config ~/.ssh/config.backup
+ln -s $(pwd)/.ssh/config ~/.ssh/config
+
 # Install Homebrew Packages
 brew install nvm
 
