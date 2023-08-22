@@ -47,3 +47,5 @@ brew install --cask 1password
 brew install --cask google-chrome
 brew install --cask arc
 
+brew tap homebrew/cask-fonts
+brew install --cask font-fira-code
