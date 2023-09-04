@@ -167,6 +167,8 @@
   # default = matching
   # Make `git push` push relevant annotated tags when pushing branches out.
   followTags = true
+  # Automatically setup upstream when pushing a new branch.
+	autoSetupRemote = true
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
