@@ -37,6 +37,7 @@ ln -s $(pwd)/.ssh/config ~/.ssh/config
 
 # Install Homebrew Packages
 brew install nvm
+brew install font-monaspace
 
 # Install Homebrew Casks
 brew install --cask docker
