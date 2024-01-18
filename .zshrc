@@ -116,6 +116,7 @@ source $ZSH/oh-my-zsh.sh
 # Permanently add ssh identity (macOS)
 # ssh-add --apple-use-keychain -K ~/.ssh/id_ed25519 > /dev/null 2>&1
 
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Aliases
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -153,8 +154,16 @@ export NVM_DIR="$HOME/.nvm"
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Miscellaneous Configuration
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export REACT_EDITOR="code"
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Bun Completion
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ -s "/Users/bulicmatko/.bun/_bun" ] && source "/Users/bulicmatko/.bun/_bun"
