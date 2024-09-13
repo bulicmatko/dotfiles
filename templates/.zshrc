@@ -110,7 +110,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # Permanently add ssh identity (Ubuntu)
-# keychain must be installed (sudo apt-get install keychain)
+# keychain must be installed (apt install keychain)
 { eval `keychain --eval --agents ssh id_ed25519` } &> /dev/null
 
 # Permanently add ssh identity (macOS)
@@ -156,14 +156,14 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Bun Completion
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Miscellaneous Configuration
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export REACT_EDITOR="code"
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Bun Completion
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-[ -s "/Users/bulicmatko/.bun/_bun" ] && source "/Users/bulicmatko/.bun/_bun"

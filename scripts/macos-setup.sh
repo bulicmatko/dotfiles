@@ -22,18 +22,18 @@ git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/
 
 # Symlink .zshrc
 mv ~/.zshrc ~/.zshrc.backup
-ln -s $(pwd)/.zshrc ~/.zshrc
+ln -s $(pwd)/templates/.zshrc ~/.zshrc
 
 # Symlink .gitconfig
 mv ~/.gitconfig ~/.gitconfig.backup
-ln -s $(pwd)/.gitconfig ~/.gitconfig
+ln -s $(pwd)/templates/.gitconfig ~/.gitconfig
 
 # Add SSH Key to Keychain
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519
 
-# Symlink .ssh.config
+# Symlink .ssh/config
 mv ~/.ssh/config ~/.ssh/config.backup
-ln -s $(pwd)/.ssh/config ~/.ssh/config
+ln -s $(pwd)/templates/.ssh/config ~/.ssh/config
 
 # Install Homebrew Packages
 brew install nvm
@@ -42,11 +42,11 @@ brew install font-monaspace
 # Install Homebrew Casks
 brew install --cask docker
 brew install --cask warp
-brew install --cask visual-studio-code
 brew install --cask moom
-brew install --cask 1password
-brew install --cask google-chrome
 brew install --cask arc
+brew install --cask google-chrome
+brew install --cask visual-studio-code
+brew install --cask 1password
 
 brew tap homebrew/cask-fonts
 brew install --cask font-fira-code
