@@ -1,3 +1,3 @@
 # dotfiles
 
-Personal dotfiles used on macOS and Linux machines.
+Personal dotfiles used on my `macOS` and `Linux` machines.

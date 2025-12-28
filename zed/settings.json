@@ -1,0 +1,190 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+  "when_closing_with_no_tabs": "keep_window_open",
+  "base_keymap": "VSCode",
+  "theme": "Tokyo Night Storm",
+  "theme_overrides": {
+    "Tokyo Night Storm": {
+      "editor.background": "#1f2335",
+      "editor.gutter.background": "#1f2335",
+      "tab.active_background": "#2c324a",
+      "tab.inactive_background": "#1f2335",
+      "ghost_element.background": "#1f2335",
+      "ghost_element.hover": "#2c324a",
+      "ghost_element.selected": "#2c324a",
+      // "ghost_element.active": "#2c324a",
+      "element.hover": "#2c324a",
+      "element.selected": "#2c324a"
+    }
+  },
+  "title_bar": {
+    "show_branch_icon": true
+  },
+  "tabs": {
+    "git_status": true,
+    "show_diagnostics": "all",
+    "show_close_button": "hidden"
+  },
+  "toolbar": {
+    "code_actions": true
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true
+    }
+  },
+  "ui_font_family": "Monaspace Argon",
+  "ui_font_size": 16.0,
+  "buffer_font_family": "Monaspace Argon",
+  "buffer_font_features": {
+    "calt": true,
+    "ss01": true,
+    "ss02": true,
+    "ss03": true,
+    "ss04": true,
+    "ss05": true,
+    "ss06": true,
+    "ss07": true,
+    "ss08": true,
+    "ss09": true,
+    "liga": true
+  },
+  "buffer_font_size": 13.0,
+  "buffer_line_height": {
+    "custom": 2.0
+  },
+  "wrap_guides": [80, 100, 120],
+  "indent_guides": {
+    "coloring": "indent_aware"
+  },
+  "show_whitespaces": "all",
+  "use_smartcase_search": true,
+  "project_panel": {
+    "default_width": 420.0,
+    "auto_fold_dirs": false
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true
+    }
+  },
+  "git_panel": {
+    "default_width": 800,
+    "sort_by_path": false,
+    "status_style": "label_color"
+  },
+  "terminal": {
+    "toolbar": {
+      "breadcrumbs": false
+    },
+    "dock": "right",
+    "default_width": 800,
+    "font_size": 13.0,
+    "line_height": {
+      "custom": 1.8
+    }
+  },
+  "agent": {
+    "use_modifier_to_send": true,
+    "default_width": 800,
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    }
+  },
+  "agent_buffer_font_size": 13.0,
+  "features": {
+    "edit_prediction_provider": "copilot"
+  },
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
+  "languages": {
+    "CSS": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    },
+    "TSX": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    },
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    },
+    "JSON": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    },
+    "JSONC": {
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}"
+          ]
+        }
+      }
+    }
+  }
+}

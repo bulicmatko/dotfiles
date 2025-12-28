@@ -43,7 +43,6 @@ brew install font-monaspace
 brew install --cask docker
 brew install --cask warp
 brew install --cask moom
-brew install --cask arc
 brew install --cask google-chrome
 brew install --cask visual-studio-code
 brew install --cask 1password
