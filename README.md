@@ -10,28 +10,41 @@ pull on another — done.
 ## Layout
 
 ```
-install.sh                  entrypoint — detects the platform and dispatches
-Brewfile                    every macOS app/CLI, installed in one call
-os/
-  macos.sh                  macOS installer
-  macos-defaults.sh         macOS system + Finder settings (defaults write)
-  linux.sh                  Linux (Debian/Ubuntu) installer
-  devcontainer.sh           devcontainer / Codespaces installer (headless)
-scripts/
-  lib.sh                    shared helpers (idempotent linking, cloning, ...)
-zsh/zshrc                   oh-my-zsh + spaceship, cross-platform
-git/
-  gitconfig                 aliases + shared config
-  gitignore_global          global ignores (OS/editor junk)
-  gitattributes             global attributes
-  gitconfig.local.template  seed for machine-specific ~/.gitconfig.local
-ssh/config                  keychain-aware, valid on macOS and Linux
-settings/
-  vscode/                   settings.json, keybindings.json, extensions.txt
-  zed/                      settings.json, keymap.json
-  warp/                     settings.toml, themes/
 devcontainer/
-  devcontainer.example.json starter devcontainer for new projects
+  devcontainer.example.json   starter devcontainer for new projects
+git/
+  gitattributes               global git attributes
+  gitconfig                   aliases + shared config
+  gitconfig.local.template    seed for machine-specific ~/.gitconfig.local
+  gitignore_global            global ignores (OS/editor junk)
+os/
+  devcontainer.sh             devcontainer / Codespaces installer (headless)
+  linux.sh                    Linux (Debian/Ubuntu) installer
+  macos-defaults.sh           macOS system + Finder settings (defaults write)
+  macos.sh                    macOS installer
+scripts/
+  lib.sh                      shared helpers (linking, cloning, guided UI)
+settings/
+  vscode/
+    extensions.txt            VSCode extension list
+    keybindings.json          VSCode shortcuts
+    settings.json             VSCode settings
+  warp/
+    themes/
+      tokyo_night_storm.yml   custom Warp theme
+    settings.toml             Warp settings
+  zed/
+    keymap.json               Zed shortcuts
+    settings.json             Zed settings
+ssh/
+  config                      keychain-aware, valid on macOS and Linux
+zsh/
+  zshrc                       oh-my-zsh + spaceship, cross-platform
+.editorconfig                 editor defaults for files in this repo
+Brewfile                      every macOS app/CLI, installed in one call
+install.sh                    entrypoint — detects the platform and dispatches
+LICENSE                       MIT
+README.md                     this file
 ```
 
 ## Fresh machine setup
@@ -92,17 +105,17 @@ Headless subset: zsh + oh-my-zsh + spaceship + git config only. No SSH keys
 
 | Repo file                          | Linked to                                             |
 | ---------------------------------- | ----------------------------------------------------- |
-| `zsh/zshrc`                        | `~/.zshrc`                                            |
+| `git/gitattributes`                | `~/.gitattributes`                                    |
 | `git/gitconfig`                    | `~/.gitconfig`                                        |
 | `git/gitignore_global`             | `~/.gitignore_global`                                 |
-| `git/gitattributes`                | `~/.gitattributes`                                    |
-| `ssh/config`                       | `~/.ssh/config`                                       |
-| `settings/zed/settings.json`       | `~/.config/zed/settings.json`                         |
-| `settings/zed/keymap.json`         | `~/.config/zed/keymap.json`                           |
+| `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                 |
 | `settings/vscode/settings.json`    | `~/Library/Application Support/Code/User/settings.json` (macOS) / `~/.config/Code/User/settings.json` (Linux) |
-| `settings/vscode/keybindings.json` | same VSCode User dir                                  |
+| `settings/warp/themes/`            | `~/.warp/themes` (macOS)                              |
 | `settings/warp/settings.toml`      | `~/.warp/settings.toml` (macOS)                       |
-| `settings/warp/themes`             | `~/.warp/themes` (macOS)                              |
+| `settings/zed/keymap.json`         | `~/.config/zed/keymap.json`                           |
+| `settings/zed/settings.json`       | `~/.config/zed/settings.json`                         |
+| `ssh/config`                       | `~/.ssh/config`                                       |
+| `zsh/zshrc`                        | `~/.zshrc`                                            |
 
 ## Keeping machines in sync
 
