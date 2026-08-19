@@ -15,33 +15,25 @@ tap "oven-sh/bun"      # third-party tap that provides the bun formula
 # CLI tools
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-brew "coreutils"       # GNU versions of ls/cp/date/... (gls, gdate, ...)
 brew "tree"            # print directory trees in the terminal
 brew "gh"              # GitHub CLI — PRs, issues, auth from the terminal
 brew "glab"            # GitLab CLI — same idea for GitLab
-brew "git-filter-repo" # rewrite/clean git history (remove files, split repos)
 brew "mkcert"          # locally-trusted HTTPS certificates for dev servers
 
 # Runtimes & languages
-# (nvm itself is installed and kept up to date by the zsh-nvm plugin)
+# (nvm itself is installed and kept up to date by the zsh-nvm plugin;
+# the Docker CLI comes with the docker-desktop cask below)
 brew "asdf"            # multi-language version manager (Erlang, Elixir, ...)
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
 brew "deno"            # Deno — secure TypeScript/JavaScript runtime
 brew "go"              # Go compiler and toolchain
-brew "rust"            # Rust compiler and cargo
-brew "llvm"            # clang/LLVM toolchain — needed to build native deps
-brew "cocoapods"       # iOS/macOS dependency manager (React Native builds)
 
-# Containers & infrastructure
-brew "docker"          # Docker CLI (the desktop app is a cask below)
-brew "kind"            # run Kubernetes clusters inside Docker containers
+# Infrastructure
 brew "minikube"        # local single-node Kubernetes cluster
 brew "terraform"       # infrastructure as code
-brew "packer"          # build machine/VM images from config
 
 # Misc
 brew "ollama"          # run open-source LLMs locally from the terminal
-brew "wireshark"       # network packet capture, CLI tools (tshark)
 
 # Native build dependencies — uncomment when building Erlang/Elixir via asdf
 # or image tooling that needs them:
@@ -64,7 +56,7 @@ cask "ghostty"            # Ghostty — minimal GPU-accelerated terminal
 # Development apps
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cask "docker-desktop"     # Docker engine + GUI for macOS
+cask "docker-desktop"     # Docker engine + GUI for macOS (ships the docker CLI)
 cask "tableplus"          # database GUI (Postgres, MySQL, SQLite, ...)
 cask "postman"            # API client for testing HTTP endpoints
 cask "lens"               # Kubernetes IDE — browse clusters visually
@@ -103,7 +95,7 @@ cask "moom"               # window manager — move/resize windows with shortcut
 cask "the-unarchiver"     # extract rar/7z/... archives Finder cannot open
 cask "notion"             # notes and docs
 cask "openvpn-connect"    # VPN client
-cask "wireshark-app"      # Wireshark GUI (CLI variant is in formulae above)
+cask "wireshark-app"      # Wireshark GUI network packet analyzer
 cask "freecad"            # 3D CAD modeling
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
