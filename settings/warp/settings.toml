@@ -3,10 +3,11 @@
 # that rewrite drops these comments — treat them as review notes, and expect
 # to see the rewrite as a diff in this repo (that is the sync working).
 
-# Text rendering: MonaspiceAr Nerd Font — the same Monaspace Argon look as
-# the editors, with full nerd glyphs for starship and eza icons. (Terminals
-# only apply liga/calt, so Monaspace shows texture healing but few ligatures
-# here; switch to "FiraCode Nerd Font" for maximum terminal ligatures.)
+# Text rendering: MonaspiceAr NF (the Nerd Font build's exact family name) —
+# the same Monaspace Argon look as the editors, with full nerd glyphs for
+# starship and eza icons. (Terminals only apply liga/calt, so Monaspace shows
+# texture healing but few ligatures here; switch to "FiraCode Nerd Font" for
+# maximum terminal ligatures.)
 # Double line height. NOTE: Warp adds all extra leading ABOVE the glyphs, so
 # background-painted prompts look bottom-aligned at this height — the
 # starship preset uses plain colored text for exactly that reason.
@@ -18,8 +19,8 @@ match_ai_font = true
 line_height_ratio = 2.0
 font_size = 13.0
 notebook_font_size = 14.0
-ai_font_name = "MonaspiceAr Nerd Font"
-font_name = "MonaspiceAr Nerd Font"
+ai_font_name = "MonaspiceAr NF"
+font_name = "MonaspiceAr NF"
 
 # Window chrome: no blur/transparency, default size, 100% zoom.
 [appearance.window]

@@ -17,6 +17,25 @@ warn() { printf '\033[33m[warn]\033[0m %s\n' "$*"; }
 fail() { printf '\033[31m[fail]\033[0m %s\n' "$*" >&2; exit 1; }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Platform detection
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# detect_target — prints macos / linux / devcontainer / unsupported.
+# Shared by install.sh (dispatch) and bin/dotfiles-doctor (target-aware checks).
+detect_target() {
+  if [ -n "${CODESPACES:-}" ] || [ -n "${REMOTE_CONTAINERS:-}" ] || [ -f /.dockerenv ]; then
+    echo "devcontainer"
+    return 0
+  fi
+
+  case "$(uname -s)" in
+    Darwin) echo "macos" ;;
+    Linux)  echo "linux" ;;
+    *)      echo "unsupported" ;;
+  esac
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Guided install UI
 #
 # Everything here is plain bash 3.2 (macOS stock bash) with zero dependencies,
@@ -201,9 +220,11 @@ multiselect() {
 # choose_brew_packages
 #
 # Parses the Brewfile into the multiselect picker (section headers included,
-# already-installed items annotated) and writes the selection to a temporary
-# Brewfile. Sets BREWFILE_TO_USE; empty string means nothing was selected.
-# Without a TTY the full Brewfile is used, matching unattended behavior.
+# already-installed items annotated) and writes the selection to
+# ~/.Brewfile.local — this machine's untracked subset, installed here and
+# re-used by dotfiles-update so updates respect the choice. Sets
+# BREWFILE_TO_USE; empty string means nothing was selected. Without a TTY the
+# full Brewfile is used, matching unattended behavior.
 # shellcheck disable=SC2034  # BREWFILE_TO_USE is consumed by os/macos/install.sh
 choose_brew_packages() {
   BREWFILE_TO_USE="$DOTFILES_DIR/Brewfile"
@@ -260,14 +281,18 @@ EOF
 
   multiselect "Select applications to install (all selected by default)"
 
-  local tmp selected=0 skipped=0 i=0
-  tmp="$(mktemp "${TMPDIR:-/tmp}/dotfiles-brewfile.XXXXXX")"
-  grep '^tap ' "$DOTFILES_DIR/Brewfile" > "$tmp" || true
+  local selection="$HOME/.Brewfile.local" selected=0 skipped=0 i=0
+  {
+    printf '%s\n' "# ~/.Brewfile.local — this machine's Brewfile subset, written by the"
+    printf '%s\n' "# installer's picker. dotfiles-update installs from it; re-run ./install.sh"
+    printf '%s\n' "# to change the selection or pick up new Brewfile entries."
+    grep '^tap ' "$DOTFILES_DIR/Brewfile" || true
+  } > "$selection"
 
   while [ $i -lt ${#names[@]} ]; do
     if [ "${kinds[$i]}" != "header" ]; then
       if [ "${MS_CHECKED[$i]}" = "1" ]; then
-        printf '%s "%s"\n' "${kinds[$i]}" "${names[$i]}" >> "$tmp"
+        printf '%s "%s"\n' "${kinds[$i]}" "${names[$i]}" >> "$selection"
         selected=$((selected + 1))
       else
         skipped=$((skipped + 1))
@@ -278,12 +303,74 @@ EOF
 
   if [ $selected -eq 0 ]; then
     BREWFILE_TO_USE=""
-    rm -f "$tmp"
     warn "no applications selected — skipping brew bundle"
   else
-    BREWFILE_TO_USE="$tmp"
-    ok "$selected application(s) selected, $skipped skipped"
+    BREWFILE_TO_USE="$selection"
+    ok "$selected application(s) selected, $skipped skipped (saved to ~/.Brewfile.local)"
   fi
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Symlink manifest
+#
+# The single source of truth for what gets linked where. The setup_* helpers
+# link through it (link_entry) and bin/dotfiles-doctor checks against it, so
+# the installer and the doctor can never disagree about what a healthy
+# machine looks like.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# vscode_user_dir — VSCode's per-OS user-settings directory.
+vscode_user_dir() {
+  if [ "$(uname -s)" = "Darwin" ]; then
+    printf '%s' "$HOME/Library/Application Support/Code/User"
+  else
+    printf '%s' "$HOME/.config/Code/User"
+  fi
+}
+
+# dotfiles_links <macos|linux|devcontainer> — emit the manifest as
+# "repo-relative-source<TAB>absolute-target" lines for the given target.
+# "macos" is the superset; "devcontainer" is the headless subset (shell,
+# prompt, and git only).
+dotfiles_links() {
+  local target="$1"
+
+  printf '%s\t%s\n' "zsh/zshrc" "$HOME/.zshrc"
+  printf '%s\t%s\n' "settings/starship/starship.toml" "$HOME/.config/starship.toml"
+  printf '%s\t%s\n' "git/gitconfig" "$HOME/.gitconfig"
+  printf '%s\t%s\n' "git/gitignore_global" "$HOME/.gitignore_global"
+  printf '%s\t%s\n' "git/gitattributes" "$HOME/.gitattributes"
+
+  if [ "$target" = "devcontainer" ]; then
+    return 0
+  fi
+
+  printf '%s\t%s\n' "ssh/config" "$HOME/.ssh/config"
+  printf '%s\t%s\n' "settings/zed/settings.json" "$HOME/.config/zed/settings.json"
+  printf '%s\t%s\n' "settings/zed/keymap.json" "$HOME/.config/zed/keymap.json"
+  printf '%s\t%s\n' "settings/claude/settings.json" "$HOME/.claude/settings.json"
+  printf '%s\t%s\n' "settings/claude/statusline.sh" "$HOME/.claude/statusline.sh"
+  printf '%s\t%s\n' "settings/gh/config.yml" "$HOME/.config/gh/config.yml"
+  printf '%s\t%s\n' "settings/vscode/settings.json" "$(vscode_user_dir)/settings.json"
+  printf '%s\t%s\n' "settings/vscode/keybindings.json" "$(vscode_user_dir)/keybindings.json"
+
+  if [ "$target" = "macos" ]; then
+    printf '%s\t%s\n' "settings/warp/settings.toml" "$HOME/.warp/settings.toml"
+    printf '%s\t%s\n' "settings/warp/themes" "$HOME/.warp/themes"
+  fi
+  return 0
+}
+
+# link_entry <repo-relative-source> — link one manifest entry, looking the
+# target path up in dotfiles_links (the "macos" superset carries every entry).
+# awk reads the whole manifest rather than exiting on the match: an early
+# exit closes the pipe and the manifest's remaining writes would take
+# SIGPIPE, which pipefail turns into a failed install step.
+link_entry() {
+  local src="$1" dst
+  dst="$(dotfiles_links macos | awk -F '\t' -v s="$src" '$1 == s { print $2 }')"
+  [ -n "$dst" ] || fail "no manifest entry for: $src"
+  link_file "$src" "$dst"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -339,45 +426,40 @@ setup_zsh() {
     ok "oh-my-zsh already installed"
   else
     info "installing oh-my-zsh"
-    RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    # Fetch first, run second: a failed download is a hard error instead of
+    # silently executing an empty script.
+    local omz_installer
+    if omz_installer="$(curl -fsSL --retry 3 --connect-timeout 10 --max-time 300 \
+        https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+      && [ -n "$omz_installer" ]; then
+      RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$omz_installer" "" --unattended
+    fi
+    [ -d "$HOME/.oh-my-zsh" ] || fail "oh-my-zsh install failed — check your network and re-run ./install.sh"
   fi
 
   local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-
-  # The prompt is starship, not an oh-my-zsh theme — clear out the spaceship
-  # clone and theme symlink if a previous setup left them behind.
-  if [ -d "$custom/themes/spaceship-prompt" ] || [ -L "$custom/themes/spaceship.zsh-theme" ]; then
-    rm -rf "$custom/themes/spaceship-prompt" "$custom/themes/spaceship.zsh-theme"
-    ok "removed stale spaceship theme (the prompt is starship)"
-  fi
 
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
   # zsh-syntax-highlighting — valid commands green, typos red, as you type.
   clone_repo https://github.com/zsh-users/zsh-syntax-highlighting.git "$custom/plugins/zsh-syntax-highlighting"
 
-  # nvm is wired directly in zsh/zshrc, not via a plugin — clear out the
-  # zsh-nvm clone if a previous setup left one behind.
-  if [ -d "$custom/plugins/zsh-nvm" ]; then
-    rm -rf "$custom/plugins/zsh-nvm"
-    ok "removed stale zsh-nvm plugin (nvm is wired directly in zshrc)"
-  fi
-
-  link_file zsh/zshrc "$HOME/.zshrc"
+  link_entry zsh/zshrc
 }
 
-# setup_starship — the prompt. Config is linked for every platform; the
-# binary comes from the Brewfile on macOS and the official installer
-# elsewhere (single static binary into /usr/local/bin).
+# setup_starship — the prompt. Links the config and makes sure the binary
+# exists: the Brewfile provides it on macOS when selected, and the official
+# installer covers every other case (single static binary into /usr/local/bin).
 setup_starship() {
-  link_file settings/starship/starship.toml "$HOME/.config/starship.toml"
+  link_entry settings/starship/starship.toml
 
-  if command -v starship >/dev/null 2>&1 || command -v brew >/dev/null 2>&1; then
+  if command -v starship >/dev/null 2>&1; then
+    ok "starship already installed"
     return 0
   fi
   info "installing starship"
-  curl -sS https://starship.rs/install.sh | sh -s -- -y || warn "starship install failed"
+  curl -sS --retry 3 --connect-timeout 10 --max-time 300 https://starship.rs/install.sh \
+    | sh -s -- -y || warn "starship install failed — re-run ./install.sh to retry"
 }
 
 # setup_nvm — official installer, pinned release, no shell-profile edits
@@ -389,8 +471,16 @@ setup_nvm() {
     return 0
   fi
   info "installing nvm"
-  PROFILE=/dev/null bash -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh)" \
-    || warn "nvm install failed"
+  # Fetch first, run second: a failed download warns instead of silently
+  # executing an empty script.
+  local nvm_installer
+  if nvm_installer="$(curl -fsSL --retry 3 --connect-timeout 10 --max-time 300 \
+      https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh)" \
+    && [ -n "$nvm_installer" ]; then
+    PROFILE=/dev/null bash -c "$nvm_installer" || warn "nvm install failed"
+  else
+    warn "could not download the nvm installer — re-run ./install.sh to retry"
+  fi
 }
 
 # set_default_shell_zsh — best effort, never fatal (chsh may prompt or be absent).
@@ -404,7 +494,7 @@ set_default_shell_zsh() {
     return 0
   fi
 
-  if chsh -s "$zsh_path" 2>/dev/null || ${SUDO:-} chsh -s "$zsh_path" "$USER" 2>/dev/null; then
+  if chsh -s "$zsh_path" 2>/dev/null || ${SUDO:-} chsh -s "$zsh_path" "${USER:-$(id -un)}" 2>/dev/null; then
     ok "default shell set to $zsh_path"
   else
     warn "could not change default shell — run: chsh -s $zsh_path"
@@ -423,9 +513,9 @@ setup_git() {
   existing_name="$(git config --global user.name 2>/dev/null || true)"
   existing_email="$(git config --global user.email 2>/dev/null || true)"
 
-  link_file git/gitconfig "$HOME/.gitconfig"
-  link_file git/gitignore_global "$HOME/.gitignore_global"
-  link_file git/gitattributes "$HOME/.gitattributes"
+  link_entry git/gitconfig
+  link_entry git/gitignore_global
+  link_entry git/gitattributes
 
   # Machine-specific overrides live outside the repo and win over gitconfig.
   if [ ! -f "$HOME/.gitconfig.local" ]; then
@@ -475,7 +565,7 @@ git_email() {
 setup_ssh_config() {
   mkdir -p "$HOME/.ssh"
   chmod 700 "$HOME/.ssh"
-  link_file ssh/config "$HOME/.ssh/config"
+  link_entry ssh/config
 
   # Private hosts live outside the repo (Included from ssh/config).
   if [ ! -f "$HOME/.ssh/config.local" ]; then
@@ -489,15 +579,15 @@ setup_ssh_config() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zed() {
-  link_file settings/zed/settings.json "$HOME/.config/zed/settings.json"
-  link_file settings/zed/keymap.json "$HOME/.config/zed/keymap.json"
+  link_entry settings/zed/settings.json
+  link_entry settings/zed/keymap.json
 }
 
-# setup_vscode <vscode-user-dir>
+# setup_vscode — targets come from the manifest (vscode_user_dir picks the
+# per-OS settings directory).
 setup_vscode() {
-  local user_dir="$1"
-  link_file settings/vscode/settings.json "$user_dir/settings.json"
-  link_file settings/vscode/keybindings.json "$user_dir/keybindings.json"
+  link_entry settings/vscode/settings.json
+  link_entry settings/vscode/keybindings.json
 }
 
 install_vscode_extensions() {
@@ -508,7 +598,7 @@ install_vscode_extensions() {
 
   info "installing VSCode extensions"
   local installed extension
-  installed="$(code --list-extensions 2>/dev/null)"
+  installed="$(code --list-extensions 2>/dev/null || true)"
   while IFS= read -r extension; do
     case "$extension" in ''|'#'*) continue ;; esac
     if printf '%s\n' "$installed" | grep -qix "$extension"; then
@@ -520,17 +610,17 @@ install_vscode_extensions() {
 }
 
 setup_warp() {
-  link_file settings/warp/settings.toml "$HOME/.warp/settings.toml"
-  link_file settings/warp/themes "$HOME/.warp/themes"
+  link_entry settings/warp/settings.toml
+  link_entry settings/warp/themes
 }
 
 setup_claude_code() {
-  link_file settings/claude/settings.json "$HOME/.claude/settings.json"
-  link_file settings/claude/statusline.sh "$HOME/.claude/statusline.sh"
+  link_entry settings/claude/settings.json
+  link_entry settings/claude/statusline.sh
 }
 
 # Only gh's config.yml is synced — hosts.yml holds auth tokens and must
 # never enter the repo.
 setup_gh() {
-  link_file settings/gh/config.yml "$HOME/.config/gh/config.yml"
+  link_entry settings/gh/config.yml
 }

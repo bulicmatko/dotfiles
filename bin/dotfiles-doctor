@@ -12,6 +12,9 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$DOTFILES_DIR/scripts/lib.sh"
 
+# Checks follow the same target split as the installers (the devcontainer
+# target is a headless subset: shell, prompt, and git only).
+TARGET="$(detect_target)"
 PROBLEMS=0
 
 # check_link <repo-relative-source> <absolute-target>
@@ -31,39 +34,31 @@ check_link() {
   fi
 }
 
-info "dotfiles: $DOTFILES_DIR"
+info "dotfiles: $DOTFILES_DIR (target: $TARGET)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 info "symlinks"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-check_link zsh/zshrc "$HOME/.zshrc"
-check_link settings/starship/starship.toml "$HOME/.config/starship.toml"
-check_link git/gitconfig "$HOME/.gitconfig"
-check_link git/gitignore_global "$HOME/.gitignore_global"
-check_link git/gitattributes "$HOME/.gitattributes"
-check_link ssh/config "$HOME/.ssh/config"
-check_link settings/zed/settings.json "$HOME/.config/zed/settings.json"
-check_link settings/zed/keymap.json "$HOME/.config/zed/keymap.json"
-check_link settings/claude/settings.json "$HOME/.claude/settings.json"
-check_link settings/claude/statusline.sh "$HOME/.claude/statusline.sh"
-check_link settings/gh/config.yml "$HOME/.config/gh/config.yml"
-
-if [ "$(uname -s)" = "Darwin" ]; then
-  check_link settings/vscode/settings.json "$HOME/Library/Application Support/Code/User/settings.json"
-  check_link settings/vscode/keybindings.json "$HOME/Library/Application Support/Code/User/keybindings.json"
-  check_link settings/warp/settings.toml "$HOME/.warp/settings.toml"
-  check_link settings/warp/themes "$HOME/.warp/themes"
-else
-  check_link settings/vscode/settings.json "$HOME/.config/Code/User/settings.json"
-  check_link settings/vscode/keybindings.json "$HOME/.config/Code/User/keybindings.json"
-fi
+# The pairs come from the shared manifest in scripts/lib.sh, so this check
+# always matches exactly what the installer links for this target.
+while IFS=$'\t' read -r src dst; do
+  check_link "$src" "$dst"
+done <<EOF
+$(dotfiles_links "$TARGET")
+EOF
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 info "local overrides + git identity"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-for f in "$HOME/.gitconfig.local" "$HOME/.ssh/config.local"; do
+# ~/.ssh/config.local is only created by the macOS/Linux installers (the
+# devcontainer target gets SSH via agent forwarding, no config link).
+OVERRIDES=("$HOME/.gitconfig.local")
+if [ "$TARGET" != "devcontainer" ]; then
+  OVERRIDES=("${OVERRIDES[@]}" "$HOME/.ssh/config.local")
+fi
+for f in "${OVERRIDES[@]}"; do
   if [ -f "$f" ]; then ok "$f"; else
     warn "$f missing — run ./install.sh"
     PROBLEMS=$((PROBLEMS + 1))
@@ -89,10 +84,15 @@ info "shell components"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-for d in "$HOME/.oh-my-zsh" \
-         "$custom/plugins/zsh-autosuggestions" \
-         "$custom/plugins/zsh-syntax-highlighting" \
-         "$HOME/.nvm"; do
+COMPONENTS=("$HOME/.oh-my-zsh"
+            "$custom/plugins/zsh-autosuggestions"
+            "$custom/plugins/zsh-syntax-highlighting")
+# nvm is only installed by the macOS/Linux installers (containers bring
+# their own Node via the image).
+if [ "$TARGET" != "devcontainer" ]; then
+  COMPONENTS=("${COMPONENTS[@]}" "$HOME/.nvm")
+fi
+for d in "${COMPONENTS[@]}"; do
   if [ -d "$d" ]; then ok "${d##*/}"; else
     warn "${d##*/} missing — run ./install.sh"
     PROBLEMS=$((PROBLEMS + 1))
@@ -108,10 +108,17 @@ info "homebrew (informational)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if command -v brew >/dev/null 2>&1; then
-  if brew bundle check --file="$DOTFILES_DIR/Brewfile" >/dev/null 2>&1; then
-    ok "Brewfile satisfied"
+  # This machine's picker selection wins over the full catalog, so a
+  # deliberately trimmed install is never reported as unhealthy.
+  if [ -f "$HOME/.Brewfile.local" ]; then
+    BREWFILE="$HOME/.Brewfile.local"
   else
-    warn "Brewfile has missing or outdated entries — run dotfiles-update"
+    BREWFILE="$DOTFILES_DIR/Brewfile"
+  fi
+  if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+    ok "$(basename "$BREWFILE") satisfied"
+  else
+    warn "$(basename "$BREWFILE") has missing or outdated entries — run dotfiles-update"
   fi
 fi
 
@@ -119,9 +126,16 @@ fi
 info "leftover backups (informational)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-backups="$(find "$HOME" "$HOME/.ssh" "$HOME/.config/zed" "$HOME/.warp" \
-  "$HOME/Library/Application Support/Code/User" "$HOME/.config/Code/User" \
-  -maxdepth 1 -name "*.backup.*" 2>/dev/null | sort -u || true)"
+# Scan every directory the installer links into (derived from the manifest,
+# plus $HOME itself) so no backup location is ever missed.
+backups="$(
+  {
+    printf '%s\n' "$HOME"
+    dotfiles_links macos | while IFS=$'\t' read -r _ dst; do dirname "$dst"; done
+  } | sort -u | while IFS= read -r dir; do
+        find "$dir" -maxdepth 1 -name "*.backup.*" 2>/dev/null || true
+      done | sort -u
+)"
 if [ -n "$backups" ]; then
   printf '%s\n' "$backups" | while IFS= read -r b; do info "backup: $b"; done
 else

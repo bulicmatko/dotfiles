@@ -54,7 +54,9 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-source "$ZSH/oh-my-zsh.sh"
+# Guarded so a shell still starts (without plugins/aliases) if oh-my-zsh is
+# missing — ./install.sh restores it.
+[[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # History
@@ -112,12 +114,15 @@ fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # nvm — Node version manager (installed into ~/.nvm by the install script).
+# Sourced with --no-use so startup skips nvm's own version activation; the
+# load-nvmrc hook below picks the right version once instead.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Auto-switch Node versions when entering a directory with .nvmrc —
-# nvm's own documented zsh integration.
+# Auto-switch Node versions when entering a directory with .nvmrc — nvm's
+# documented zsh integration, plus a default-version branch (needed with
+# --no-use above) so shells without a .nvmrc still get Node on PATH.
 if command -v nvm >/dev/null 2>&1; then
   autoload -U add-zsh-hook
 
@@ -134,6 +139,8 @@ if command -v nvm >/dev/null 2>&1; then
       elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
         nvm use
       fi
+    elif [ "$(nvm current)" = "none" ]; then
+      nvm use default --silent
     elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
       echo "Reverting to nvm default version"
       nvm use default
@@ -199,4 +206,6 @@ export REACT_EDITOR="code"
 # Machine-local overrides (not tracked in the repo)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+# The || true keeps a missing (optional) file from leaving $? = 1, which
+# would paint the very first prompt in its error state.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local" || true

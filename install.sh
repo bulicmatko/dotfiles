@@ -14,19 +14,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-detect_target() {
-  if [ -n "${CODESPACES:-}" ] || [ -n "${REMOTE_CONTAINERS:-}" ] || [ -f /.dockerenv ]; then
-    echo "devcontainer"
-    return
-  fi
-
-  case "$(uname -s)" in
-    Darwin) echo "macos" ;;
-    Linux)  echo "linux" ;;
-    *)      echo "unsupported" ;;
-  esac
-}
+source "$DOTFILES_DIR/scripts/lib.sh"
 
 TARGET="${1:-$(detect_target)}"
 

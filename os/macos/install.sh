@@ -21,7 +21,7 @@ step "Homebrew" "Package manager used for everything in the Brewfile."
 if command -v brew >/dev/null 2>&1; then
   ok "Homebrew already installed"
 elif confirm "Homebrew is missing — install it now?"; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL --retry 3 --connect-timeout 10 --max-time 600 https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
   warn "skipping Homebrew — application install will be skipped too"
 fi
@@ -42,10 +42,10 @@ if ! command -v brew >/dev/null 2>&1; then
 elif confirm "Choose and install applications from the Brewfile?"; then
   choose_brew_packages
   if [ -n "$BREWFILE_TO_USE" ]; then
-    brew bundle --file="$BREWFILE_TO_USE"
-    if [ "$BREWFILE_TO_USE" != "$DOTFILES_DIR/Brewfile" ]; then
-      rm -f "$BREWFILE_TO_USE"
-    fi
+    # Guarded so one failing formula/cask (e.g. an app that already exists in
+    # /Applications from a manual install) never aborts the remaining steps.
+    brew bundle --file="$BREWFILE_TO_USE" \
+      || warn "brew bundle reported issues — fix them and re-run ./install.sh"
   fi
 else
   warn "skipping applications"
@@ -131,7 +131,7 @@ step "App settings" "Symlink Zed, VSCode, and Warp config; VSCode extensions."
 
 if confirm "Link editor/terminal settings and install VSCode extensions?"; then
   setup_zed
-  setup_vscode "$HOME/Library/Application Support/Code/User"
+  setup_vscode
   install_vscode_extensions
   setup_warp
   setup_claude_code
