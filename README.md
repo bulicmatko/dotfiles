@@ -220,6 +220,10 @@ The [Brewfile](Brewfile) is the app manifest. One call installs everything:
 brew bundle --file ~/Projects/dotfiles/Brewfile
 ```
 
+- Packages from third-party taps (like `oven-sh/bun`) load only after the tap
+  is trusted on that machine. The installer and `dotfiles-update` ask for
+  every tap the Brewfile lists; Homebrew keeps the answer per machine in
+  `~/.homebrew/trust.json`.
 - After installing something new: `brew bundle dump --file=Brewfile --force`
   (then review the diff — it will also pick up dependencies you may not want
   listed) or just add the line by hand.

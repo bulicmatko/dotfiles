@@ -9,6 +9,8 @@
 # The trailing comment on each line doubles as its description in the
 # interactive picker shown by ./install.sh.
 
+# Third-party taps are trusted per machine (Homebrew stores that in
+# ~/.homebrew/trust.json); the installer asks once for every tap listed here.
 tap "oven-sh/bun"      # third-party tap that provides the bun formula
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

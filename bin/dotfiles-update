@@ -17,6 +17,9 @@ if command -v brew >/dev/null 2>&1; then
   info "updating Homebrew packages"
   brew update
   brew upgrade
+  # Taps added to the Brewfile since the last run need trusting before
+  # their packages can be installed below.
+  trust_brew_taps
   # Install anything newly added since the last run — from this machine's
   # picker selection (~/.Brewfile.local) when one exists, else the full
   # Brewfile, so deselected applications are never dragged in. Re-run

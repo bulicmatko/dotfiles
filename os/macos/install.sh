@@ -40,6 +40,7 @@ step "Applications" "Pick which Brewfile formulae and casks to install."
 if ! command -v brew >/dev/null 2>&1; then
   warn "Homebrew not available — skipping applications"
 elif confirm "Choose and install applications from the Brewfile?"; then
+  trust_brew_taps
   choose_brew_packages
   if [ -n "$BREWFILE_TO_USE" ]; then
     # Guarded so one failing formula/cask (e.g. an app that already exists in

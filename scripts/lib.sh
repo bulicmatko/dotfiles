@@ -72,13 +72,30 @@ step() {
   return 0
 }
 
+# prompt_text <question> [default] — the prompt string for the readline
+# prompts below. The color codes sit between \001 and \002 markers, which
+# tell readline they occupy no screen width; without them it miscounts the
+# prompt and redraws an edited line over the top of it.
+prompt_text() {
+  if [ -n "${2:-}" ]; then
+    printf '\001\033[36m\002?\001\033[0m\002 %s \001\033[2m\002[%s]\001\033[0m\002 ' "$1" "$2"
+  else
+    printf '\001\033[36m\002?\001\033[0m\002 %s ' "$1"
+  fi
+}
+
+# Answers are read through readline (-e), so arrow keys, word jumps, and
+# history work while typing instead of leaving raw escape codes in the value.
+# The prompt goes to readline itself (-p) so it survives line redraws, and
+# stderr is pointed at the terminal so the prompt still appears when the
+# installer's output is redirected.
+
 # confirm <question> — returns 0 on yes (default), 1 on no. Auto-yes when
 # there is no TTY so unattended runs proceed without blocking.
 confirm() {
   local reply
   is_interactive || return 0
-  printf '\033[36m?\033[0m %s \033[2m[Y/n]\033[0m ' "$1" >/dev/tty
-  IFS= read -r reply </dev/tty
+  IFS= read -e -r -p "$(prompt_text "$1" "Y/n")" reply </dev/tty 2>/dev/tty
   case "$reply" in
     n|N|no|No|NO) return 1 ;;
     *) return 0 ;;
@@ -90,12 +107,7 @@ confirm() {
 ask() {
   local question="$1" default="${2:-}" reply=""
   if is_interactive; then
-    if [ -n "$default" ]; then
-      printf '\033[36m?\033[0m %s \033[2m[%s]\033[0m ' "$question" "$default" >/dev/tty
-    else
-      printf '\033[36m?\033[0m %s ' "$question" >/dev/tty
-    fi
-    IFS= read -r reply </dev/tty
+    IFS= read -e -r -p "$(prompt_text "$question" "$default")" reply </dev/tty 2>/dev/tty
   fi
   [ -n "$reply" ] && printf '%s' "$reply" || printf '%s' "$default"
 }
@@ -215,6 +227,49 @@ multiselect() {
 
   printf '\033[?25h\033[?1049l' >/dev/tty
   trap - INT
+}
+
+# trust_brew_taps [brewfile]
+#
+# Homebrew refuses to load formulae and casks from a third-party tap until
+# that tap is trusted, and trust is per-machine (~/.homebrew/trust.json),
+# so it is confirmed once per machine rather than carried in the repo.
+# Every tap the Brewfile declares is offered here; without a TTY they are
+# trusted automatically, matching the rest of the unattended install.
+trust_brew_taps() {
+  local brewfile="${1:-$DOTFILES_DIR/Brewfile}" taps trusted tap
+
+  command -v brew >/dev/null 2>&1 || return 0
+  [ -f "$brewfile" ] || return 0
+  # Homebrew builds without the trust gate have no `brew trust` command.
+  brew trust --json=v1 >/dev/null 2>&1 || return 0
+
+  taps="$(awk '/^[[:space:]]*tap[[:space:]]+"/ { gsub(/^[^"]*"|".*$/, ""); print }' "$brewfile")"
+  [ -n "$taps" ] || return 0
+
+  trusted="$(brew trust --json=v1 2>/dev/null || true)"
+
+  while IFS= read -r tap; do
+    [ -n "$tap" ] || continue
+    # The closing quote keeps "owner/name" from matching "owner/name/formula".
+    case "$trusted" in
+      *"\"$tap\""*)
+        ok "tap already trusted: $tap"
+        continue
+        ;;
+    esac
+    if confirm "Trust the third-party tap $tap (needed to install its packages)?"; then
+      if brew trust --tap "$tap"; then
+        ok "trusted tap: $tap"
+      else
+        warn "could not trust $tap — its packages will fail to install"
+      fi
+    else
+      warn "$tap left untrusted — its packages will fail to install"
+    fi
+  done <<EOF
+$taps
+EOF
 }
 
 # choose_brew_packages
