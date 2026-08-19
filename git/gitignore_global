@@ -10,6 +10,7 @@
 # Editor files are deliberately NOT listed: no list can know every editor a
 # person may use, and editor files are not reliably junk (some teams track
 # .idea/ or .vscode/ on purpose) — that policy belongs to each project.
+# The one exception is vim (below): it exists on every machine.
 #
 # NOTE: gitignore has no trailing comments — a # only counts at line start.
 
@@ -40,3 +41,9 @@ Icon?
 Thumbs.db
 # Explorer folder settings
 Desktop.ini
+
+# Vim — exception to the no-editor rule: vim/vi ships with every OS and is
+# this setup's fallback editor on headless machines, so its transient swap
+# files are environment junk everywhere (and never legitimately tracked).
+*.swp
+*.swo
