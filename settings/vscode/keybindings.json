@@ -1,0 +1,109 @@
+// VSCode keybindings — symlinked by ./install.sh.
+// Entries whose command starts with "-" REMOVE a default binding; they pair
+// with the custom binding next to them. The overall theme: mirror the same
+// shortcuts across VSCode and Zed (join lines, rename, references, git panel).
+[
+  // cmd+j joins lines (instead of the default ctrl+j).
+  {
+    "key": "cmd+j",
+    "command": "editor.action.joinLines",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "-editor.action.joinLines",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // Go-to-symbol moves to the cmd+g cmd+t chord...
+  {
+    "key": "cmd+g cmd+t",
+    "command": "workbench.action.gotoSymbol"
+  },
+  // ...freeing cmd+r, which becomes rename (F2 unbound below).
+  {
+    "key": "cmd+r",
+    "command": "-workbench.action.gotoSymbol"
+  },
+  {
+    "key": "cmd+r",
+    "command": "editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "f2",
+    "command": "-editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  // cmd+w closes the editor (re-added without the default's extra conditions).
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.closeActiveEditor"
+  },
+  {
+    "key": "cmd+w",
+    "command": "-workbench.action.closeActiveEditor"
+  },
+  // alt+space opens completions (instead of ctrl+space, which macOS
+  // reserves for input-source switching).
+  {
+    "key": "alt+space",
+    "command": "editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+space",
+    "command": "-editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+  },
+  // shift+cmd+r replaces in files (instead of shift+cmd+h)...
+  {
+    "key": "shift+cmd+r",
+    "command": "workbench.action.replaceInFiles"
+  },
+  {
+    "key": "shift+cmd+h",
+    "command": "-workbench.action.replaceInFiles"
+  },
+  // shift+cmd+g opens source control (instead of ctrl+shift+g) — same
+  // shortcut as the Zed git panel.
+  {
+    "key": "shift+cmd+g",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  // ...and shift+cmd+r also finds references when the cursor is on a symbol
+  // (context decides between this and replace-in-files above).
+  {
+    "key": "shift+cmd+r",
+    "command": "references-view.findReferences",
+    "when": "editorHasReferenceProvider"
+  },
+  // alt+cmd+o opens recent projects (moved off ctrl+r; remote menu unbound).
+  {
+    "key": "alt+cmd+o",
+    "command": "workbench.action.openRecent"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "-workbench.action.openRecent"
+  },
+  {
+    "key": "alt+cmd+o",
+    "command": "-workbench.action.remote.showMenu"
+  },
+  // shift+enter in the terminal sends ESC+CR (newline in Claude Code CLI
+  // and other TUIs instead of submitting).
+  {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\u001b\r"
+    },
+    "when": "terminalFocus"
+  }
+]

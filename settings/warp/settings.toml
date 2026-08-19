@@ -1,0 +1,238 @@
+# Warp settings — symlinked to ~/.warp/settings.toml by ./install.sh.
+# NOTE: Warp rewrites this file whenever a setting changes in the app, and
+# that rewrite drops these comments — treat them as review notes, and expect
+# to see the rewrite as a diff in this repo (that is the sync working).
+
+# Text rendering: MonaspiceAr NF (the Nerd Font build's exact family name) —
+# the same Monaspace Argon look as the editors, with full nerd glyphs for
+# starship and eza icons. (Terminals only apply liga/calt, so Monaspace shows
+# texture healing but few ligatures here; switch to "FiraCode Nerd Font" for
+# maximum terminal ligatures.)
+# Double line height. NOTE: Warp adds all extra leading ABOVE the glyphs, so
+# background-painted prompts look bottom-aligned at this height — the
+# starship preset uses plain colored text for exactly that reason.
+[appearance]
+spacing = "normal"
+
+[appearance.text]
+match_ai_font = true
+line_height_ratio = 2.0
+font_size = 13.0
+notebook_font_size = 14.0
+ai_font_name = "MonaspiceAr NF"
+font_name = "MonaspiceAr NF"
+
+# Window chrome: no blur/transparency, default size, 100% zoom.
+[appearance.window]
+open_windows_at_custom_size = false
+override_blur = 1
+override_opacity = 100
+left_panel_visibility_across_tabs = false
+zoom_level = 100
+
+# Theme: custom Tokyo Night Storm (file in themes/), system switching off.
+[appearance.themes]
+theme = { custom = { name = "Tokyo Night Storm", path = "tokyo_night_storm.yml" } }
+system_theme = false
+
+# Tabs shown vertically in an expanded sidebar; each tab labeled with its
+# working directory and git branch.
+[appearance.vertical_tabs]
+view_mode = "expanded"
+enabled = true
+primary_info = "working_directory"
+compact_subtitle = "branch"
+display_granularity = "tabs"
+
+# Block cursor.
+[appearance.cursor]
+cursor_display_type = "block"
+
+# Minimal block chrome: no dividers, no jump-to-bottom button.
+[appearance.blocks]
+show_jump_to_bottom_of_block_button = false
+show_block_dividers = false
+
+# Fullscreen TUI apps (vim, htop) get padding per the blocklist rules.
+[appearance.full_screen_apps]
+alt_screen_padding = "match_blocklist"
+
+# Stock Warp app icon.
+[appearance.icon]
+app_icon = "original"
+
+# Tab bar details: close button right, workspace label always visible.
+[appearance.tabs]
+tab_close_button_position = "right"
+workspace_decoration_visibility = "always_show"
+show_indicators_button = true
+
+# Custom toolbar chip layout: tabs/tools left, code review + inbox right.
+[appearance.tabs.header_toolbar_chip_selection]
+
+[appearance.tabs.header_toolbar_chip_selection.custom]
+left = ["tabs_panel", "tools_panel"]
+right = ["code_review", "notifications_mailbox"]
+
+# Waterfall input: the prompt box grows downward as you type.
+[appearance.input]
+input_mode = "waterfall"
+
+# Hovering a split pane does not steal focus.
+[appearance.panes]
+focus_pane_on_hover = false
+
+# Telemetry on; the regex list below defines what Warp REDACTS from any
+# data it sends (IPs, phone numbers, and API keys/tokens of common vendors).
+[privacy]
+telemetry_enabled = true
+crash_reporting_enabled = true
+custom_secret_regex_list = [
+  { name = "IPv4 Address", pattern = '\b((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}\b' },
+  {
+    name = "IPv6 Address",
+    pattern = '\b((([0-9A-Fa-f]{1,4}:){1,6}:)|(([0-9A-Fa-f]{1,4}:){7}))([0-9A-Fa-f]{1,4})\b',
+  },
+  { name = "Slack App Token", pattern = '\bxapp-[0-9]+-[A-Za-z0-9_]+-[0-9]+-[a-f0-9]+\b' },
+  { name = "Phone Number", pattern = '\b(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b' },
+  {
+    name = "AWS Access ID",
+    pattern = '\b(AKIA|A3T|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{12,}\b',
+  },
+  {
+    name = "MAC Address",
+    pattern = '\b((([a-zA-z0-9]{2}[-:]){5}([a-zA-z0-9]{2}))|(([a-zA-z0-9]{2}:){5}([a-zA-z0-9]{2})))\b',
+  },
+  { name = "Google API Key", pattern = '\bAIza[0-9A-Za-z-_]{35}\b' },
+  { name = "Google OAuth ID", pattern = '\b[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com\b' },
+  { name = "GitHub Classic Personal Access Token", pattern = '\bghp_[A-Za-z0-9_]{36}\b' },
+  { name = "GitHub Fine-Grained Personal Access Token", pattern = '\bgithub_pat_[A-Za-z0-9_]{82}\b' },
+  { name = "GitHub OAuth Access Token", pattern = '\bgho_[A-Za-z0-9_]{36}\b' },
+  { name = "GitHub User-to-Server Token", pattern = '\bghu_[A-Za-z0-9_]{36}\b' },
+  { name = "GitHub Server-to-Server Token", pattern = '\bghs_[A-Za-z0-9_]{36}\b' },
+  { name = "Stripe Key", pattern = '\b(?:r|s)k_(test|live)_[0-9a-zA-Z]{24}\b' },
+  { name = "Firebase Auth Domain", pattern = '\b([a-z0-9-]){1,30}(\.firebaseapp\.com)\b' },
+  { name = "JWT", pattern = '\b(ey[a-zA-z0-9_\-=]{10,}\.){2}[a-zA-z0-9_\-=]{10,}\b' },
+  { name = "OpenAI API Key", pattern = '\bsk-[a-zA-Z0-9]{48}\b' },
+  { name = "Anthropic API Key", pattern = '\bsk-ant-api\d{0,2}-[a-zA-Z0-9\-]{80,120}\b' },
+  { name = "Generic SK API Key", pattern = '\bsk-[a-zA-Z0-9\-]{10,100}\b' },
+  { name = "Fireworks API Key", pattern = '\bfw_[a-zA-Z0-9]{24}\b' },
+]
+
+# Don't launch at login; quit without a confirmation dialog.
+[general]
+login_item = false
+show_warning_before_quitting = false
+
+# Warp AI agents: conversations may be stored in Warp cloud...
+[agents]
+cloud_conversation_storage_enabled = true
+
+# ...but the built-in Warp Agent itself is fully disabled.
+[agents.warp_agent]
+is_any_ai_enabled = false
+
+# No AI auto-detection or natural-language interpretation of typed commands.
+[agents.warp_agent.input]
+ai_auto_detection_enabled = false
+nld_in_terminal_enabled = false
+
+[agents.warp_agent.other]
+show_agent_notifications = true
+
+# No extra toolbar for CLI agents (claude, etc.) running in the terminal.
+[agents.third_party]
+should_render_cli_agent_toolbar = false
+
+# Permission profile for Warp agents (inactive while the agent is disabled):
+# always ask before executing, never computer-use, and a denylist blocking
+# shells, network fetchers, ssh/scp, and rm.
+[agents.execution_profiles]
+
+[agents.execution_profiles.default]
+apply_code_diffs = "agent_decides"
+ask_user_question = "always_ask"
+autosync_plans_to_warp_drive = true
+command_allowlist = []
+command_denylist = [
+  'bash(\s.*)?',
+  'fish(\s.*)?',
+  'pwsh(\s.*)?',
+  'sh(\s.*)?',
+  'zsh(\s.*)?',
+  'curl(\s.*)?',
+  'eval(\s.*)?',
+  'exec(\s.*)?',
+  'source(\s.*)?',
+  'wget(\s.*)?',
+  'dig(\s.*)?',
+  'nslookup(\s.*)?',
+  'host(\s.*)?',
+  'ssh(\s.*)?',
+  'scp(\s.*)?',
+  'rsync(\s.*)?',
+  'telnet(\s.*)?',
+  'rm(\s.*)?',
+]
+computer_use = "never"
+directory_allowlist = []
+execute_commands = "always_ask"
+mcp_allowlist = []
+mcp_denylist = []
+mcp_permissions = "agent_decides"
+name = "Default"
+read_files = "agent_decides"
+run_agents = "always_ask"
+web_search_enabled = true
+write_to_pty = "always_ask"
+
+# Notifications: on, with sound — for finished agent tasks, commands that
+# run longer than 30s, password prompts, and anything needing attention.
+[notifications]
+
+[notifications.preferences]
+is_agent_task_completed_enabled = true
+is_long_running_enabled = true
+is_needs_attention_enabled = true
+is_password_prompt_enabled = true
+long_running_threshold = 30
+mode = "enabled"
+play_notification_sound = true
+
+[terminal]
+
+# Prompt handling: honor the shell's PS1 (starship prompt), expand aliases,
+# classic single-line input box, no @-mention context menu.
+[terminal.input]
+honor_ps1 = true
+alias_expansion_enabled = true
+input_box_type_setting = "classic"
+at_context_menu_in_terminal_mode = false
+
+[warpify]
+
+# No tmux wrapper around ssh sessions (Warpify).
+[warpify.ssh]
+use_ssh_tmux_wrapper = false
+ssh_tmux_deprecation_notice_pending = false
+
+# Always start zsh regardless of the system login shell.
+[session]
+startup_shell_override = "/bin/zsh"
+
+# Warp's own settings sync stays off — this repo is the source of truth
+# for this file, so two sync mechanisms would fight each other.
+[account]
+is_settings_sync_enabled = false
+
+[code]
+
+# Warp's built-in code editor panes: file tree, review button, global search.
+[code.editor]
+show_project_explorer = true
+show_code_review_button = true
+show_global_search = true
+
+# Warp Drive (cloud workflows/notebooks) enabled.
+[warp_drive]
+enabled = true

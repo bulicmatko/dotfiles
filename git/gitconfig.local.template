@@ -1,0 +1,34 @@
+# ~/.gitconfig.local — machine-specific git config, NOT tracked in dotfiles.
+# Everything here overrides the shared ~/.gitconfig.
+#
+# The install script fills in [user] (asked during install) and sets
+# credential.helper per OS. Edit or extend freely — for example:
+#
+# [user]
+#   name = Your Name
+#   email = you@example.com
+#
+# [credential]
+#   helper = osxkeychain   # macOS (set automatically by os/macos/install.sh)
+#   helper = cache         # Linux (set automatically by os/linux/install.sh)
+#
+# Sign commits with your SSH key via 1Password — GitHub shows them as
+# "Verified" (enable the SSH agent in 1Password, add the key as a signing
+# key at https://github.com/settings/keys, then uncomment):
+#
+# [user]
+#   signingkey = ssh-ed25519 AAAA... (your PUBLIC key, one line)
+# [gpg]
+#   format = ssh
+# [gpg "ssh"]
+#   program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+# [commit]
+#   gpgsign = true
+#
+# On machines with git older than 2.40 / 2.35, override the modern values
+# from the shared config:
+#
+# [help]
+#   autocorrect = 1
+# [merge]
+#   conflictStyle = diff3

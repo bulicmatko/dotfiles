@@ -1,0 +1,6 @@
+# ~/.gitattributes — global git attributes (referenced from gitconfig).
+# Intentionally minimal: no active rules, so per-project .gitattributes stay
+# in full control. Add global rules here only when you really mean globally.
+#
+# Example — normalize line endings everywhere:
+# * text=auto

@@ -1,0 +1,204 @@
+// Zed settings — symlinked to ~/.config/zed/settings.json by ./install.sh.
+// Every option carries a short comment. Docs: https://zed.dev/docs/configuring-zed
+{
+  // No minimap column.
+  "minimap": {
+    "show": "never"
+  },
+  // Highlight the current line and its gutter.
+  "current_line_highlight": "all",
+  // Fonts tried when the main font misses a glyph.
+  "buffer_font_fallbacks": [
+    "FiraCode Nerd Font",
+    "Monaco"
+  ],
+  // Treat .env as dotenv and .dockerignore as shell for highlighting.
+  "file_types": {
+    "dotenv": [
+      ".env"
+    ],
+    "shellscript": [
+      ".dockerignore"
+    ]
+  },
+  // Rename paired HTML/JSX tags together.
+  "linked_edits": true,
+  // Show inline (ghost text) edit predictions.
+  "show_edit_predictions": true,
+  // Ensure files end with a newline on save.
+  "ensure_final_newline_on_save": true,
+  // Format every file on save.
+  "format_on_save": "on",
+  // Two-space indentation.
+  "tab_size": 2,
+  // Font size of the markdown preview pane.
+  "markdown_preview_font_size": 13.0,
+  // Font size of the agent panel UI.
+  "agent_ui_font_size": 16.0,
+  // External agent available in the agent panel: Claude Code via ACP.
+  "agent_servers": {
+    "claude-acp": {
+      "default_config_options": {
+        "mode": "auto",
+        "effort": "default",
+        "model": "default"
+      },
+      "type": "registry"
+    }
+  },
+  // `zed <path>` from the terminal opens a new window.
+  "cli_default_open_behavior": "new_window",
+  // File icon theme (default icons in both appearances).
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)"
+  },
+  // Collaboration sidebar docked right.
+  "collaboration_panel": {
+    "dock": "right",
+  },
+  // Outline (symbols) sidebar docked right.
+  "outline_panel": {
+    "dock": "right",
+  },
+  // Inline predictions come from Zed's own model (not Copilot).
+  "features": {
+    "edit_prediction_provider": "zed",
+  },
+  // Closing the last tab keeps the window open.
+  "when_closing_with_no_tabs": "keep_window_open",
+  // Use VSCode-style default shortcuts as the base keymap.
+  "base_keymap": "VSCode",
+  // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
+  // applies if "mode" is ever switched to "system".)
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Tokyo Night Storm"
+  },
+  // Darker background variant + unified hover/selection tint (#1f2335 /
+  // #2c324a) to match the VSCode and Warp customizations.
+  "theme_overrides": {
+    "Tokyo Night Storm": {
+      "editor.background": "#1f2335",
+      "editor.gutter.background": "#1f2335",
+      "tab.active_background": "#2c324a",
+      "tab.inactive_background": "#1f2335",
+      "ghost_element.background": "#1f2335",
+      "ghost_element.hover": "#2c324a",
+      "ghost_element.selected": "#2c324a",
+      // "ghost_element.active": "#2c324a",
+      "element.hover": "#2c324a",
+      "element.selected": "#2c324a",
+    },
+  },
+  // Show the git branch status icon in the title bar.
+  "title_bar": {
+    "show_branch_status_icon": true
+  },
+  // Tabs: color by git status, show error/warning dots, no close button.
+  "tabs": {
+    "git_status": true,
+    "show_diagnostics": "all",
+    "show_close_button": "hidden",
+  },
+  // Quick-fix (code action) button in the toolbar.
+  "toolbar": {
+    "code_actions": true,
+  },
+  // Show diagnostics inline at the end of the line (like Error Lens).
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
+  // UI font and size.
+  "ui_font_family": "MonaspiceAr NF",
+  "ui_font_size": 16.0,
+  // Editor font — Monaspice (Nerd Font build of Monaspace Argon).
+  "buffer_font_family": "MonaspiceAr NF",
+  // Enable all Monaspace ligature/stylistic sets (arrows, ===, etc.).
+  "buffer_font_features": {
+    "calt": true,
+    "ss01": true,
+    "ss02": true,
+    "ss03": true,
+    "ss04": true,
+    "ss05": true,
+    "ss06": true,
+    "ss07": true,
+    "ss08": true,
+    "ss09": true,
+    "liga": true,
+  },
+  // Small editor font with double line height (matches VSCode).
+  "buffer_font_size": 11.0,
+  "buffer_line_height": {
+    "custom": 2.0,
+  },
+  // Vertical guide line at 80 characters.
+  "wrap_guides": [
+    80
+  ],
+  // Indent guides colored per indentation level.
+  "indent_guides": {
+    "coloring": "indent_aware",
+  },
+  // Render spaces/tabs as visible dots/arrows.
+  "show_whitespaces": "all",
+  // Search is case-insensitive until the query has an uppercase letter.
+  "use_smartcase_search": true,
+  // File tree: left dock, 400px, folders never auto-collapse into a/b/c.
+  "project_panel": {
+    "dock": "left",
+    "default_width": 400.0,
+    "auto_fold_dirs": false,
+  },
+  // Inline git blame shows the commit summary text too.
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+    },
+  },
+  // Git panel: left dock, tree view, full diffs for untracked files,
+  // status shown by coloring the file label.
+  "git_panel": {
+    "collapse_untracked_diff": false,
+    "dock": "left",
+    "tree_view": true,
+    "default_width": 400,
+    "status_style": "label_color",
+  },
+  // Terminal: right dock, 800px, blinking cursor, small font, double line
+  // height, no breadcrumbs bar.
+  "terminal": {
+    "blinking": "on",
+    "toolbar": {
+      "breadcrumbs": false,
+    },
+    "dock": "right",
+    "default_width": 800,
+    "font_size": 11.0,
+    "line_height": {
+      "custom": 2.0,
+    },
+  },
+  // Built-in AI agent panel: fully disabled (button hidden); the remaining
+  // keys only matter if it gets re-enabled.
+  "agent": {
+    "button": false,
+    "enabled": false,
+    "dock": "right",
+    "use_modifier_to_send": true,
+    "enable_feedback": true,
+    "default_width": 800,
+  },
+  // Font size inside agent conversations.
+  "agent_buffer_font_size": 13.0,
+  // Telemetry: no usage metrics, crash diagnostics allowed.
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": true,
+  },
+}

@@ -1,0 +1,236 @@
+# ~/.gitconfig — managed by https://github.com/bulicmatko/dotfiles
+# Machine-specific settings belong in ~/.gitconfig.local (included at the end,
+# so anything set there overrides this file).
+
+# Commit identity (user.name / user.email) is intentionally NOT in this file:
+# the install script asks for it and stores it in ~/.gitconfig.local (included
+# at the bottom), so anyone can use these dotfiles without editing them.
+
+# `git init` creates "main" instead of "master".
+[init]
+  defaultBranch = main
+
+[alias]
+  # Fetch all
+  fa = fetch --all
+
+  # View abbreviated SHA, description, and history graph of the latest 20 commits
+  lg = log --pretty=oneline --graph --abbrev-commit -n 20
+
+  # View the current working tree status using the short format
+  st = status -sb
+
+  # Show the diff between the latest commit and the current state
+  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+  # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+  # Pull in remote changes for the current repository and all its submodules
+  pull-all = pull --recurse-submodules
+
+  # Pull with rebase
+  pullr = pull --rebase
+
+  # Delete any branches that have been merged into current branch, except 'main', 'master' and 'develop'
+  delete-merged-branches = !"git branch --merged | grep -Ev \"(^\\*|main|master|develop)\" | xargs git branch -d"
+
+  # Clone a repository including all submodules
+  clone-all = clone --recursive
+
+  # Search for branch
+  brep = !git branch -a | grep
+
+  # Checkout
+  co = checkout
+
+  # Commit with simple message inside editor
+  cm = commit
+
+  # Commit all changes
+  cma = !git add -A && git commit -av
+
+  # Unstage staged files
+  unstage = reset HEAD
+
+  # Uncommit last commit
+  uncommit = reset --soft HEAD^
+
+  # Switch to a branch, creating it if necessary
+  go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+
+  # Show verbose output about tags, branches or remotes
+  tags = tag -l
+  branches = branch -a
+  remotes = remote -v
+
+  # List aliases
+  aliases = config --get-regexp alias
+
+  # Amend the currently staged files to the latest commit
+  amend = commit --amend --reuse-message=HEAD
+
+  # Credit an author on the latest commit
+  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+  # List contributors with number of commits
+  contributors = shortlog --summary --numbered
+
+[apply]
+  # Detect whitespace errors when applying a patch
+  whitespace = fix
+
+[core]
+  # Use custom `.gitignore` and `.gitattributes` (linked by install.sh)
+  excludesfile = ~/.gitignore_global
+  attributesfile = ~/.gitattributes
+
+  # Treat spaces before tabs and all kinds of trailing whitespace as an error
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+  # Make `git rebase` safer on macOS
+  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+  trustctime = false
+
+  # Normalize macOS NFD filenames to NFC so names with accents/umlauts do
+  # not show as phantom changes between macOS and Linux checkouts
+  precomposeunicode = true
+
+  # Keep LF endings in the repository and on Mac/Linux checkouts
+  autocrlf = input
+
+  # Cache untracked-file lookups — faster `git status` in big repos
+  untrackedCache = true
+
+# Colored output whenever the target is a terminal.
+[color]
+  ui = auto
+
+# Colors for `git branch` output.
+[color "branch"]
+  local = yellow
+  current = yellow reverse
+  remote = green
+
+# Colors for `git diff` output.
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold # line info
+  old = red reverse # deletions
+  new = green reverse # additions
+  whitespace = white reverse
+
+# Colors for `git status` output.
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+  branch = magenta
+
+[diff]
+  # Detect copies as well as renames
+  renames = copies
+
+  # Histogram produces noticeably better diffs than the default algorithm
+  algorithm = histogram
+
+  # Color moved lines differently from plain additions/deletions
+  colorMoved = default
+
+  # i/ and w/ (index/worktree) prefixes instead of a/ b/ in diff headers
+  mnemonicPrefix = true
+
+[diff "bin"]
+  # Use `hexdump` to diff binary files
+  textconv = hexdump -v -C
+
+[fetch]
+  # Remote-deleted branches disappear locally on fetch
+  prune = true
+
+[branch]
+  # `git branch` lists most recently active branches first
+  sort = -committerdate
+
+[tag]
+  # v10 sorts after v9, not after v1
+  sort = version:refname
+
+[column]
+  # Branch/tag/status lists in columns when output is a terminal
+  ui = auto
+
+[commit]
+  # Show the full diff below the message while editing a commit
+  verbose = true
+
+[help]
+  # Ask before running the correction for a mistyped command
+  # (needs git >= 2.40 — on older machines override in ~/.gitconfig.local)
+  autocorrect = prompt
+
+[merge]
+  # Include summaries of merged commits in newly created merge commit messages
+  log = true
+
+  # Conflict markers also show the common ancestor — much easier to resolve
+  # (needs git >= 2.35 — on older machines override to diff3 in ~/.gitconfig.local)
+  conflictStyle = zdiff3
+
+[mergetool]
+  # No *.orig backup files left behind after resolving with a mergetool
+  keepBackup = false
+
+[rebase]
+  # Auto-stash local changes around rebase / pull --rebase
+  autoStash = true
+
+  # fixup!/squash! commits fold in automatically on interactive rebase
+  autoSquash = true
+
+  # Rebasing a branch moves the stacked branches on top of it too
+  updateRefs = true
+
+[rerere]
+  # Remember conflict resolutions...
+  enabled = true
+
+  # ...and re-apply them automatically next time
+  autoUpdate = true
+
+[push]
+  # `git push` targets the branch's configured upstream.
+  default = upstream
+  # Make `git push` push relevant annotated tags when pushing branches out
+  followTags = true
+  # Automatically set up upstream when pushing a new branch
+  autoSetupRemote = true
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# URL shorthands
+#
+# Lets you type short remotes: `git clone gh:user/repo` clones over SSH,
+# `github:user/repo` fetches anonymously over HTTPS but pushes over SSH;
+# same for gists.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[url "git@github.com:"]
+  insteadOf = "gh:"
+  pushInsteadOf = "github:"
+
+[url "https://github.com/"]
+  insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+  insteadOf = "gst:"
+  pushInsteadOf = "gist:"
+
+[url "https://gist.github.com/"]
+  insteadOf = "gist:"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Machine-local overrides — keep this include LAST so it wins
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+[include]
+  path = ~/.gitconfig.local

@@ -1,0 +1,40 @@
+// Bun devcontainer — copy to <project>/.devcontainer/devcontainer.json
+//
+// Keep project devcontainers team-neutral: personal config (zsh, prompt, git
+// aliases) does NOT belong here. It arrives automatically because:
+//   - VSCode Dev Containers reads "dotfiles.repository" from your user settings
+//     (already set in settings/vscode/settings.json) and runs install.sh
+//   - GitHub Codespaces: enable dotfiles at https://github.com/settings/codespaces
+//     and select bulicmatko/dotfiles
+{
+  "name": "Bun",
+  // Official Bun image (Debian based) — bump the tag when a project needs it.
+  "image": "oven/bun:1.3.14",
+
+  "features": {
+    // The bun image ships without git — required for plugins and dotfiles.
+    "ghcr.io/devcontainers/features/git:1": {},
+    // zsh preinstalled so the dotfiles install is instant
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      // Project-relevant extensions only — personal ones sync separately.
+      "extensions": [
+        "editorconfig.editorconfig",
+        "oven.bun-vscode",
+        "oxc.oxc-vscode"
+      ]
+    }
+  },
+
+  "remoteUser": "bun",
+  "postCreateCommand": "bun install"
+}

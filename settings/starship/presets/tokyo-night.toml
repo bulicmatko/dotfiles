@@ -1,0 +1,90 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Tokyo Night prompt — plain colored text on the terminal background (no
+# painted segments, so any terminal line height renders cleanly), laid out
+# like a classic two-line prompt: os, directory, git, language versions,
+# and "took Xs" after slow commands.
+
+format = """
+$os$directory$git_branch$git_status$nodejs$bun$rust$golang$php$cmd_duration
+$character"""
+
+[directory]
+style = "bold fg:#7aa2f7"
+format = "[$path ]($style)"
+# Show only the current folder name, no "…/" prefix
+truncation_length = 1
+truncation_symbol = ""
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "fg:#bb9af7"
+format = '[$symbol $branch ]($style)'
+
+[git_status]
+style = "fg:#e0af68"
+format = '[($all_status$ahead_behind )]($style)'
+
+[nodejs]
+symbol = ""
+style = "fg:#9ece6a"
+format = '[$symbol ($version) ]($style)'
+
+[bun]
+symbol = ""
+style = "fg:#e0af68"
+format = '[$symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "fg:#f7768e"
+format = '[$symbol ($version) ]($style)'
+
+[golang]
+symbol = ""
+style = "fg:#7dcfff"
+format = '[$symbol ($version) ]($style)'
+
+[php]
+symbol = ""
+style = "fg:#bb9af7"
+format = '[$symbol ($version) ]($style)'
+
+[cmd_duration]
+# "took 3s" after commands running longer than 2 seconds
+format = '[took $duration ](fg:#e0af68)'
+
+[os]
+style = "fg:#7aa2f7"
+format = "[$symbol ]($style)"
+disabled = false
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+EndeavourOS = ""
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+Pop = ""
