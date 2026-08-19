@@ -1,4 +1,4 @@
-# dotfiles
+# bulicmatko/dotfiles
 
 Personal dotfiles — the single source of truth for every machine I use:
 macOS laptops, Linux boxes, and devcontainers/Codespaces.
