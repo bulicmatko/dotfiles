@@ -73,7 +73,6 @@ cask "claude"             # Claude desktop app
 cask "claude-code"        # Claude Code desktop app
 cask "codex-app"          # OpenAI Codex desktop app
 cask "lm-studio"          # download and run local LLMs with a GUI
-cask "supacode"           # desktop UI for running coding agents in parallel
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Browsers
