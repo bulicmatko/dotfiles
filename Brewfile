@@ -31,6 +31,7 @@ brew "jq"              # command-line JSON processor
 brew "ripgrep"         # rg — very fast recursive grep
 brew "btop"            # pretty resource monitor (htop successor)
 brew "mas"             # install Mac App Store apps from this file
+cask "mysides"         # writes the Finder sidebar favorites (os/macos/defaults.sh)
 # mas "Xcode", id: 497799835   # example — list App Store apps like this
 
 # Runtimes & languages
