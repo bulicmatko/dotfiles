@@ -12,8 +12,9 @@ $character"""
 [directory]
 style = "bold fg:#7aa2f7"
 format = "[$path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
+# Show only the current folder name, no "…/" prefix
+truncation_length = 1
+truncation_symbol = ""
 
 [directory.substitutions]
 "Documents" = "󰈙 "
