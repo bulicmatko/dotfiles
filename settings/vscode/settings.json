@@ -280,10 +280,6 @@
   "biome.suggestInstallingGlobally": false,
   // Global fallback formatter (language overrides above win).
   "editor.defaultFormatter": "biomejs.biome",
-  // Elixir: ElixirLS formats.
-  "[elixir]": {
-    "editor.defaultFormatter": "JakeBecker.elixir-ls",
-  },
   // docker-compose files: YAML extension formats, 2-space indent.
   "[dockercompose]": {
     "editor.insertSpaces": true,

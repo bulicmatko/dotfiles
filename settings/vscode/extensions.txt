@@ -35,8 +35,6 @@ golang.go
 graphql.vscode-graphql-syntax
 # Terraform — HCL language support + formatter
 hashicorp.terraform
-# ElixirLS — Elixir language server (used as Elixir formatter)
-jakebecker.elixir-ls
 # SVG — preview and edit SVG files (default SVG formatter)
 jock.svg
 # DotENV — syntax highlighting for .env files
@@ -51,8 +49,6 @@ ms-vscode-remote.remote-containers
 oven.bun-vscode
 # Oxc — very fast JS/TS linter
 oxc.oxc-vscode
-# Phoenix — Phoenix framework (HEEx templates) support
-phoenixframework.phoenix
 # Prisma — schema highlighting, formatting, autocomplete
 prisma.prisma
 # XML — Red Hat XML language support

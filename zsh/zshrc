@@ -71,9 +71,6 @@ fi
 
 # nvm is installed and loaded by the zsh-nvm plugin (see plugins above).
 
-# asdf version-manager shims — only active once asdf has installed something.
-[[ -d "$HOME/.asdf/shims" ]] && export PATH="$HOME/.asdf/shims:$PATH"
-
 # deno — binaries installed by `deno install` land in ~/.deno/bin.
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"

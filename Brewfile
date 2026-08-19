@@ -23,7 +23,6 @@ brew "mkcert"          # locally-trusted HTTPS certificates for dev servers
 # Runtimes & languages
 # (nvm itself is installed and kept up to date by the zsh-nvm plugin;
 # the Docker CLI comes with the docker-desktop cask below)
-brew "asdf"            # multi-language version manager (Erlang, Elixir, ...)
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
 brew "deno"            # Deno — secure TypeScript/JavaScript runtime
 brew "go"              # Go compiler and toolchain
@@ -35,11 +34,7 @@ brew "terraform"       # infrastructure as code
 # Misc
 brew "ollama"          # run open-source LLMs locally from the terminal
 
-# Native build dependencies — uncomment when building Erlang/Elixir via asdf
-# or image tooling that needs them:
-# brew "wxwidgets"     # GUI toolkit Erlang's observer needs at build time
-# brew "fop"           # Apache FOP — Erlang docs build dependency
-# brew "unixodbc"      # ODBC driver layer — Erlang :odbc module
+# Native build dependencies — uncomment when image tooling needs them:
 # brew "vips"          # fast image processing (sharp/image pipelines)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
