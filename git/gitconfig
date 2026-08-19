@@ -177,6 +177,10 @@
   # (needs git >= 2.35 — on older machines override to diff3 in ~/.gitconfig.local)
   conflictStyle = zdiff3
 
+[mergetool]
+  # No *.orig backup files left behind after resolving with a mergetool
+  keepBackup = false
+
 [rebase]
   # Auto-stash local changes around rebase / pull --rebase
   autoStash = true

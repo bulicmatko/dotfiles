@@ -21,7 +21,7 @@ git/
   gitattributes               global git attributes
   gitconfig                   aliases + shared config
   gitconfig.local.template    seed for machine-specific ~/.gitconfig.local
-  gitignore_global            global ignores (OS/editor junk)
+  gitignore_global            global ignores (OS junk only)
 os/
   devcontainer.sh             devcontainer / Codespaces installer (headless)
   linux.sh                    Linux (Debian/Ubuntu) installer

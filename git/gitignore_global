@@ -1,11 +1,15 @@
-# ~/.gitignore_global — OS and editor junk ignored in every repository.
+# ~/.gitignore_global — OS junk ignored in every repository.
 #
 # The three ignore tiers, scoped by WHO causes a file to exist:
 #   project .gitignore  — what the project produces (build output, env files);
 #                         lives in the repo so it protects every contributor
-#   this file           — what YOUR environment produces (OS/editor junk);
+#   this file           — what YOUR operating system produces;
 #                         other people's environments are their own job
 #   .git/info/exclude   — personal one-offs in a single repo, never committed
+#
+# Editor files are deliberately NOT listed: no list can know every editor a
+# person may use, and editor files are not reliably junk (some teams track
+# .idea/ or .vscode/ on purpose) — that policy belongs to each project.
 #
 # NOTE: gitignore has no trailing comments — a # only counts at line start.
 
@@ -26,8 +30,6 @@ Icon?
 .Trashes
 
 # Linux
-# editor backup files (nano, gedit, emacs)
-*~
 # KDE folder-view metadata
 .directory
 # trash folder on external drives
@@ -38,12 +40,3 @@ Icon?
 Thumbs.db
 # Explorer folder settings
 Desktop.ini
-
-# Editors
-# JetBrains project settings
-.idea/
-# vim swap files
-*.swp
-*.swo
-# merge-conflict leftovers
-*.orig
