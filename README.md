@@ -47,6 +47,19 @@ one with `./install.sh macos|linux|devcontainer`. Every step is idempotent —
 re-run it any time (e.g. after adding a new symlinked file). Files that would
 be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 
+When run from a terminal the installer is **guided**: it shows a banner, walks
+through numbered steps, and asks before each one (Enter = yes). The
+applications step opens a checkbox picker built from the Brewfile — so the
+Brewfile can list *everything*, and each machine installs only what it needs:
+
+```
+space toggle · ↑/↓ (or j/k) move · a select all · n select none · enter confirm
+```
+
+Already-installed packages are annotated, and everything starts selected.
+Without a TTY (Codespaces, scripted runs) there are no prompts: every step
+runs and the full Brewfile is installed, same as before.
+
 ### What it does on macOS
 
 1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)

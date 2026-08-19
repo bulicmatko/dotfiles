@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 #
-# Linux setup (Debian/Ubuntu based) — for desktops and VPS boxes.
-# Installs zsh + oh-my-zsh + spaceship, links git/ssh config, and links
-# editor settings so they are ready whenever the apps get installed.
+# Linux setup (Debian/Ubuntu based) — guided, step-by-step installer for
+# desktops and VPS boxes: zsh + oh-my-zsh + spaceship, git/ssh config, and
+# editor settings linked so they are ready whenever the apps get installed.
+#
+# Interactive when run from a terminal; fully automatic without a TTY.
 
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lib.sh"
@@ -15,49 +17,86 @@ if [ "$(id -u)" -ne 0 ]; then
   SUDO="sudo"
 fi
 
+STEP_TOTAL=6
+print_banner "Linux"
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Packages
+step "Packages" "zsh, git, curl, and keychain (persistent ssh-agent)."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if command -v apt-get >/dev/null 2>&1; then
-  info "installing base packages"
+if ! command -v apt-get >/dev/null 2>&1; then
+  warn "apt-get not found — install zsh, git, curl, and keychain manually"
+elif confirm "Install base packages via apt?"; then
   $SUDO apt-get update
-  # keychain keeps a single ssh-agent alive across sessions (see zsh/zshrc)
   $SUDO apt-get install -y zsh git curl keychain
 else
-  warn "apt-get not found — install zsh, git, curl, and keychain manually"
+  warn "skipping packages"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Shell + git + ssh
+step "Shell" "oh-my-zsh + spaceship prompt + zsh-nvm + zsh-autosuggestions."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-setup_zsh
-setup_git
-setup_ssh_config
-
-# Cache git HTTPS credentials in memory (machine-local setting).
-if [ -z "$(git config --file "$HOME/.gitconfig.local" credential.helper || true)" ]; then
-  git config --file "$HOME/.gitconfig.local" credential.helper cache
-  ok "git credential.helper set to cache in ~/.gitconfig.local"
-fi
-
-if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ -t 0 ]; then
-  email="$(git config --file "$DOTFILES_DIR/git/gitconfig" user.email)"
-  info "generating SSH key for $email (you will be asked for a passphrase)"
-  ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519"
-  ok "new public key — add it at https://github.com/settings/keys :"
-  cat "$HOME/.ssh/id_ed25519.pub"
+if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
+  setup_zsh
+else
+  warn "skipping shell setup"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# App settings (linked even before the apps are installed — harmless)
+step "Git" "Aliases + shared config; machine overrides in ~/.gitconfig.local."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-setup_zed
-setup_vscode "$HOME/.config/Code/User"
-install_vscode_extensions
+if confirm "Set up git config (links ~/.gitconfig into this repo)?"; then
+  setup_git
+  # Cache git HTTPS credentials in memory (machine-local setting).
+  if [ -z "$(git config --file "$HOME/.gitconfig.local" credential.helper || true)" ]; then
+    git config --file "$HOME/.gitconfig.local" credential.helper cache
+    ok "git credential.helper set to cache in ~/.gitconfig.local"
+  fi
+else
+  warn "skipping git setup"
+fi
 
-set_default_shell_zsh
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+step "SSH" "Config link and key generation."
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+if confirm "Set up SSH (links ~/.ssh/config)?"; then
+  setup_ssh_config
+
+  if [ ! -f "$HOME/.ssh/id_ed25519" ] && is_interactive; then
+    email="$(git config --file "$DOTFILES_DIR/git/gitconfig" user.email)"
+    info "generating SSH key for $email (you will be asked for a passphrase)"
+    ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519"
+    ok "new public key — add it at https://github.com/settings/keys :"
+    cat "$HOME/.ssh/id_ed25519.pub"
+  fi
+else
+  warn "skipping SSH setup"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+step "App settings" "Zed and VSCode links (harmless before the apps exist)."
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if confirm "Link editor settings and install VSCode extensions?"; then
+  setup_zed
+  setup_vscode "$HOME/.config/Code/User"
+  install_vscode_extensions
+else
+  warn "skipping app settings"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+step "Default shell" "Make zsh the login shell."
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if confirm "Set zsh as the default shell?"; then
+  set_default_shell_zsh
+else
+  warn "skipping default shell change"
+fi
+
+printf '\n'
 ok "Linux setup complete — log out and back in to use zsh"

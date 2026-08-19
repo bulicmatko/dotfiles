@@ -7,6 +7,8 @@
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lib.sh"
 
+print_banner "devcontainer"
+
 export DEBIAN_FRONTEND=noninteractive
 
 SUDO=""
