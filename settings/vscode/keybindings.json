@@ -65,7 +65,7 @@
     "command": "-workbench.action.replaceInFiles"
   },
   // shift+cmd+g opens source control (instead of ctrl+shift+g) — same
-  // shortcut as the Zed git panel. Second pair covers GitLens chorded mode.
+  // shortcut as the Zed git panel.
   {
     "key": "shift+cmd+g",
     "command": "workbench.view.scm",
@@ -75,16 +75,6 @@
     "key": "ctrl+shift+g",
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active"
-  },
-  {
-    "key": "shift+cmd+g",
-    "command": "workbench.view.scm",
-    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
-  },
-  {
-    "key": "ctrl+shift+g",
-    "command": "-workbench.view.scm",
-    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
   },
   // ...and shift+cmd+r also finds references when the cursor is on a symbol
   // (context decides between this and replace-in-files above).
