@@ -247,4 +247,5 @@ Released under the [MIT License](LICENSE) — use, copy, and adapt freely.
 
 <p align="center">
   Built with ❤️ by <a href="https://github.com/bulicmatko">Matko Bulić</a>
+  and <a href="https://claude.com/claude-code">Claude</a>
 </p>
