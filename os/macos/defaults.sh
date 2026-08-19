@@ -80,9 +80,11 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 # Finder sidebar favorites
 #
 # The sidebar list lives in a binary file `defaults` cannot reach, so it is
-# written with mysides (from the Brewfile). Each entry is removed before it
-# is added again, which both fixes the order and keeps re-runs idempotent.
-# Paths are written relative to $HOME, so the list works for any account.
+# written with mysides — an optional extra, installed on demand with
+#   brew install --cask mysides
+# Each entry is removed before it is added again, which both fixes the order
+# and keeps re-runs idempotent. Paths are written relative to $HOME, so the
+# list works for any account.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if command -v mysides >/dev/null 2>&1; then
@@ -99,7 +101,7 @@ Downloads|file://$HOME/Downloads/
 Applications|file:///Applications/
 EOF
 else
-  echo "mysides not installed — skipping Finder sidebar favorites (brew bundle installs it)"
+  echo "mysides not installed — skipping Finder sidebar favorites"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
