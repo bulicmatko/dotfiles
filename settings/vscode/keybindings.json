@@ -14,11 +14,6 @@
     "command": "-editor.action.joinLines",
     "when": "editorTextFocus && !editorReadonly"
   },
-  // Unbind Project Manager's list shortcut (extension currently not installed).
-  {
-    "key": "alt+cmd+p",
-    "command": "-projectManager.listProjects"
-  },
   // Go-to-symbol moves to the cmd+g cmd+t chord...
   {
     "key": "cmd+g cmd+t",
@@ -47,17 +42,6 @@
   {
     "key": "cmd+w",
     "command": "-workbench.action.closeActiveEditor"
-  },
-  // ctrl+` toggles the terminal only while the terminal is active.
-  {
-    "key": "ctrl+`",
-    "command": "workbench.action.terminal.toggleTerminal",
-    "when": "terminal.active"
-  },
-  {
-    "key": "ctrl+`",
-    "command": "-workbench.action.terminal.toggleTerminal",
-    "when": "terminal.active"
   },
   // alt+space opens completions (instead of ctrl+space, which macOS
   // reserves for input-source switching).
@@ -101,11 +85,6 @@
     "key": "ctrl+shift+g",
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
-  },
-  // shift+cmd+c opens Copilot quick chat.
-  {
-    "key": "shift+cmd+c",
-    "command": "workbench.action.openQuickChat.copilot"
   },
   // ...and shift+cmd+r also finds references when the cursor is on a symbol
   // (context decides between this and replace-in-files above).

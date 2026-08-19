@@ -35,8 +35,6 @@
   "git.confirmSync": false,
   // Always offer to save dirty files before committing.
   "git.promptToSaveFilesBeforeCommit": "always",
-  // GitLens: two-step (chorded) keyboard shortcuts.
-  "gitlens.keymap": "chorded",
   // GitLens code lens would show on blocks/containers/document (lens is off below).
   "gitlens.codeLens.scopes": ["blocks", "containers", "document"],
   // GitLens blame hover only when hovering the current line itself.
@@ -45,48 +43,32 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never",
   },
-  // TypeScript: Prettier formats, imports untouched on save.
+  // TypeScript family: oxfmt formats (oxc extension).
   "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "never",
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
-  // TSX: same as TypeScript above.
   "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "never",
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   // Let macOS decide font smoothing.
   "workbench.fontAliasing": "auto",
   // Preselect the first entry in the suggest list.
   "editor.suggestSelection": "first",
-  // Marker left behind by the IntelliCode extension (not installed); harmless.
-  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  // JavaScript: Prettier formats.
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
-  },
   // Show default keybindings JSON alongside the user one when opened.
   "workbench.settings.openDefaultKeybindings": true,
-  // JSX: no overrides (falls back to the global default formatter).
-  "[javascriptreact]": {
-    // "editor.defaultFormatter": "biomejs.biome"
-  },
   // YAML: Red Hat YAML extension formats.
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml",
-    // "editor.defaultFormatter": "biomejs.biome"
   },
   // JSON: Prettier formats.
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
   },
   // No GitLens code lens above functions/classes.
   "gitlens.codeLens.enabled": false,
@@ -100,7 +82,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "diffEditor.ignoreTrimWhitespace": false,
-    // "editor.defaultFormatter": "biomejs.biome"
   },
   // Per-theme color tweaks (background unified with Zed/Warp: #1f2335).
   "workbench.colorCustomizations": {
@@ -136,16 +117,9 @@
       // "gitDecoration.ignoredResourceForeground": "#696d87"
     },
   },
-  // Project Manager extension settings (extension not in extensions.txt —
-  // these four keys are inert unless it gets installed).
-  "projectManager.git.baseFolders": ["~/Projects"],
-  "projectManager.groupList": true,
-  "projectManager.filterOnFullPath": true,
-  "projectManager.openInNewWindowWhenClickingInStatusBar": true,
   // HTML: Prettier formats.
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
   },
   // Don't suggest auto-import paths from TS server (path-intellisense does it).
   "typescript.suggest.paths": false,
@@ -155,8 +129,8 @@
   "editor.renderWhitespace": "all",
   // Keep the find widget from pushing the first line down.
   "editor.find.addExtraSpaceOnTop": false,
-  // App opened by "Open in external terminal" (iTerm2 is not installed).
-  "terminal.external.osxExec": "iTerm2.app",
+  // App opened by "Open in external terminal".
+  "terminal.external.osxExec": "Warp.app",
   // Format every file on save.
   "editor.formatOnSave": true,
   // Auto-update import paths when files are moved/renamed.
@@ -173,22 +147,11 @@
   // JSONC: Prettier formats.
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    // "editor.defaultFormatter": "biomejs.biome"
   },
   // No telemetry from Red Hat extensions.
   "redhat.telemetry.enabled": false,
   // Inline (ghost text) suggestions on.
   "editor.inlineSuggest.enabled": true,
-  // Copilot on everywhere except the commit message box.
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": false,
-    "yaml": true,
-    "typescriptreact": true,
-    "typescript": true,
-  },
   // Jump straight to the location instead of opening a peek view.
   "editor.gotoLocation.multipleDeclarations": "goto",
   "editor.gotoLocation.multipleDefinitions": "goto",
@@ -220,12 +183,6 @@
     "editor.defaultFormatter": "jock.svg",
   },
   // "search.mode": "reuseEditor",
-  // Extra safety net: never organize imports for TS/TSX on save.
-  "[typescript][typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "never",
-    },
-  },
   // Don't flag invisible unicode characters (noisy in some files).
   "editor.unicodeHighlight.invisibleCharacters": false,
   // Auto-open the repo when a parent folder contains .git.
@@ -239,10 +196,9 @@
   },
   // Font stack for inlay hints (matches the editor font).
   "editor.inlayHints.fontFamily": "'Monaspace Argon', FiraCode-Retina, 'Fira Code', Hasklig, Monaco",
-  // Double line height in editor, terminal, and chat.
+  // Double line height in editor and terminal.
   "editor.lineHeight": 2,
   "terminal.integrated.lineHeight": 2,
-  "chat.editor.lineHeight": 2,
   // Main editor font stack — Monaspace Argon first.
   "editor.fontFamily": "'Monaspace Argon', FiraCode-Retina, 'Fira Code', Hasklig, Monaco",
   // Show whitespace-only changes in diffs.
@@ -264,22 +220,14 @@
   },
   // Keep suggesting the next path segment after completing one.
   "path-intellisense.autoTriggerNextSuggestion": true,
-  // Copilot next-edit suggestions (multi-line follow-up edits).
-  "github.copilot.nextEditSuggestions.enabled": true,
   // Open Editors list sorted by full path.
   "explorer.openEditors.sortOrder": "fullPath",
-  // Copilot agent mode off (Claude Code is used instead).
-  "chat.agent.enabled": false,
   // Zen mode hides tabs entirely.
   "zenMode.showTabs": "none",
   // No watermark hints on empty editors.
   "workbench.editor.empty.hint": "hidden",
-  // "editor.defaultFormatter": "biomejs.biome",
-  // Biome only runs where a biome.json exists, and never nags to install.
-  "biome.requireConfiguration": true,
-  "biome.suggestInstallingGlobally": false,
   // Global fallback formatter (language overrides above win).
-  "editor.defaultFormatter": "biomejs.biome",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   // docker-compose files: YAML extension formats, 2-space indent.
   "[dockercompose]": {
     "editor.insertSpaces": true,
@@ -321,10 +269,6 @@
   "claudeCode.preferredLocation": "sidebar",
   // Single terminal — no tab list UI.
   "terminal.integrated.tabs.enabled": false,
-  // Machine-specific path written by the Kubernetes extension.
-  "vs-kubernetes": {
-    "vscode-kubernetes.minikube-path-mac": "/Users/bulicmatko/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
-  },
   // Claude Code model + permission mode (skips per-action prompts).
   "claudeCode.selectedModel": "default",
   "claudeCode.allowDangerouslySkipPermissions": true,
@@ -339,16 +283,8 @@
     "https://developer.microsoft.com/json-schemas/": true,
     "https://biomejs.dev": true,
   },
-  // Hide "Ask in chat" from the command palette.
-  "workbench.commandPalette.showAskInChat": false,
   // No "Type to search" hint in fresh terminals.
   "terminal.integrated.initialHint": false,
-  // Disable Copilot Chat experiments (agents/checkpoints/etc. UI).
-  "chat.extensionUnification.enabled": false,
-  "chat.agentsControl.enabled": false,
-  "chat.checkpoints.enabled": false,
-  "chat.customAgentInSubagent.enabled": false,
-  "chat.customizations.harnessSelector.enabled": false,
   // Whole-window zoom one notch up (display-specific taste).
   "window.zoomLevel": 1,
   // Claude Code skill files: ignore whitespace-only diff noise.
@@ -357,13 +293,6 @@
   },
   // Active color theme.
   "workbench.colorTheme": "Tokyo Night Storm",
-  // "debug.console.fontSize": 11,
-  // "scm.inputFontSize": 11,
-  // "chat.fontSize": 11,
-  // "chat.editor.fontSize": 11,
-  // "terminal.integrated.fontSize": 11,
-  // "notebook.defaultFormatter": "biomejs.biome",
-
   // Auto-install these dotfiles inside every devcontainer VSCode opens.
   "dotfiles.repository": "bulicmatko/dotfiles",
   "dotfiles.targetPath": "~/dotfiles",

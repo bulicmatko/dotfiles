@@ -63,8 +63,8 @@
     "dock": "right",
   },
   // Inline predictions come from Zed's own model (not Copilot).
-  "edit_predictions": {
-    "provider": "zed",
+  "features": {
+    "edit_prediction_provider": "zed",
   },
   // Closing the last tab keeps the window open.
   "when_closing_with_no_tabs": "keep_window_open",
@@ -189,14 +189,9 @@
     "button": false,
     "enabled": false,
     "dock": "right",
-    "default_profile": "write",
     "use_modifier_to_send": true,
     "enable_feedback": true,
     "default_width": 800,
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4.1",
-    },
   },
   // Font size inside agent conversations.
   "agent_buffer_font_size": 13.0,
@@ -204,160 +199,5 @@
   "telemetry": {
     "metrics": false,
     "diagnostics": true,
-  },
-  // Per-language overrides. Each web language repeats the same editor
-  // defaults and formats with the project-local Biome binary
-  // (./node_modules/@biomejs/biome) instead of Zed's built-in formatter.
-  "languages": {
-    // Diff: same editor defaults, no external formatter.
-    "Diff": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2
-    },
-    // CSS: format with project-local Biome.
-    "CSS": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
-    // TSX: same pattern as CSS.
-    "TSX": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
-    // TypeScript: same pattern as CSS.
-    "TypeScript": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
-    // JavaScript: same pattern as CSS.
-    "JavaScript": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
-    // JSON: same pattern as CSS.
-    "JSON": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
-    // JSONC: same pattern as CSS.
-    "JSONC": {
-      "linked_edits": true,
-      "show_whitespaces": "all",
-      "show_edit_predictions": true,
-      "ensure_final_newline_on_save": true,
-      "format_on_save": "on",
-      "wrap_guides": [
-        80
-      ],
-      "tab_size": 2,
-      "formatter": {
-        "external": {
-          "command": "./node_modules/@biomejs/biome/bin/biome",
-          "arguments": [
-            "check",
-            "--write",
-            "--stdin-file-path",
-            "{buffer_path}",
-          ],
-        },
-      },
-    },
   },
 }

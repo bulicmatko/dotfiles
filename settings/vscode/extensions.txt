@@ -7,8 +7,6 @@ aaron-bond.better-comments
 anthropic.claude-code
 # Astro — language support for the Astro web framework
 astro-build.astro-vscode
-# Biome — fast JS/TS formatter+linter (the default formatter in settings)
-biomejs.biome
 # Tailwind CSS — class autocomplete and hover docs
 bradlc.vscode-tailwindcss
 # Multi-cursor case preserve — keeps casing when replacing with multiple cursors
@@ -27,7 +25,7 @@ eamodio.gitlens
 editorconfig.editorconfig
 # Tokyo Night — the active color theme
 enkia.tokyo-night
-# Prettier — formatter used for JSON/HTML/Markdown/YAML overrides
+# Prettier — global fallback formatter (JSON/HTML/Markdown/CSS)
 esbenp.prettier-vscode
 # Go — official Go language support
 golang.go
@@ -47,7 +45,7 @@ ms-kubernetes-tools.vscode-kubernetes-tools
 ms-vscode-remote.remote-containers
 # Bun — Bun runtime support and debugger
 oven.bun-vscode
-# Oxc — very fast JS/TS linter
+# Oxc — oxlint + oxfmt, the primary JS/TS linter and formatter
 oxc.oxc-vscode
 # Prisma — schema highlighting, formatting, autocomplete
 prisma.prisma
@@ -55,8 +53,6 @@ prisma.prisma
 redhat.vscode-xml
 # YAML — schema-aware YAML (formatter for compose/GitHub Actions)
 redhat.vscode-yaml
-# Live Server — one-click static file server with live reload
-ritwickdey.liveserver
 # styled-components — CSS-in-JS highlighting and IntelliSense
 styled-components.vscode-styled-components
 # Even Better TOML — TOML language support
