@@ -135,9 +135,11 @@ waiting for input.
 
 ### What it does on Linux
 
-Installs `zsh git curl keychain` via apt, sets up the same shell/git/ssh
-config plus nvm, links editor settings, and makes zsh the default shell.
-`keychain` keeps one ssh-agent alive across sessions (wired up in `zsh/zshrc`).
+Installs `zsh git curl keychain fzf zoxide` via apt, sets up the same
+shell/git/ssh config plus nvm, links editor settings, and makes zsh the
+default shell. `keychain` keeps one ssh-agent alive across sessions (wired
+up in `zsh/zshrc`). Machines without root or sudo skip the apt step and
+still get everything else.
 
 ### What it does in devcontainers
 
@@ -152,6 +154,7 @@ Headless subset: zsh + oh-my-zsh + starship + git config only. No SSH keys
 | `git/gitconfig`                    | `~/.gitconfig`                                        |
 | `git/gitignore_global`             | `~/.gitignore_global`                                 |
 | `settings/claude/settings.json`    | `~/.claude/settings.json`                             |
+| `settings/claude/statusline.sh`    | `~/.claude/statusline.sh`                             |
 | `settings/gh/config.yml`           | `~/.config/gh/config.yml`                             |
 | `settings/starship/starship.toml`  | `~/.config/starship.toml`                             |
 | `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                 |
@@ -187,6 +190,11 @@ missing VSCode extensions — run the one command (it lives in `bin/`, which
 dotfiles-update
 ```
 
+Homebrew installs come from this machine's picker selection
+(`~/.Brewfile.local`) when one exists, so apps you skipped during install
+stay skipped. Re-run `./install.sh` to change the selection or pick up
+entries newly added to the Brewfile.
+
 Any script dropped into `bin/` is instantly available on every machine.
 To verify a machine is wired up correctly — every symlink pointing into the
 repo, git identity set, shell components present — run:
@@ -202,13 +210,14 @@ dotfiles-doctor
 | `~/.zshrc.local`    | extra shell config, sourced at the end of `zshrc`    |
 | `~/.gitconfig.local`| commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
 | `~/.ssh/config.local`| private SSH hosts (VPS IPs, work jumphosts) — Included from the synced `ssh/config` |
+| `~/.Brewfile.local` | this machine's picker selection from the Brewfile — `dotfiles-update` installs from it, so deselected apps never come back |
 
 ## Homebrew (macOS apps)
 
 The [Brewfile](Brewfile) is the app manifest. One call installs everything:
 
 ```sh
-brew bundle --file=~/Projects/dotfiles/Brewfile
+brew bundle --file ~/Projects/dotfiles/Brewfile
 ```
 
 - After installing something new: `brew bundle dump --file=Brewfile --force`

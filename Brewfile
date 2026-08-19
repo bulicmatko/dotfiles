@@ -110,4 +110,4 @@ cask "freecad"            # 3D CAD modeling
 # Nerd Font builds: same letterforms + ligatures, plus icon glyphs for
 # starship presets, eza --icons, and TUI tools.
 cask "font-monaspice-nerd-font" # GitHub Monaspace, patched — editor font ("MonaspiceAr NF")
-cask "font-fira-code-nerd-font" # Fira Code, patched — terminal font + editor fallback
+cask "font-fira-code-nerd-font" # Fira Code, patched — editor/terminal fallback ("FiraCode Nerd Font")

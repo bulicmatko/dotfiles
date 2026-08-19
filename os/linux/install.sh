@@ -11,9 +11,10 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/scripts/lib.sh"
 
 [ "$(uname -s)" = "Linux" ] || fail "this script is Linux-only — use ./install.sh"
 
+# Root/sudo is only needed for the apt step — everything else lives in $HOME,
+# so a machine without sudo still gets the full shell/git/ssh/editor setup.
 SUDO=""
-if [ "$(id -u)" -ne 0 ]; then
-  command -v sudo >/dev/null 2>&1 || fail "need root or sudo to install packages"
+if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
   SUDO="sudo"
 fi
 
@@ -21,20 +22,32 @@ STEP_TOTAL=6
 print_banner "Linux"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Packages" "zsh, git, curl, and keychain (persistent ssh-agent)."
+step "Packages" "zsh, git, curl, keychain, fzf, and zoxide via apt."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# zsh      — the shell itself
+# git      — clones oh-my-zsh plugins (and everything else)
+# curl     — fetches the oh-my-zsh installer
+# keychain — keeps one ssh-agent alive across sessions (used in zsh/zshrc)
+# fzf      — fuzzy Ctrl-R history and file finding (wired in zsh/zshrc)
+# zoxide   — learned cd (wired in zsh/zshrc)
+PKGS=(zsh git curl keychain fzf zoxide)
+
 if ! command -v apt-get >/dev/null 2>&1; then
-  warn "apt-get not found — install zsh, git, curl, and keychain manually"
+  warn "apt-get not found — install ${PKGS[*]} manually"
+elif [ "$(id -u)" -ne 0 ] && [ -z "$SUDO" ]; then
+  warn "no root and no sudo — skipping packages; install ${PKGS[*]} manually"
 elif confirm "Install base packages via apt?"; then
   $SUDO apt-get update
-  # zsh      — the shell itself
-  # git      — clones oh-my-zsh plugins (and everything else)
-  # curl     — fetches the oh-my-zsh installer
-  # keychain — keeps one ssh-agent alive across sessions (used in zsh/zshrc)
-  # fzf      — fuzzy Ctrl-R history and file finding (wired in zsh/zshrc)
-  # zoxide   — learned cd (wired in zsh/zshrc)
-  $SUDO apt-get install -y zsh git curl keychain fzf zoxide
+  # One transaction first; if a package is unavailable on this release
+  # (apt aborts the whole transaction for one unknown name), fall back to
+  # one-by-one so the rest still install.
+  if ! $SUDO apt-get install -y "${PKGS[@]}"; then
+    warn "batch install failed — retrying packages one by one"
+    for pkg in "${PKGS[@]}"; do
+      $SUDO apt-get install -y "$pkg" || warn "could not install $pkg"
+    done
+  fi
 else
   warn "skipping packages"
 fi
@@ -90,7 +103,7 @@ step "App settings" "Zed and VSCode links (harmless before the apps exist)."
 
 if confirm "Link editor settings and install VSCode extensions?"; then
   setup_zed
-  setup_vscode "$HOME/.config/Code/User"
+  setup_vscode
   install_vscode_extensions
   setup_claude_code
   setup_gh
