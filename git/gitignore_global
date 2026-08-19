@@ -1,5 +1,12 @@
 # ~/.gitignore_global — OS and editor junk ignored in every repository.
-# Project-specific ignores belong in each project's own .gitignore.
+#
+# The three ignore tiers, scoped by WHO causes a file to exist:
+#   project .gitignore  — what the project produces (build output, env files);
+#                         lives in the repo so it protects every contributor
+#   this file           — what YOUR environment produces (OS/editor junk);
+#                         other people's environments are their own job
+#   .git/info/exclude   — personal one-offs in a single repo, never committed
+#
 # NOTE: gitignore has no trailing comments — a # only counts at line start.
 
 # macOS
@@ -40,9 +47,3 @@ Desktop.ini
 *.swo
 # merge-conflict leftovers
 *.orig
-
-# Safety net
-# Deliberate exception to the OS/editor-junk rule: local secrets must never
-# reach a repository, even one missing its own ignore entry.
-# (`git add -f` can still add it where genuinely intended.)
-.env.local
