@@ -1,0 +1,38 @@
+// Node.js (LTS) devcontainer — copy to <project>/.devcontainer/devcontainer.json
+//
+// Keep project devcontainers team-neutral: personal config (zsh, prompt, git
+// aliases) does NOT belong here. It arrives automatically because:
+//   - VSCode Dev Containers reads "dotfiles.repository" from your user settings
+//     (already set in settings/vscode/settings.json) and runs install.sh
+//   - GitHub Codespaces: enable dotfiles at https://github.com/settings/codespaces
+//     and select bulicmatko/dotfiles
+{
+  "name": "Node 24",
+  // TypeScript variant: node 24 + npm/yarn/pnpm + tsc, git and curl included.
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+
+  "features": {
+    // zsh preinstalled so the dotfiles install is instant
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true
+    }
+    // "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      // Project-relevant extensions only — personal ones sync separately.
+      "extensions": [
+        "editorconfig.editorconfig",
+        "oxc.oxc-vscode"
+      ]
+    }
+  },
+
+  "remoteUser": "node",
+  "postCreateCommand": "npm install"
+}

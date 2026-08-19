@@ -53,4 +53,4 @@ jobs:
             settings/vscode/keybindings.json \
             settings/zed/settings.json \
             settings/zed/keymap.json \
-            devcontainer/devcontainer.example.json
+            devcontainer/*/devcontainer.json

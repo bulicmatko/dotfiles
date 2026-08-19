@@ -1,4 +1,4 @@
-// Starter devcontainer for a project — copy to <project>/.devcontainer/devcontainer.json
+// Bun devcontainer — copy to <project>/.devcontainer/devcontainer.json
 //
 // Keep project devcontainers team-neutral: personal config (zsh, prompt, git
 // aliases) does NOT belong here. It arrives automatically because:
@@ -7,16 +7,18 @@
 //   - GitHub Codespaces: enable dotfiles at https://github.com/settings/codespaces
 //     and select bulicmatko/dotfiles
 {
-  "name": "app",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "name": "Bun",
+  // Official Bun image (Debian based) — bump the tag when a project needs it.
+  "image": "oven/bun:1.3.14",
 
   "features": {
+    // The bun image ships without git — required for plugins and dotfiles.
+    "ghcr.io/devcontainers/features/git:1": {},
     // zsh preinstalled so the dotfiles install is instant
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
       "configureZshAsDefaultShell": true
     }
-    // "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
   "customizations": {
@@ -27,11 +29,12 @@
       // Project-relevant extensions only — personal ones sync separately.
       "extensions": [
         "editorconfig.editorconfig",
-        "biomejs.biome"
+        "oven.bun-vscode",
+        "oxc.oxc-vscode"
       ]
     }
   },
 
-  "remoteUser": "node",
-  "postCreateCommand": "npm install"
+  "remoteUser": "bun",
+  "postCreateCommand": "bun install"
 }

@@ -26,7 +26,12 @@ bin/
   dotfiles-doctor             health check — symlinks, identity, Brewfile
   dotfiles-update             update everything with one command (on PATH)
 devcontainer/
-  devcontainer.example.json   starter devcontainer for new projects
+  bun/
+    devcontainer.json         Bun project template (official oven/bun image)
+  go/
+    devcontainer.json         Go project template
+  node/
+    devcontainer.json         Node.js LTS project template
 git/
   gitattributes               global git attributes
   gitconfig                   aliases + shared config
@@ -211,9 +216,11 @@ Two pieces make containers feel like home:
    repo into every container and runs `install.sh`. For GitHub Codespaces,
    enable it once at <https://github.com/settings/codespaces> → *Automatically
    install dotfiles* → select this repo.
-2. **Project config, per repo**: copy
-   [devcontainer/devcontainer.example.json](devcontainer/devcontainer.example.json)
-   to `<project>/.devcontainer/devcontainer.json` and adjust. Keep it
+2. **Project config, per repo**: copy the matching template —
+   [node](devcontainer/node/devcontainer.json) (Node LTS),
+   [bun](devcontainer/bun/devcontainer.json), or
+   [go](devcontainer/go/devcontainer.json) — to
+   `<project>/.devcontainer/devcontainer.json` and adjust. Keep it
    team-neutral — personal config arrives via step 1.
 
 ## SSH keys on a brand-new Mac
