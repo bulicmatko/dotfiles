@@ -76,33 +76,8 @@ defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Finder sidebar favorites
-#
-# The sidebar list lives in a binary file `defaults` cannot reach, so it is
-# written with mysides — an optional extra, installed on demand with
-#   brew install --cask mysides
-# Each entry is removed before it is added again, which both fixes the order
-# and keeps re-runs idempotent. Paths are written relative to $HOME, so the
-# list works for any account.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-if command -v mysides >/dev/null 2>&1; then
-  # name|URL, listed in the order they should appear in the sidebar
-  while IFS='|' read -r fav_name fav_url; do
-    [ -n "$fav_name" ] || continue
-    mysides remove "$fav_name" >/dev/null 2>&1 || true
-    mysides add "$fav_name" "$fav_url" >/dev/null 2>&1 \
-      || echo "could not add $fav_name to the Finder sidebar" >&2
-  done <<EOF
-Desktop|file://$HOME/Desktop/
-Documents|file://$HOME/Documents/
-Downloads|file://$HOME/Downloads/
-Applications|file:///Applications/
-EOF
-else
-  echo "mysides not installed — skipping Finder sidebar favorites"
-fi
+# The sidebar keeps its stock favorites — Desktop, Documents, Downloads, and
+# Applications — which is what a Mac ships with, so there is nothing to set.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Screensaver
