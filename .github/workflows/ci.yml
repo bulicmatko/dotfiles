@@ -45,6 +45,32 @@ jobs:
       - name: Brewfile parses
         run: brew bundle list --file=Brewfile > /dev/null && echo "OK Brewfile"
 
+      - name: Brewfile entries still exist upstream
+        run: |
+          # Parsing the file says nothing about whether Homebrew still carries
+          # what it lists, and one entry that cannot be resolved aborts the
+          # whole `brew bundle` run — so a single stale line installs nothing
+          # at all on a fresh machine. Ask the API, which is what a clean
+          # install sees; a local `brew info` would be masked by whatever this
+          # runner happens to have installed.
+          missing=0
+          while read -r kind name; do
+            # Third-party taps are not in the core API; brew resolves them
+            # from the tap the Brewfile declares.
+            case "$name" in */*) echo "SKIP $kind $name (third-party tap)"; continue ;; esac
+            case "$kind" in
+              brew) url="https://formulae.brew.sh/api/formula/$name.json" ;;
+              cask) url="https://formulae.brew.sh/api/cask/$name.json" ;;
+            esac
+            if curl -fsS --retry 3 --retry-delay 2 --connect-timeout 10 -o /dev/null "$url"; then
+              echo "OK   $kind $name"
+            else
+              echo "GONE $kind $name — removed from Homebrew, or renamed"
+              missing=1
+            fi
+          done < <(awk '/^(brew|cask) "/ { t=$1; match($0,/"[^"]+"/); print t, substr($0,RSTART+1,RLENGTH-2) }' Brewfile)
+          exit $missing
+
       - name: JSONC settings parse
         run: |
           node .github/scripts/jsonc-check.js \

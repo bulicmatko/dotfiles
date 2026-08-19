@@ -12,6 +12,7 @@
 # Third-party taps are trusted per machine (Homebrew stores that in
 # ~/.homebrew/trust.json); the installer asks once for every tap listed here.
 tap "oven-sh/bun"      # third-party tap that provides the bun formula
+tap "hashicorp/tap"    # HashiCorp's own tap — the only source of terraform
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # CLI tools
@@ -43,7 +44,10 @@ brew "go"              # Go compiler and toolchain
 
 # Infrastructure
 brew "minikube"        # local single-node Kubernetes cluster
-brew "terraform"       # infrastructure as code
+# Terraform ships from HashiCorp's tap rather than homebrew-core, which
+# carries no terraform formula. OpenTofu (brew "opentofu") is the drop-in
+# fork if a machine would rather stay on an open-source license.
+brew "hashicorp/tap/terraform" # infrastructure as code
 
 # Misc
 brew "ollama"          # run open-source LLMs locally from the terminal
