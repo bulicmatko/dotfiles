@@ -87,7 +87,7 @@ if confirm "Set up SSH (links ~/.ssh/config, keychain-backed key)?"; then
 
   if [ ! -f "$SSH_KEY" ]; then
     if is_interactive; then
-      email="$(git config --file "$DOTFILES_DIR/git/gitconfig" user.email)"
+      email="$(git_email)"
       info "generating SSH key for $email (you will be asked for a passphrase)"
       ssh-keygen -t ed25519 -C "$email" -f "$SSH_KEY"
       ok "new public key — add it at https://github.com/settings/keys :"

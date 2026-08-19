@@ -65,6 +65,21 @@ confirm() {
   esac
 }
 
+# ask <question> [default] — prints the answer on stdout. Enter accepts the
+# default; without a TTY the default is used so unattended runs never block.
+ask() {
+  local question="$1" default="${2:-}" reply=""
+  if is_interactive; then
+    if [ -n "$default" ]; then
+      printf '\033[36m?\033[0m %s \033[2m[%s]\033[0m ' "$question" "$default" >/dev/tty
+    else
+      printf '\033[36m?\033[0m %s ' "$question" >/dev/tty
+    fi
+    IFS= read -r reply </dev/tty
+  fi
+  [ -n "$reply" ] && printf '%s' "$reply" || printf '%s' "$default"
+}
+
 # multiselect <title>
 #
 # Checkbox picker on the terminal's alternate screen. Items are provided via
@@ -365,6 +380,13 @@ set_default_shell_zsh() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_git() {
+  # Capture any identity configured before ~/.gitconfig gets replaced (a
+  # previous setup, or the identity Codespaces injects into containers) so
+  # unattended runs keep committing as the right person.
+  local existing_name existing_email
+  existing_name="$(git config --global user.name 2>/dev/null || true)"
+  existing_email="$(git config --global user.email 2>/dev/null || true)"
+
   link_file git/gitconfig "$HOME/.gitconfig"
   link_file git/gitignore_global "$HOME/.gitignore_global"
   link_file git/gitattributes "$HOME/.gitattributes"
@@ -374,6 +396,40 @@ setup_git() {
     cp "$DOTFILES_DIR/git/gitconfig.local.template" "$HOME/.gitconfig.local"
     ok "created ~/.gitconfig.local for machine-specific overrides"
   fi
+
+  # Commit identity is per installation (the repo ships none, so these
+  # dotfiles work for anyone without editing them). Asked once, stored in
+  # ~/.gitconfig.local; skipped on every later run.
+  local name email
+  name="$(git config --file "$HOME/.gitconfig.local" user.name 2>/dev/null || true)"
+  email="$(git config --file "$HOME/.gitconfig.local" user.email 2>/dev/null || true)"
+
+  if [ -z "$name" ]; then
+    name="$(ask "Name for git commits:" "$existing_name")"
+    if [ -n "$name" ]; then
+      git config --file "$HOME/.gitconfig.local" user.name "$name"
+      ok "git user.name set to '$name' in ~/.gitconfig.local"
+    fi
+  fi
+  if [ -z "$email" ]; then
+    email="$(ask "Email for git commits:" "$existing_email")"
+    if [ -n "$email" ]; then
+      git config --file "$HOME/.gitconfig.local" user.email "$email"
+      ok "git user.email set to '$email' in ~/.gitconfig.local"
+    fi
+  fi
+  if [ -z "$name" ] || [ -z "$email" ]; then
+    warn "git identity incomplete — set it later with:"
+    warn "  git config --file ~/.gitconfig.local user.name 'Your Name'"
+    warn "  git config --file ~/.gitconfig.local user.email you@example.com"
+  fi
+}
+
+# git_email — best available email (for the SSH key comment).
+git_email() {
+  git config --file "$HOME/.gitconfig.local" user.email 2>/dev/null \
+    || git config user.email 2>/dev/null \
+    || printf '%s@%s' "$(id -un)" "$(hostname -s 2>/dev/null || hostname)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

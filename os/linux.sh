@@ -70,7 +70,7 @@ if confirm "Set up SSH (links ~/.ssh/config)?"; then
   setup_ssh_config
 
   if [ ! -f "$HOME/.ssh/id_ed25519" ] && is_interactive; then
-    email="$(git config --file "$DOTFILES_DIR/git/gitconfig" user.email)"
+    email="$(git_email)"
     info "generating SSH key for $email (you will be asked for a passphrase)"
     ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519"
     ok "new public key — add it at https://github.com/settings/keys :"

@@ -7,6 +7,11 @@ Everything is **symlinked** from this repo into place, so editing a setting in
 any tool changes the file *in this repo*. Commit and push on one machine,
 pull on another — done.
 
+The repo contains **no personal identity**: the installer asks for a git
+name/email on first run and stores them in untracked `~/.gitconfig.local`,
+and app choice is a per-machine pick from the Brewfile. Anyone can use these
+dotfiles as-is, customized entirely through the untracked local files.
+
 ## Layout
 
 ```
@@ -78,7 +83,9 @@ waiting for input.
 
 1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)
 2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-nvm + zsh-autosuggestions
-3. Symlinks zsh, git, and ssh config (see table below)
+3. Symlinks zsh, git, and ssh config (see table below), and asks for your
+   git commit name/email — stored in untracked `~/.gitconfig.local`, asked
+   only once per machine
 4. Generates an ed25519 SSH key if missing and stores its passphrase in the
    **Apple keychain** (`ssh-add --apple-use-keychain`); `ssh/config` has
    `UseKeychain` + `AddKeysToAgent`, so the key auto-loads forever after
@@ -139,7 +146,7 @@ the tools' own settings-sync off to avoid tug-of-war.
 | File                | Purpose                                              |
 | ------------------- | ---------------------------------------------------- |
 | `~/.zshrc.local`    | extra shell config, sourced at the end of `zshrc`    |
-| `~/.gitconfig.local`| git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
+| `~/.gitconfig.local`| commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
 
 ## Homebrew (macOS apps)
 

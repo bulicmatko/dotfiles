@@ -2,10 +2,9 @@
 # Machine-specific settings belong in ~/.gitconfig.local (included at the end,
 # so anything set there overrides this file).
 
-# Identity on every commit (override per machine in ~/.gitconfig.local).
-[user]
-  name = Matko Bulić
-  email = bulicmatko@gmail.com
+# Commit identity (user.name / user.email) is intentionally NOT in this file:
+# the install script asks for it and stores it in ~/.gitconfig.local (included
+# at the bottom), so anyone can use these dotfiles without editing them.
 
 # `git init` creates "main" instead of "master".
 [init]
