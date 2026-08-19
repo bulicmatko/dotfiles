@@ -164,10 +164,10 @@ alias ...="cd ../.."
 
 alias c="clear"
 
-# Long listings — eza (git-aware, dirs first) when installed, plain ls otherwise.
+# Long listings — eza (git-aware, icons, dirs first) when installed, else ls.
 if command -v eza >/dev/null 2>&1; then
-  alias lsl="eza -l --git --group-directories-first"
-  alias lsal="eza -la --git --group-directories-first"
+  alias lsl="eza -l --git --icons --group-directories-first"
+  alias lsal="eza -la --git --icons --group-directories-first"
 else
   alias lsl="ls -lF"
   alias lsal="ls -alF"

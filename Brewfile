@@ -108,5 +108,7 @@ cask "freecad"            # 3D CAD modeling
 # Fonts
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cask "font-monaspace"     # GitHub Monaspace — editor/terminal font (Argon)
-cask "font-fira-code"     # Fira Code — ligature font used as fallback
+# Nerd Font builds: same letterforms + ligatures, plus icon glyphs for
+# starship presets, eza --icons, and TUI tools.
+cask "font-monaspice-nerd-font" # GitHub Monaspace, patched — editor font ("MonaspiceAr NF")
+cask "font-fira-code-nerd-font" # Fira Code, patched — terminal font + editor fallback

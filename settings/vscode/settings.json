@@ -4,7 +4,7 @@
 {
   // Search is case-insensitive until the query contains an uppercase letter.
   "search.smartCase": true,
-  // Enable all Monaspace ligature/stylistic sets (arrows, ===, etc.).
+  // Enable all Monaspice ligature/stylistic sets (arrows, ===, etc.).
   "editor.fontLigatures": "'calt', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09', 'liga'",
   // Vertical guide line at 80 characters.
   "editor.rulers": [80],
@@ -195,12 +195,12 @@
     ".dockerignore": "shellscript",
   },
   // Font stack for inlay hints (matches the editor font).
-  "editor.inlayHints.fontFamily": "'Monaspace Argon', FiraCode-Retina, 'Fira Code', Hasklig, Monaco",
+  "editor.inlayHints.fontFamily": "'MonaspiceAr NF', 'FiraCode Nerd Font', Monaco",
   // Double line height in editor and terminal.
   "editor.lineHeight": 2,
   "terminal.integrated.lineHeight": 2,
-  // Main editor font stack — Monaspace Argon first.
-  "editor.fontFamily": "'Monaspace Argon', FiraCode-Retina, 'Fira Code', Hasklig, Monaco",
+  // Main editor font stack — Monaspice (Nerd Font build of Monaspace Argon).
+  "editor.fontFamily": "'MonaspiceAr NF', 'FiraCode Nerd Font', Monaco",
   // Show whitespace-only changes in diffs.
   "diffEditor.ignoreTrimWhitespace": false,
   // Panel (terminal/problems) docked on the right.

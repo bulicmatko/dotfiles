@@ -7,9 +7,9 @@
   },
   // Highlight the current line and its gutter.
   "current_line_highlight": "all",
-  // Fonts tried when Monaspace Argon misses a glyph.
+  // Fonts tried when the main font misses a glyph.
   "buffer_font_fallbacks": [
-    "Fira Code",
+    "FiraCode Nerd Font",
     "Monaco"
   ],
   // Treat .env as dotenv and .dockerignore as shell for highlighting.
@@ -113,10 +113,10 @@
     },
   },
   // UI font and size.
-  "ui_font_family": "Monaspace Argon",
+  "ui_font_family": "MonaspiceAr NF",
   "ui_font_size": 16.0,
-  // Editor font.
-  "buffer_font_family": "Monaspace Argon",
+  // Editor font — Monaspice (Nerd Font build of Monaspace Argon).
+  "buffer_font_family": "MonaspiceAr NF",
   // Enable all Monaspace ligature/stylistic sets (arrows, ===, etc.).
   "buffer_font_features": {
     "calt": true,
