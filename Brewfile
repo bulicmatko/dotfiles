@@ -19,6 +19,7 @@ brew "tree"            # print directory trees in the terminal
 brew "gh"              # GitHub CLI — PRs, issues, auth from the terminal
 brew "glab"            # GitLab CLI — same idea for GitLab
 brew "mkcert"          # locally-trusted HTTPS certificates for dev servers
+brew "starship"        # the prompt — configured in settings/starship/
 brew "fzf"             # fuzzy finder — Ctrl-R history, **<Tab> completion
 brew "zoxide"          # smarter cd — `z dotf` jumps to ~/Projects/dotfiles
 brew "eza"             # modern ls — git status, icons (aliased in zshrc)

@@ -38,6 +38,7 @@ info "symlinks"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 check_link zsh/zshrc "$HOME/.zshrc"
+check_link settings/starship/starship.toml "$HOME/.config/starship.toml"
 check_link git/gitconfig "$HOME/.gitconfig"
 check_link git/gitignore_global "$HOME/.gitignore_global"
 check_link git/gitattributes "$HOME/.gitattributes"
@@ -88,7 +89,6 @@ info "shell components"
 
 custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 for d in "$HOME/.oh-my-zsh" \
-         "$custom/themes/spaceship-prompt" \
          "$custom/plugins/zsh-autosuggestions" \
          "$custom/plugins/zsh-syntax-highlighting" \
          "$HOME/.nvm"; do
@@ -97,6 +97,10 @@ for d in "$HOME/.oh-my-zsh" \
     PROBLEMS=$((PROBLEMS + 1))
   fi
 done
+if command -v starship >/dev/null 2>&1; then ok "starship"; else
+  warn "starship missing — run ./install.sh"
+  PROBLEMS=$((PROBLEMS + 1))
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 info "homebrew (informational)"

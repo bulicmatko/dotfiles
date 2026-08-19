@@ -21,10 +21,9 @@ if command -v brew >/dev/null 2>&1; then
   brew bundle --file="$DOTFILES_DIR/Brewfile" --no-upgrade || warn "brew bundle reported issues"
 fi
 
-info "updating oh-my-zsh, theme, and plugins"
+info "updating oh-my-zsh and plugins"
 custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 for repo in "$HOME/.oh-my-zsh" \
-            "$custom/themes/spaceship-prompt" \
             "$custom/plugins/zsh-autosuggestions" \
             "$custom/plugins/zsh-syntax-highlighting"; do
   if [ -d "$repo/.git" ]; then

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Linux setup (Debian/Ubuntu based) — guided, step-by-step installer for
-# desktops and VPS boxes: zsh + oh-my-zsh + spaceship, git/ssh config, and
+# desktops and VPS boxes: zsh + oh-my-zsh + starship, git/ssh config, and
 # editor settings linked so they are ready whenever the apps get installed.
 #
 # Interactive when run from a terminal; fully automatic without a TTY.
@@ -40,11 +40,12 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + nvm."
+step "Shell" "oh-my-zsh + starship prompt + zsh-autosuggestions + nvm."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
   setup_zsh
+  setup_starship
   setup_nvm
 else
   warn "skipping shell setup"

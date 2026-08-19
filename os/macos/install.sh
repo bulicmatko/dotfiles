@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # macOS setup — guided, step-by-step installer for Homebrew apps, zsh +
-# oh-my-zsh + spaceship, git, SSH keychain, and symlinked app settings.
+# oh-my-zsh + starship, git, SSH keychain, and symlinked app settings.
 #
 # Interactive when run from a terminal (choose apps, confirm each step);
 # fully automatic when run without a TTY.
@@ -52,11 +52,12 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + nvm."
+step "Shell" "oh-my-zsh + starship prompt + zsh-autosuggestions + nvm."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
   setup_zsh
+  setup_starship
   setup_nvm
 else
   warn "skipping shell setup"

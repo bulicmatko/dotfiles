@@ -36,6 +36,7 @@ command -v zsh >/dev/null 2>&1 || fail "zsh is not available in this container"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh
+setup_starship
 setup_git
 
 set_default_shell_zsh

@@ -1,0 +1,9 @@
+# Starship prompt — symlinked to ~/.config/starship.toml by ./install.sh.
+#
+# An empty config means starship's defaults: directory, git branch + status,
+# language versions, command duration, and the ❯ arrow — fast and minimal.
+# Full option reference: https://starship.rs/config/
+#
+# Alternative look: presets/tokyo-night.toml (powerline segments). Try it in
+# one terminal with STARSHIP_CONFIG=<repo>/settings/starship/presets/tokyo-night.toml,
+# or make it permanent by copying it over this file.

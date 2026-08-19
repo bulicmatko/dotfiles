@@ -331,7 +331,7 @@ clone_repo() {
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Zsh / oh-my-zsh / spaceship
+# Zsh / oh-my-zsh / starship
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh() {
@@ -345,10 +345,11 @@ setup_zsh() {
 
   local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-  # spaceship — the prompt theme (git branch/status, language versions, ...).
-  clone_repo https://github.com/spaceship-prompt/spaceship-prompt.git "$custom/themes/spaceship-prompt"
-  if [ ! -e "$custom/themes/spaceship.zsh-theme" ]; then
-    ln -s "$custom/themes/spaceship-prompt/spaceship.zsh-theme" "$custom/themes/spaceship.zsh-theme"
+  # The prompt is starship, not an oh-my-zsh theme — clear out the spaceship
+  # clone and theme symlink if a previous setup left them behind.
+  if [ -d "$custom/themes/spaceship-prompt" ] || [ -L "$custom/themes/spaceship.zsh-theme" ]; then
+    rm -rf "$custom/themes/spaceship-prompt" "$custom/themes/spaceship.zsh-theme"
+    ok "removed stale spaceship theme (the prompt is starship)"
   fi
 
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
@@ -364,6 +365,19 @@ setup_zsh() {
   fi
 
   link_file zsh/zshrc "$HOME/.zshrc"
+}
+
+# setup_starship — the prompt. Config is linked for every platform; the
+# binary comes from the Brewfile on macOS and the official installer
+# elsewhere (single static binary into /usr/local/bin).
+setup_starship() {
+  link_file settings/starship/starship.toml "$HOME/.config/starship.toml"
+
+  if command -v starship >/dev/null 2>&1 || command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+  info "installing starship"
+  curl -sS https://starship.rs/install.sh | sh -s -- -y || warn "starship install failed"
 }
 
 # setup_nvm — official installer, pinned release, no shell-profile edits

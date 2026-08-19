@@ -194,7 +194,7 @@ play_notification_sound = true
 
 [terminal]
 
-# Prompt handling: honor the shell's PS1 (spaceship prompt), expand aliases,
+# Prompt handling: honor the shell's PS1 (starship prompt), expand aliases,
 # classic single-line input box, no @-mention context menu.
 [terminal.input]
 honor_ps1 = true

@@ -52,6 +52,10 @@ settings/
     settings.json             Claude Code settings
   gh/
     config.yml                GitHub CLI settings + aliases (no tokens)
+  starship/
+    presets/
+      tokyo-night.toml        alternative prompt look (powerline segments)
+    starship.toml             starship prompt config (defaults = minimal)
   vscode/
     extensions.txt            VSCode extension list
     keybindings.json          VSCode shortcuts
@@ -66,7 +70,7 @@ settings/
 ssh/
   config                      keychain-aware, valid on macOS and Linux
 zsh/
-  zshrc                       oh-my-zsh + spaceship, cross-platform
+  zshrc                       oh-my-zsh + starship, cross-platform
 .editorconfig                 editor defaults for files in this repo
 Brewfile                      every macOS app/CLI, installed in one call
 install.sh                    entrypoint — detects the platform and dispatches
@@ -104,8 +108,8 @@ waiting for input.
 ### What it does on macOS
 
 1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)
-2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-autosuggestions,
-   and nvm via its official installer
+2. Installs oh-my-zsh (unattended) + the starship prompt +
+   zsh-autosuggestions, and nvm via its official installer
 3. Symlinks zsh, git, and ssh config (see table below), and asks for your
    git commit name/email — stored in untracked `~/.gitconfig.local`, asked
    only once per machine
@@ -129,7 +133,7 @@ config plus nvm, links editor settings, and makes zsh the default shell.
 
 ### What it does in devcontainers
 
-Headless subset: zsh + oh-my-zsh + spaceship + git config only. No SSH keys
+Headless subset: zsh + oh-my-zsh + starship + git config only. No SSH keys
 (agent forwarding provides them) and no GUI settings.
 
 ## Symlink map
@@ -141,6 +145,7 @@ Headless subset: zsh + oh-my-zsh + spaceship + git config only. No SSH keys
 | `git/gitignore_global`             | `~/.gitignore_global`                                 |
 | `settings/claude/settings.json`    | `~/.claude/settings.json`                             |
 | `settings/gh/config.yml`           | `~/.config/gh/config.yml`                             |
+| `settings/starship/starship.toml`  | `~/.config/starship.toml`                             |
 | `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                 |
 | `settings/vscode/settings.json`    | `~/Library/Application Support/Code/User/settings.json` (macOS) / `~/.config/Code/User/settings.json` (Linux) |
 | `settings/warp/themes/`            | `~/.warp/themes` (macOS)                              |
@@ -241,5 +246,5 @@ Released under the [MIT License](LICENSE) — use, copy, and adapt freely.
 ---
 
 <p align="center">
-  Built with ❤️ and a 🌵 by <a href="https://github.com/bulicmatko">Matko Bulić</a>
+  Built with ❤️ by <a href="https://github.com/bulicmatko">Matko Bulić</a>
 </p>
