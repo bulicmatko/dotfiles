@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Shared helpers for all install scripts.
 # Source this file, do not execute it:  source "$DOTFILES_DIR/scripts/lib.sh"
 
@@ -118,7 +119,7 @@ multiselect() {
       [ $offset -gt 0 ] && printf '\033[2m  ↑ more\033[0m\n' || printf '\n'
 
       i=$offset
-      while [ $i -lt $((offset + window)) ] && [ $i -lt $total ]; do
+      while [ $i -lt $((offset + window)) ] && [ $i -lt "$total" ]; do
         if [ "${MS_KINDS[$i]}" = "header" ]; then
           line="  \033[1;34m${MS_LABELS[$i]}\033[0m"
         else
@@ -135,7 +136,7 @@ multiselect() {
         i=$((i + 1))
       done
 
-      if [ $((offset + window)) -lt $total ]; then
+      if [ $((offset + window)) -lt "$total" ]; then
         printf '\033[2m  ↓ more\033[0m\n'
       fi
     } >/dev/tty
@@ -168,22 +169,22 @@ multiselect() {
         ;;
       ' ')
         if [ "${MS_CHECKED[$cursor]}" = "1" ]; then
-          MS_CHECKED[$cursor]=0
+          MS_CHECKED[cursor]=0
         else
-          MS_CHECKED[$cursor]=1
+          MS_CHECKED[cursor]=1
         fi
         ;;
       a)
         i=0
-        while [ $i -lt $total ]; do
-          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[$i]=1
+        while [ $i -lt "$total" ]; do
+          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[i]=1
           i=$((i + 1))
         done
         ;;
       n)
         i=0
-        while [ $i -lt $total ]; do
-          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[$i]=0
+        while [ $i -lt "$total" ]; do
+          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[i]=0
           i=$((i + 1))
         done
         ;;
@@ -203,6 +204,7 @@ multiselect() {
 # already-installed items annotated) and writes the selection to a temporary
 # Brewfile. Sets BREWFILE_TO_USE; empty string means nothing was selected.
 # Without a TTY the full Brewfile is used, matching unattended behavior.
+# shellcheck disable=SC2034  # BREWFILE_TO_USE is consumed by os/macos/install.sh
 choose_brew_packages() {
   BREWFILE_TO_USE="$DOTFILES_DIR/Brewfile"
   is_interactive || return 0
@@ -349,10 +351,15 @@ setup_zsh() {
     ln -s "$custom/themes/spaceship-prompt/spaceship.zsh-theme" "$custom/themes/spaceship.zsh-theme"
   fi
 
-  # zsh-nvm — installs/loads nvm and auto-switches Node versions via .nvmrc.
-  clone_repo https://github.com/lukechilds/zsh-nvm.git "$custom/plugins/zsh-nvm"
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
+
+  # Node versions are managed by fnm, not a zsh plugin — clear out the
+  # zsh-nvm clone if a previous setup left one behind.
+  if [ -d "$custom/plugins/zsh-nvm" ]; then
+    rm -rf "$custom/plugins/zsh-nvm"
+    ok "removed stale zsh-nvm plugin (fnm manages Node)"
+  fi
 
   link_file zsh/zshrc "$HOME/.zshrc"
 }

@@ -7,7 +7,7 @@
 # fully automatic when run without a TTY.
 
 set -euo pipefail
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lib.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/scripts/lib.sh"
 
 [ "$(uname -s)" = "Darwin" ] || fail "this script is macOS-only — use ./install.sh"
 
@@ -52,7 +52,7 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-nvm + zsh-autosuggestions."
+step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
@@ -131,9 +131,9 @@ step "macOS system settings" "defaults write tweaks — restarts Dock and Finder
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Apply macOS system settings (Dock and Finder will restart)?"; then
-  bash "$DOTFILES_DIR/os/macos-defaults.sh"
+  bash "$DOTFILES_DIR/os/macos/defaults.sh"
 else
-  warn "skipping system settings — run ./os/macos-defaults.sh later"
+  warn "skipping system settings — run ./os/macos/defaults.sh later"
 fi
 
 printf '\n'

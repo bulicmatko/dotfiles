@@ -1,0 +1,48 @@
+# Validates every config file and script in the repo. Runs on macOS so the
+# shell checks use the same stock bash 3.2 the installer must support.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax under stock bash 3.2
+        run: |
+          /bin/bash --version | head -1
+          for f in install.sh os/*/*.sh scripts/lib.sh; do
+            /bin/bash -n "$f"
+            echo "OK $f"
+          done
+
+      - name: ShellCheck
+        run: |
+          command -v shellcheck >/dev/null || brew install shellcheck
+          shellcheck -x install.sh os/*/*.sh scripts/lib.sh
+
+      - name: zshrc syntax
+        run: zsh -n zsh/zshrc
+
+      - name: git config parses
+        run: |
+          git config --file git/gitconfig --list > /dev/null
+          git config --file git/gitconfig.local.template --list > /dev/null
+          echo "OK gitconfig ($(git config --file git/gitconfig --list | wc -l | tr -d ' ') keys)"
+
+      - name: Brewfile parses
+        run: brew bundle list --file=Brewfile > /dev/null && echo "OK Brewfile"
+
+      - name: JSONC settings parse
+        run: |
+          node .github/scripts/jsonc-check.js \
+            settings/vscode/settings.json \
+            settings/vscode/keybindings.json \
+            settings/zed/settings.json \
+            settings/zed/keymap.json \
+            devcontainer/devcontainer.example.json

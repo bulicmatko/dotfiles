@@ -32,7 +32,7 @@ TARGET="${1:-$(detect_target)}"
 
 case "$TARGET" in
   macos|linux|devcontainer)
-    exec bash "$DOTFILES_DIR/os/$TARGET.sh"
+    exec bash "$DOTFILES_DIR/os/$TARGET/install.sh"
     ;;
   *)
     echo "Unsupported platform: $TARGET (expected macos, linux, or devcontainer)" >&2

@@ -4,9 +4,9 @@
 # needs a manual tour through System Settings and Finder preferences.
 #
 # Values were harvested from a configured machine (2026-08), so running this
-# reproduces that setup. Runs standalone or as part of os/macos.sh:
+# reproduces that setup. Runs standalone or as part of os/macos/install.sh:
 #
-#   ./os/macos-defaults.sh
+#   ./os/macos/defaults.sh
 #
 # Some changes need a logout/restart to fully apply; Dock and Finder are
 # restarted automatically at the end.

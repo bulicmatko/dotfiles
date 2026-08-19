@@ -7,7 +7,7 @@
 # Interactive when run from a terminal; fully automatic without a TTY.
 
 set -euo pipefail
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lib.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/scripts/lib.sh"
 
 [ "$(uname -s)" = "Linux" ] || fail "this script is Linux-only — use ./install.sh"
 
@@ -38,13 +38,20 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-nvm + zsh-autosuggestions."
+step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + fnm."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
   setup_zsh
 else
   warn "skipping shell setup"
+fi
+
+# fnm — Node version manager (installed to ~/.local/share/fnm, wired up
+# by zsh/zshrc; on macOS it comes from the Brewfile instead).
+if ! command -v fnm >/dev/null 2>&1 && [ ! -d "$HOME/.local/share/fnm" ]; then
+  info "installing fnm"
+  curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell || warn "fnm install failed"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

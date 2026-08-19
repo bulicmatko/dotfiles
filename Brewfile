@@ -21,8 +21,8 @@ brew "glab"            # GitLab CLI — same idea for GitLab
 brew "mkcert"          # locally-trusted HTTPS certificates for dev servers
 
 # Runtimes & languages
-# (nvm itself is installed and kept up to date by the zsh-nvm plugin;
-# the Docker CLI comes with the docker-desktop cask below)
+# (the Docker CLI comes with the docker-desktop cask below)
+brew "fnm"             # fast Node version manager — auto-switches on .nvmrc
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
 brew "deno"            # Deno — secure TypeScript/JavaScript runtime
 brew "go"              # Go compiler and toolchain

@@ -15,6 +15,11 @@ dotfiles as-is, customized entirely through the untracked local files.
 ## Layout
 
 ```
+.github/
+  scripts/
+    jsonc-check.js            JSONC validator used by the CI workflow
+  workflows/
+    ci.yml                    CI — validates scripts and settings on every push
 devcontainer/
   devcontainer.example.json   starter devcontainer for new projects
 git/
@@ -23,10 +28,13 @@ git/
   gitconfig.local.template    seed for machine-specific ~/.gitconfig.local
   gitignore_global            global ignores (OS junk only)
 os/
-  devcontainer.sh             devcontainer / Codespaces installer (headless)
-  linux.sh                    Linux (Debian/Ubuntu) installer
-  macos-defaults.sh           macOS system + Finder settings (defaults write)
-  macos.sh                    macOS installer
+  devcontainer/
+    install.sh                devcontainer / Codespaces installer (headless)
+  linux/
+    install.sh                Linux (Debian/Ubuntu) installer
+  macos/
+    defaults.sh               macOS system + Finder settings (defaults write)
+    install.sh                macOS installer
 scripts/
   lib.sh                      shared helpers (linking, cloning, guided UI)
 settings/
@@ -82,7 +90,7 @@ waiting for input.
 ### What it does on macOS
 
 1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)
-2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-nvm + zsh-autosuggestions
+2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-autosuggestions
 3. Symlinks zsh, git, and ssh config (see table below), and asks for your
    git commit name/email — stored in untracked `~/.gitconfig.local`, asked
    only once per machine
@@ -92,17 +100,17 @@ waiting for input.
 5. Sets git's credential helper to `osxkeychain` (in `~/.gitconfig.local`)
 6. Symlinks Zed, VSCode, and Warp settings; installs VSCode extensions from
    [extensions.txt](settings/vscode/extensions.txt)
-7. Applies macOS system settings via [os/macos-defaults.sh](os/macos-defaults.sh)
+7. Applies macOS system settings via [os/macos/defaults.sh](os/macos/defaults.sh)
    — keyboard repeat, tap to click, Finder view/search/hidden files, Dock
    behavior — so System Settings never needs a manual walkthrough. Also runs
-   standalone: `./os/macos-defaults.sh` (restarts Dock and Finder; some
+   standalone: `./os/macos/defaults.sh` (restarts Dock and Finder; some
    changes need a logout). Extra opt-in tweaks are included commented out.
 
 ### What it does on Linux
 
 Installs `zsh git curl keychain` via apt, sets up the same shell/git/ssh
-config, links editor settings, and makes zsh the default shell. `keychain`
-keeps one ssh-agent alive across sessions (wired up in `zsh/zshrc`).
+config plus fnm, links editor settings, and makes zsh the default shell.
+`keychain` keeps one ssh-agent alive across sessions (wired up in `zsh/zshrc`).
 
 ### What it does in devcontainers
 
@@ -160,8 +168,8 @@ brew bundle --file=~/Projects/dotfiles/Brewfile
   (then review the diff — it will also pick up dependencies you may not want
   listed) or just add the line by hand.
 - `brew bundle cleanup --file=Brewfile` shows what is installed but not listed.
-- nvm is intentionally **not** in the Brewfile — the `zsh-nvm` plugin installs
-  and updates it in `~/.nvm`.
+- Node versions are managed by **fnm** (in the Brewfile) — it auto-switches
+  per project using `.nvmrc` / `.node-version`, wired up in `zsh/zshrc`.
 
 ## Devcontainers
 

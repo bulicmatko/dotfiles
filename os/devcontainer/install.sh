@@ -5,7 +5,7 @@
 # forwarding and GUI app settings do not apply inside a container.
 
 set -euo pipefail
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/lib.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/scripts/lib.sh"
 
 print_banner "devcontainer"
 

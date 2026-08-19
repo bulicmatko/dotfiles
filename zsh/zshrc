@@ -37,17 +37,11 @@ HYPHEN_INSENSITIVE="true"
 # Offer to auto-correct mistyped commands ("zhs" -> "zsh"?).
 ENABLE_CORRECTION="true"
 
-# Auto-run `nvm use` when entering a directory with .nvmrc — must be set
-# before plugins load (read by zsh-nvm).
-export NVM_AUTO_USE="true"
-
 # Plugins loaded by oh-my-zsh:
 #   git                  — g* aliases (gst, gco, gp, ...) for common git commands
-#   zsh-nvm              — installs nvm into ~/.nvm, loads it, keeps it updated
 #   zsh-autosuggestions  — inline gray suggestion from history; right-arrow accepts
 plugins=(
   git
-  zsh-nvm
   zsh-autosuggestions
 )
 
@@ -69,7 +63,13 @@ fi
 # Toolchains
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# nvm is installed and loaded by the zsh-nvm plugin (see plugins above).
+# fnm — fast Node version manager; --use-on-cd switches versions
+# automatically when entering a directory with .nvmrc / .node-version.
+# (brew provides fnm on macOS; the curl installer puts it in ~/.local/share/fnm)
+[[ -d "$HOME/.local/share/fnm" ]] && export PATH="$HOME/.local/share/fnm:$PATH"
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 # deno — binaries installed by `deno install` land in ~/.deno/bin.
 export DENO_INSTALL="$HOME/.deno"
