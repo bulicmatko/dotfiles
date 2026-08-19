@@ -77,6 +77,21 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Screensaver
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Start after 10 minutes idle, show the clock over it
+defaults -currentHost write com.apple.screensaver idleTime -int 600
+defaults -currentHost write com.apple.screensaver showClock -bool true
+
+# The "Ventura" aerial screensaver (XML fragment keeps the value types exact)
+defaults -currentHost write com.apple.screensaver moduleDict '<dict><key>moduleName</key><string>Ventura</string><key>path</key><string>/System/Library/ExtensionKit/Extensions/Ventura.appex</string><key>type</key><integer>0</integer></dict>'
+
+# Require the password 5 seconds after the screensaver starts. sysadminctl
+# prompts for your account password, so run it manually once per machine:
+#   sysadminctl -screenLock 5 -password -
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Dock
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

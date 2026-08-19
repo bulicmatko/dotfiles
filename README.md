@@ -22,6 +22,8 @@ dotfiles as-is, customized entirely through the untracked local files.
     jsonc-check.js            JSONC validator used by the CI workflow
   workflows/
     ci.yml                    CI — validates scripts and settings on every push
+assets/
+  wallpaper.jpg               desktop background (offered during install)
 bin/
   dotfiles-doctor             health check — symlinks, identity, Brewfile
   dotfiles-update             update everything with one command (on PATH)
@@ -124,6 +126,7 @@ waiting for input.
    behavior — so System Settings never needs a manual walkthrough. Also runs
    standalone: `./os/macos/defaults.sh` (restarts Dock and Finder; some
    changes need a logout). Extra opt-in tweaks are included commented out.
+   Also offers to set the desktop wallpaper from [assets/](assets/).
 
 ### What it does on Linux
 

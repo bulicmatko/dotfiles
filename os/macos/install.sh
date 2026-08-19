@@ -150,5 +150,15 @@ else
   warn "skipping system settings — run ./os/macos/defaults.sh later"
 fi
 
+# Desktop wallpaper — the repo ships one in assets/. macOS may show a one-time
+# automation permission prompt for the terminal on first use.
+if [ -f "$DOTFILES_DIR/assets/wallpaper.jpg" ] && confirm "Set the desktop wallpaper from assets/wallpaper.jpg?"; then
+  if osascript -e 'tell application "System Events" to set picture of every desktop to "'"$DOTFILES_DIR"'/assets/wallpaper.jpg"' >/dev/null 2>&1; then
+    ok "wallpaper set"
+  else
+    warn "could not set wallpaper — grant the terminal Automation permission and re-run"
+  fi
+fi
+
 printf '\n'
 ok "macOS setup complete — open a new terminal to load the new shell config"
