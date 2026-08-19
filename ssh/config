@@ -1,5 +1,9 @@
 # ~/.ssh/config — managed by https://github.com/bulicmatko/dotfiles
 
+# Private hosts (VPS IPs, work jumphosts) belong in ~/.ssh/config.local —
+# created by the install script, never tracked here.
+Include ~/.ssh/config.local
+
 # Applies to every host.
 Host *
     # UseKeychain is a macOS-only option; this line tells Linux ssh to skip

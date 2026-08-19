@@ -15,6 +15,15 @@ elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Dotfiles
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Locate the repo by resolving this file's symlink (%x = file being sourced),
+# and put its bin/ on PATH — any script dropped there exists on every machine.
+export DOTFILES="${${(%):-%x}:A:h:h}"
+export PATH="$DOTFILES/bin:$PATH"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # oh-my-zsh + spaceship
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -38,14 +47,46 @@ HYPHEN_INSENSITIVE="true"
 ENABLE_CORRECTION="true"
 
 # Plugins loaded by oh-my-zsh:
-#   git                  — g* aliases (gst, gco, gp, ...) for common git commands
-#   zsh-autosuggestions  — inline gray suggestion from history; right-arrow accepts
+#   git                     — g* aliases (gst, gco, gp, ...) for common git commands
+#   zsh-autosuggestions     — inline gray suggestion from history; right-arrow accepts
+#   zsh-syntax-highlighting — valid commands green, typos red, as you type
+#                             (must stay last in this list)
 plugins=(
   git
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source "$ZSH/oh-my-zsh.sh"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# History
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+HISTSIZE=100000                # lines kept in memory
+SAVEHIST=100000                # lines kept in ~/.zsh_history
+setopt SHARE_HISTORY           # share history live across all open terminals
+setopt HIST_IGNORE_ALL_DUPS    # a repeated command keeps only its newest entry
+setopt HIST_IGNORE_SPACE       # commands starting with a space are not saved
+setopt HIST_REDUCE_BLANKS      # strip superfluous whitespace before saving
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Shell extras
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# fzf — fuzzy Ctrl-R history search, Ctrl-T file picker, **<Tab> completion.
+if command -v fzf >/dev/null 2>&1; then
+  if fzf --zsh >/dev/null 2>&1; then
+    eval "$(fzf --zsh)"
+  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh   # older apt versions
+  fi
+fi
+
+# zoxide — learned cd: `z <part-of-path>` jumps to the best match.
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # SSH keys
@@ -116,8 +157,14 @@ alias ...="cd ../.."
 
 alias c="clear"
 
-alias lsl="ls -lF"     # long listing, / after dirs and * after executables
-alias lsal="ls -alF"   # same, including dotfiles
+# Long listings — eza (git-aware, dirs first) when installed, plain ls otherwise.
+if command -v eza >/dev/null 2>&1; then
+  alias lsl="eza -l --git --group-directories-first"
+  alias lsal="eza -la --git --group-directories-first"
+else
+  alias lsl="ls -lF"
+  alias lsal="ls -alF"
+fi
 
 # Trailing space makes the word after sudo expand as an alias too.
 alias sudo="sudo "

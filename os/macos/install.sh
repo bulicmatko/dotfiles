@@ -80,6 +80,16 @@ if confirm "Set up git config (links ~/.gitconfig into this repo)?"; then
     git config --file "$HOME/.gitconfig.local" core.fsmonitor true
     ok "git core.fsmonitor enabled in ~/.gitconfig.local"
   fi
+
+  # delta — syntax-highlighted diff pager (from the Brewfile). Machine-local
+  # so machines without delta keep git's default pager working.
+  if [ -z "$(git config --file "$HOME/.gitconfig.local" core.pager || true)" ]; then
+    git config --file "$HOME/.gitconfig.local" core.pager delta
+    git config --file "$HOME/.gitconfig.local" interactive.diffFilter "delta --color-only"
+    git config --file "$HOME/.gitconfig.local" delta.navigate true
+    git config --file "$HOME/.gitconfig.local" delta.line-numbers true
+    ok "git diffs paged through delta (in ~/.gitconfig.local)"
+  fi
 else
   warn "skipping git setup"
 fi
@@ -123,6 +133,8 @@ if confirm "Link editor/terminal settings and install VSCode extensions?"; then
   setup_vscode "$HOME/Library/Application Support/Code/User"
   install_vscode_extensions
   setup_warp
+  setup_claude_code
+  setup_gh
 else
   warn "skipping app settings"
 fi

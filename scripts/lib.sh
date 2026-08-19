@@ -353,6 +353,8 @@ setup_zsh() {
 
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
+  # zsh-syntax-highlighting — valid commands green, typos red, as you type.
+  clone_repo https://github.com/zsh-users/zsh-syntax-highlighting.git "$custom/plugins/zsh-syntax-highlighting"
 
   # nvm is wired directly in zsh/zshrc, not via a plugin — clear out the
   # zsh-nvm clone if a previous setup left one behind.
@@ -460,6 +462,12 @@ setup_ssh_config() {
   mkdir -p "$HOME/.ssh"
   chmod 700 "$HOME/.ssh"
   link_file ssh/config "$HOME/.ssh/config"
+
+  # Private hosts live outside the repo (Included from ssh/config).
+  if [ ! -f "$HOME/.ssh/config.local" ]; then
+    printf '# Machine-specific SSH hosts — NOT tracked in dotfiles.\n' > "$HOME/.ssh/config.local"
+    ok "created ~/.ssh/config.local for private hosts"
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -500,4 +508,14 @@ install_vscode_extensions() {
 setup_warp() {
   link_file settings/warp/settings.toml "$HOME/.warp/settings.toml"
   link_file settings/warp/themes "$HOME/.warp/themes"
+}
+
+setup_claude_code() {
+  link_file settings/claude/settings.json "$HOME/.claude/settings.json"
+}
+
+# Only gh's config.yml is synced — hosts.yml holds auth tokens and must
+# never enter the repo.
+setup_gh() {
+  link_file settings/gh/config.yml "$HOME/.config/gh/config.yml"
 }

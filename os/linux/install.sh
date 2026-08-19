@@ -32,7 +32,9 @@ elif confirm "Install base packages via apt?"; then
   # git      — clones oh-my-zsh plugins (and everything else)
   # curl     — fetches the oh-my-zsh installer
   # keychain — keeps one ssh-agent alive across sessions (used in zsh/zshrc)
-  $SUDO apt-get install -y zsh git curl keychain
+  # fzf      — fuzzy Ctrl-R history and file finding (wired in zsh/zshrc)
+  # zoxide   — learned cd (wired in zsh/zshrc)
+  $SUDO apt-get install -y zsh git curl keychain fzf zoxide
 else
   warn "skipping packages"
 fi
@@ -89,6 +91,8 @@ if confirm "Link editor settings and install VSCode extensions?"; then
   setup_zed
   setup_vscode "$HOME/.config/Code/User"
   install_vscode_extensions
+  setup_claude_code
+  setup_gh
 else
   warn "skipping app settings"
 fi

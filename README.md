@@ -20,6 +20,8 @@ dotfiles as-is, customized entirely through the untracked local files.
     jsonc-check.js            JSONC validator used by the CI workflow
   workflows/
     ci.yml                    CI — validates scripts and settings on every push
+bin/
+  dotfiles-update             update everything with one command (on PATH)
 devcontainer/
   devcontainer.example.json   starter devcontainer for new projects
 git/
@@ -38,6 +40,10 @@ os/
 scripts/
   lib.sh                      shared helpers (linking, cloning, guided UI)
 settings/
+  claude/
+    settings.json             Claude Code settings
+  gh/
+    config.yml                GitHub CLI settings + aliases (no tokens)
   vscode/
     extensions.txt            VSCode extension list
     keybindings.json          VSCode shortcuts
@@ -99,8 +105,8 @@ waiting for input.
    **Apple keychain** (`ssh-add --apple-use-keychain`); `ssh/config` has
    `UseKeychain` + `AddKeysToAgent`, so the key auto-loads forever after
 5. Sets git's credential helper to `osxkeychain` (in `~/.gitconfig.local`)
-6. Symlinks Zed, VSCode, and Warp settings; installs VSCode extensions from
-   [extensions.txt](settings/vscode/extensions.txt)
+6. Symlinks Zed, VSCode, Warp, Claude Code, and GitHub CLI settings; installs
+   VSCode extensions from [extensions.txt](settings/vscode/extensions.txt)
 7. Applies macOS system settings via [os/macos/defaults.sh](os/macos/defaults.sh)
    — keyboard repeat, tap to click, Finder view/search/hidden files, Dock
    behavior — so System Settings never needs a manual walkthrough. Also runs
@@ -125,6 +131,8 @@ Headless subset: zsh + oh-my-zsh + spaceship + git config only. No SSH keys
 | `git/gitattributes`                | `~/.gitattributes`                                    |
 | `git/gitconfig`                    | `~/.gitconfig`                                        |
 | `git/gitignore_global`             | `~/.gitignore_global`                                 |
+| `settings/claude/settings.json`    | `~/.claude/settings.json`                             |
+| `settings/gh/config.yml`           | `~/.config/gh/config.yml`                             |
 | `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                 |
 | `settings/vscode/settings.json`    | `~/Library/Application Support/Code/User/settings.json` (macOS) / `~/.config/Code/User/settings.json` (Linux) |
 | `settings/warp/themes/`            | `~/.warp/themes` (macOS)                              |
@@ -150,12 +158,23 @@ On the other laptop: `git pull` — settings apply immediately (restart the app
 if it caches config). Since this repo is the source of truth, consider turning
 the tools' own settings-sync off to avoid tug-of-war.
 
+To update a machine wholesale — repo, Homebrew packages, oh-my-zsh + plugins,
+missing VSCode extensions — run the one command (it lives in `bin/`, which
+`zshrc` puts on PATH):
+
+```sh
+dotfiles-update
+```
+
+Any script dropped into `bin/` is instantly available on every machine.
+
 ## Machine-specific overrides (not tracked)
 
 | File                | Purpose                                              |
 | ------------------- | ---------------------------------------------------- |
 | `~/.zshrc.local`    | extra shell config, sourced at the end of `zshrc`    |
 | `~/.gitconfig.local`| commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
+| `~/.ssh/config.local`| private SSH hosts (VPS IPs, work jumphosts) — Included from the synced `ssh/config` |
 
 ## Homebrew (macOS apps)
 

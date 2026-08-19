@@ -19,6 +19,16 @@ brew "tree"            # print directory trees in the terminal
 brew "gh"              # GitHub CLI — PRs, issues, auth from the terminal
 brew "glab"            # GitLab CLI — same idea for GitLab
 brew "mkcert"          # locally-trusted HTTPS certificates for dev servers
+brew "fzf"             # fuzzy finder — Ctrl-R history, **<Tab> completion
+brew "zoxide"          # smarter cd — `z dotf` jumps to ~/Projects/dotfiles
+brew "eza"             # modern ls — git status, icons (aliased in zshrc)
+brew "bat"             # cat with syntax highlighting and paging
+brew "git-delta"       # syntax-highlighted git diff pager (wired per machine)
+brew "jq"              # command-line JSON processor
+brew "ripgrep"         # rg — very fast recursive grep
+brew "btop"            # pretty resource monitor (htop successor)
+brew "mas"             # install Mac App Store apps from this file
+# mas "Xcode", id: 497799835   # example — list App Store apps like this
 
 # Runtimes & languages
 # (Node versions are managed by nvm — installed by the install script, since
@@ -46,7 +56,6 @@ cask "visual-studio-code" # VSCode — primary editor
 cask "zed"                # Zed — fast native editor
 cask "cursor"             # Cursor — AI-first VSCode fork
 cask "warp"               # Warp — main terminal
-cask "ghostty"            # Ghostty — minimal GPU-accelerated terminal
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Development apps

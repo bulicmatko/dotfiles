@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# dotfiles-update — bring this machine up to date in one command:
+# pull the dotfiles repo, upgrade Homebrew packages, update oh-my-zsh and
+# its plugins/theme, and install any missing VSCode extensions.
+#
+# Lives on PATH via zsh/zshrc, so it runs from anywhere.
+
+set -euo pipefail
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$DOTFILES_DIR/scripts/lib.sh"
+
+info "pulling dotfiles repo"
+git -C "$DOTFILES_DIR" pull --ff-only || warn "could not fast-forward the repo (local changes?)"
+
+if command -v brew >/dev/null 2>&1; then
+  info "updating Homebrew packages"
+  brew update
+  brew upgrade
+  # Install anything newly added to the Brewfile since the last run.
+  brew bundle --file="$DOTFILES_DIR/Brewfile" --no-upgrade || warn "brew bundle reported issues"
+fi
+
+info "updating oh-my-zsh, theme, and plugins"
+custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+for repo in "$HOME/.oh-my-zsh" \
+            "$custom/themes/spaceship-prompt" \
+            "$custom/plugins/zsh-autosuggestions" \
+            "$custom/plugins/zsh-syntax-highlighting"; do
+  if [ -d "$repo/.git" ]; then
+    if git -C "$repo" pull --ff-only --quiet; then
+      ok "updated ${repo##*/}"
+    else
+      warn "could not update ${repo##*/}"
+    fi
+  fi
+done
+
+install_vscode_extensions
+
+ok "everything up to date"

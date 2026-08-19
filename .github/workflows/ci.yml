@@ -16,7 +16,7 @@ jobs:
       - name: Shell syntax under stock bash 3.2
         run: |
           /bin/bash --version | head -1
-          for f in install.sh os/*/*.sh scripts/lib.sh; do
+          for f in install.sh os/*/*.sh scripts/lib.sh bin/*; do
             /bin/bash -n "$f"
             echo "OK $f"
           done
@@ -24,7 +24,7 @@ jobs:
       - name: ShellCheck
         run: |
           command -v shellcheck >/dev/null || brew install shellcheck
-          shellcheck -x install.sh os/*/*.sh scripts/lib.sh
+          shellcheck -x install.sh os/*/*.sh scripts/lib.sh bin/*
 
       - name: zshrc syntax
         run: zsh -n zsh/zshrc
@@ -41,6 +41,7 @@ jobs:
       - name: JSONC settings parse
         run: |
           node .github/scripts/jsonc-check.js \
+            settings/claude/settings.json \
             settings/vscode/settings.json \
             settings/vscode/keybindings.json \
             settings/zed/settings.json \
