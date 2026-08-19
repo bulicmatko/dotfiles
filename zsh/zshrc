@@ -104,6 +104,18 @@ alias sudo="sudo "
 # Miscellaneous
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Default editor for git, crontab, etc. — VSCode where available (--wait
+# blocks until the file is closed, which git needs), otherwise vim/vi on
+# headless machines.
+if command -v code >/dev/null 2>&1; then
+  export EDITOR="code --wait"
+elif command -v vim >/dev/null 2>&1; then
+  export EDITOR="vim"
+else
+  export EDITOR="vi"
+fi
+export VISUAL="$EDITOR"
+
 # Editor that React/Next error overlays open files in.
 export REACT_EDITOR="code"
 

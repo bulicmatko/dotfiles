@@ -72,6 +72,13 @@ if confirm "Set up git config (links ~/.gitconfig into this repo)?"; then
     git config --file "$HOME/.gitconfig.local" credential.helper osxkeychain
     ok "git credential.helper set to osxkeychain in ~/.gitconfig.local"
   fi
+
+  # Filesystem monitor daemon — much faster `git status` in big repos.
+  # macOS/Windows-only feature, so it lives in the machine-local config.
+  if [ -z "$(git config --file "$HOME/.gitconfig.local" core.fsmonitor || true)" ]; then
+    git config --file "$HOME/.gitconfig.local" core.fsmonitor true
+    ok "git core.fsmonitor enabled in ~/.gitconfig.local"
+  fi
 else
   warn "skipping git setup"
 fi

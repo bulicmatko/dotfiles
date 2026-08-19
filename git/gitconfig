@@ -27,13 +27,13 @@
   di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
   # Pull in remote changes for the current repository and all its submodules
-  pull-all = !"git pull; git submodule foreach git pull origin master"
+  pull-all = pull --recurse-submodules
 
   # Pull with rebase
   pullr = pull --rebase
 
   # Delete any branches that have been merged into current branch, except 'main', 'master' and 'develop'
-  delete-merged-branches = !"git branch --merged | egrep -v \"(^\\*|main|master|develop)\" | xargs git branch -d"
+  delete-merged-branches = !"git branch --merged | grep -Ev \"(^\\*|main|master|develop)\" | xargs git branch -d"
 
   # Clone a repository including all submodules
   clone-all = clone --recursive
@@ -92,11 +92,15 @@
   # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
   trustctime = false
 
-  # Prevent showing files whose names contain non-ASCII symbols as unversioned
-  precomposeunicode = false
+  # Normalize macOS NFD filenames to NFC so names with accents/umlauts do
+  # not show as phantom changes between macOS and Linux checkouts
+  precomposeunicode = true
 
   # Keep LF endings in the repository and on Mac/Linux checkouts
   autocrlf = input
+
+  # Cache untracked-file lookups — faster `git status` in big repos
+  untrackedCache = true
 
 # Colored output whenever the target is a terminal.
 [color]
@@ -127,17 +131,68 @@
   # Detect copies as well as renames
   renames = copies
 
+  # Histogram produces noticeably better diffs than the default algorithm
+  algorithm = histogram
+
+  # Color moved lines differently from plain additions/deletions
+  colorMoved = default
+
+  # i/ and w/ (index/worktree) prefixes instead of a/ b/ in diff headers
+  mnemonicPrefix = true
+
 [diff "bin"]
   # Use `hexdump` to diff binary files
   textconv = hexdump -v -C
 
+[fetch]
+  # Remote-deleted branches disappear locally on fetch
+  prune = true
+
+[branch]
+  # `git branch` lists most recently active branches first
+  sort = -committerdate
+
+[tag]
+  # v10 sorts after v9, not after v1
+  sort = version:refname
+
+[column]
+  # Branch/tag/status lists in columns when output is a terminal
+  ui = auto
+
+[commit]
+  # Show the full diff below the message while editing a commit
+  verbose = true
+
 [help]
-  # Automatically correct and execute mistyped commands
-  autocorrect = 1
+  # Ask before running the correction for a mistyped command
+  # (needs git >= 2.40 — on older machines override in ~/.gitconfig.local)
+  autocorrect = prompt
 
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
+
+  # Conflict markers also show the common ancestor — much easier to resolve
+  # (needs git >= 2.35 — on older machines override to diff3 in ~/.gitconfig.local)
+  conflictStyle = zdiff3
+
+[rebase]
+  # Auto-stash local changes around rebase / pull --rebase
+  autoStash = true
+
+  # fixup!/squash! commits fold in automatically on interactive rebase
+  autoSquash = true
+
+  # Rebasing a branch moves the stacked branches on top of it too
+  updateRefs = true
+
+[rerere]
+  # Remember conflict resolutions...
+  enabled = true
+
+  # ...and re-apply them automatically next time
+  autoUpdate = true
 
 [push]
   # `git push` targets the branch's configured upstream.
@@ -151,23 +206,22 @@
 # URL shorthands
 #
 # Lets you type short remotes: `git clone gh:user/repo` clones over SSH,
-# `github:user/repo` fetches anonymously but pushes over SSH; same for gists.
+# `github:user/repo` fetches anonymously over HTTPS but pushes over SSH;
+# same for gists.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 [url "git@github.com:"]
   insteadOf = "gh:"
   pushInsteadOf = "github:"
-  pushInsteadOf = "git://github.com/"
 
-[url "git://github.com/"]
+[url "https://github.com/"]
   insteadOf = "github:"
 
 [url "git@gist.github.com:"]
   insteadOf = "gst:"
   pushInsteadOf = "gist:"
-  pushInsteadOf = "git://gist.github.com/"
 
-[url "git://gist.github.com/"]
+[url "https://gist.github.com/"]
   insteadOf = "gist:"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

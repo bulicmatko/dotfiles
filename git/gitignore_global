@@ -41,8 +41,8 @@ Desktop.ini
 # merge-conflict leftovers
 *.orig
 
-# Misc
-# local secrets that must never be committed
+# Safety net
+# Deliberate exception to the OS/editor-junk rule: local secrets must never
+# reach a repository, even one missing its own ignore entry.
+# (`git add -f` can still add it where genuinely intended.)
 .env.local
-# npm crash logs
-npm-debug.log*
