@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+#
+# dotfiles-doctor — verify this machine matches the repo:
+# every symlink points into the dotfiles, local override files and git
+# identity exist, the shell components are installed, the Brewfile is
+# satisfied, and no forgotten *.backup.* files are lying around.
+#
+# Exits non-zero when configuration is broken (missing/wrong symlinks or
+# identity); informational findings (pending updates, backups) do not fail.
+
+set -euo pipefail
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$DOTFILES_DIR/scripts/lib.sh"
+
+PROBLEMS=0
+
+# check_link <repo-relative-source> <absolute-target>
+check_link() {
+  local src="$DOTFILES_DIR/$1" dst="$2"
+  if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+    ok "$dst"
+  elif [ -L "$dst" ]; then
+    warn "$dst points to $(readlink "$dst") — expected $src"
+    PROBLEMS=$((PROBLEMS + 1))
+  elif [ -e "$dst" ]; then
+    warn "$dst exists but is not a symlink — run ./install.sh"
+    PROBLEMS=$((PROBLEMS + 1))
+  else
+    warn "$dst missing — run ./install.sh"
+    PROBLEMS=$((PROBLEMS + 1))
+  fi
+}
+
+info "dotfiles: $DOTFILES_DIR"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+info "symlinks"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+check_link zsh/zshrc "$HOME/.zshrc"
+check_link git/gitconfig "$HOME/.gitconfig"
+check_link git/gitignore_global "$HOME/.gitignore_global"
+check_link git/gitattributes "$HOME/.gitattributes"
+check_link ssh/config "$HOME/.ssh/config"
+check_link settings/zed/settings.json "$HOME/.config/zed/settings.json"
+check_link settings/zed/keymap.json "$HOME/.config/zed/keymap.json"
+check_link settings/claude/settings.json "$HOME/.claude/settings.json"
+check_link settings/gh/config.yml "$HOME/.config/gh/config.yml"
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  check_link settings/vscode/settings.json "$HOME/Library/Application Support/Code/User/settings.json"
+  check_link settings/vscode/keybindings.json "$HOME/Library/Application Support/Code/User/keybindings.json"
+  check_link settings/warp/settings.toml "$HOME/.warp/settings.toml"
+  check_link settings/warp/themes "$HOME/.warp/themes"
+else
+  check_link settings/vscode/settings.json "$HOME/.config/Code/User/settings.json"
+  check_link settings/vscode/keybindings.json "$HOME/.config/Code/User/keybindings.json"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+info "local overrides + git identity"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+for f in "$HOME/.gitconfig.local" "$HOME/.ssh/config.local"; do
+  if [ -f "$f" ]; then ok "$f"; else
+    warn "$f missing — run ./install.sh"
+    PROBLEMS=$((PROBLEMS + 1))
+  fi
+done
+if [ -f "$HOME/.zshrc.local" ]; then
+  ok "$HOME/.zshrc.local (optional)"
+else
+  info "no ~/.zshrc.local (optional)"
+fi
+
+name="$(git config --file "$HOME/.gitconfig.local" user.name 2>/dev/null || true)"
+email="$(git config --file "$HOME/.gitconfig.local" user.email 2>/dev/null || true)"
+if [ -n "$name" ] && [ -n "$email" ]; then
+  ok "git identity: $name <$email>"
+else
+  warn "git identity incomplete — set it in ~/.gitconfig.local"
+  PROBLEMS=$((PROBLEMS + 1))
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+info "shell components"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+for d in "$HOME/.oh-my-zsh" \
+         "$custom/themes/spaceship-prompt" \
+         "$custom/plugins/zsh-autosuggestions" \
+         "$custom/plugins/zsh-syntax-highlighting" \
+         "$HOME/.nvm"; do
+  if [ -d "$d" ]; then ok "${d##*/}"; else
+    warn "${d##*/} missing — run ./install.sh"
+    PROBLEMS=$((PROBLEMS + 1))
+  fi
+done
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+info "homebrew (informational)"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if command -v brew >/dev/null 2>&1; then
+  if brew bundle check --file="$DOTFILES_DIR/Brewfile" >/dev/null 2>&1; then
+    ok "Brewfile satisfied"
+  else
+    warn "Brewfile has missing or outdated entries — run dotfiles-update"
+  fi
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+info "leftover backups (informational)"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+backups="$(find "$HOME" "$HOME/.ssh" "$HOME/.config/zed" "$HOME/.warp" \
+  "$HOME/Library/Application Support/Code/User" "$HOME/.config/Code/User" \
+  -maxdepth 1 -name "*.backup.*" 2>/dev/null | sort -u || true)"
+if [ -n "$backups" ]; then
+  printf '%s\n' "$backups" | while IFS= read -r b; do info "backup: $b"; done
+else
+  ok "no leftover backups"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+printf '\n'
+if [ "$PROBLEMS" -eq 0 ]; then
+  ok "this machine is healthy"
+else
+  fail "$PROBLEMS problem(s) found — ./install.sh fixes most of them"
+fi

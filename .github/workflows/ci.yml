@@ -12,6 +12,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history for the secret scan
+
+      - name: Secret scan (gitleaks, full history)
+        run: |
+          command -v gitleaks >/dev/null || brew install gitleaks
+          gitleaks git . --no-banner
 
       - name: Shell syntax under stock bash 3.2
         run: |

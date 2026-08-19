@@ -1,5 +1,7 @@
 # bulicmatko/dotfiles
 
+[![CI](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml)
+
 Personal dotfiles — the single source of truth for every machine I use:
 macOS laptops, Linux boxes, and devcontainers/Codespaces.
 
@@ -21,6 +23,7 @@ dotfiles as-is, customized entirely through the untracked local files.
   workflows/
     ci.yml                    CI — validates scripts and settings on every push
 bin/
+  dotfiles-doctor             health check — symlinks, identity, Brewfile
   dotfiles-update             update everything with one command (on PATH)
 devcontainer/
   devcontainer.example.json   starter devcontainer for new projects
@@ -167,6 +170,12 @@ dotfiles-update
 ```
 
 Any script dropped into `bin/` is instantly available on every machine.
+To verify a machine is wired up correctly — every symlink pointing into the
+repo, git identity set, shell components present — run:
+
+```sh
+dotfiles-doctor
+```
 
 ## Machine-specific overrides (not tracked)
 
