@@ -1,33 +1,17 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Starship's tokyo-night preset recolored to the darker Tokyo Night STORM
-# palette: dark segment backgrounds (#3d59a1 / #414868) with light text
-# (#c0caf5) — readable on a dark terminal, and the bars blend into the
-# background instead of glowing. `starship preset tokyo-night` regenerates
-# the original light-blue version.
+# Tokyo Night prompt — plain colored text on the terminal background (no
+# painted segments, so any terminal line height renders cleanly), laid out
+# like a classic two-line prompt: os, directory, git, language versions,
+# and "took Xs" after slow commands.
 
 format = """
-[░▒▓](#3d59a1)\
-$os\
-[](bg:#414868 fg:#3d59a1)\
-$directory\
-[](fg:#414868 bg:#394260)\
-$git_branch\
-$git_status\
-[](fg:#394260 bg:#212736)\
-$nodejs\
-$bun\
-$rust\
-$golang\
-$php\
-[](fg:#212736 bg:#1d2230)\
-$time\
-[ ](fg:#1d2230)\
-\n$character"""
+$os$directory$git_branch$git_status$nodejs$bun$rust$golang$php$cmd_duration
+$character"""
 
 [directory]
-style = "fg:#c0caf5 bg:#414868"
-format = "[ $path ]($style)"
+style = "bold fg:#7aa2f7"
+format = "[$path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
@@ -39,47 +23,45 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bg:#394260"
-format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
+style = "fg:#bb9af7"
+format = '[$symbol $branch ]($style)'
 
 [git_status]
-style = "bg:#394260"
-format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+style = "fg:#e0af68"
+format = '[($all_status$ahead_behind )]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "fg:#9ece6a"
+format = '[$symbol ($version) ]($style)'
 
 [bun]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "fg:#e0af68"
+format = '[$symbol ($version) ]($style)'
 
 [rust]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "fg:#f7768e"
+format = '[$symbol ($version) ]($style)'
 
 [golang]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "fg:#7dcfff"
+format = '[$symbol ($version) ]($style)'
 
 [php]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "fg:#bb9af7"
+format = '[$symbol ($version) ]($style)'
 
-[time]
-disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "bg:#1d2230"
-format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+[cmd_duration]
+# "took 3s" after commands running longer than 2 seconds
+format = '[took $duration ](fg:#e0af68)'
 
 [os]
-style = "bg:#3d59a1 fg:#c0caf5"
-format = "[ $symbol ]($style)"
+style = "fg:#7aa2f7"
+format = "[$symbol ]($style)"
 disabled = false
 
 [os.symbols]
