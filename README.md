@@ -236,4 +236,10 @@ git remote set-url origin git@github.com:bulicmatko/dotfiles.git
 
 ## License
 
-[MIT](LICENSE)
+Released under the [MIT License](LICENSE) — use, copy, and adapt freely.
+
+---
+
+<p align="center">
+  Built with ❤️ and a 🌵 by <a href="https://github.com/bulicmatko">Matko Bulić</a>
+</p>
