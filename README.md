@@ -127,8 +127,9 @@ waiting for input.
 6. Symlinks Zed, VSCode, Warp, Claude Code, and GitHub CLI settings; installs
    VSCode extensions from [extensions.txt](settings/vscode/extensions.txt)
 7. Applies macOS system settings via [os/macos/defaults.sh](os/macos/defaults.sh)
-   — keyboard repeat, tap to click, Finder view/search/hidden files, Dock
-   behavior — so System Settings never needs a manual walkthrough. Also runs
+   — keyboard repeat, tap to click, Finder view/search/hidden files, sidebar
+   favorites, Dock behavior, and the screen saver with its options — so System
+   Settings never needs a manual walkthrough. Also runs
    standalone: `./os/macos/defaults.sh` (restarts Dock and Finder; some
    changes need a logout). Extra opt-in tweaks are included commented out.
    Also offers to set the desktop wallpaper from [assets/](assets/).

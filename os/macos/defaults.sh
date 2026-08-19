@@ -77,6 +77,34 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Finder sidebar favorites
+#
+# The sidebar list lives in a binary file `defaults` cannot reach, so it is
+# written with mysides — an optional extra, installed on demand with
+#   brew install --cask mysides
+# Each entry is removed before it is added again, which both fixes the order
+# and keeps re-runs idempotent. Paths are written relative to $HOME, so the
+# list works for any account.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if command -v mysides >/dev/null 2>&1; then
+  # name|URL, listed in the order they should appear in the sidebar
+  while IFS='|' read -r fav_name fav_url; do
+    [ -n "$fav_name" ] || continue
+    mysides remove "$fav_name" >/dev/null 2>&1 || true
+    mysides add "$fav_name" "$fav_url" >/dev/null 2>&1 \
+      || echo "could not add $fav_name to the Finder sidebar" >&2
+  done <<EOF
+Desktop|file://$HOME/Desktop/
+Documents|file://$HOME/Documents/
+Downloads|file://$HOME/Downloads/
+Applications|file:///Applications/
+EOF
+else
+  echo "mysides not installed — skipping Finder sidebar favorites"
+fi
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Screensaver
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -84,8 +112,35 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults -currentHost write com.apple.screensaver idleTime -int 600
 defaults -currentHost write com.apple.screensaver showClock -bool true
 
-# The "Ventura" aerial screensaver (XML fragment keeps the value types exact)
-defaults -currentHost write com.apple.screensaver moduleDict '<dict><key>moduleName</key><string>Ventura</string><key>path</key><string>/System/Library/ExtensionKit/Extensions/Ventura.appex</string><key>type</key><integer>0</integer></dict>'
+# The screen saver is Drift, its appearance following the system, tinted with
+# the same #1f2335 the editors and terminal use.
+#
+# Current macOS keeps that choice and its options in a binary store `defaults`
+# cannot reach, so the configuration harvested from a working machine is
+# written into the store as-is and WallpaperAgent restarted to load it. The
+# moduleDict below carries the same choice for the older releases that read it.
+defaults -currentHost write com.apple.screensaver moduleDict '<dict><key>moduleName</key><string>Drift</string><key>path</key><string>/System/Library/ExtensionKit/Extensions/Drift.appex</string><key>type</key><integer>0</integer></dict>'
+
+WALLPAPER_STORE="$HOME/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+# Drift, as file:///System/Library/ExtensionKit/Extensions/Drift.appex
+SCREENSAVER_MODULE='YnBsaXN0MDDRAQJWbW9kdWxl0QMEWHJlbGF0aXZlXxA6ZmlsZTovLy9TeXN0ZW0vTGlicmFyeS9FeHRlbnNpb25LaXQvRXh0ZW5zaW9ucy9EcmlmdC5hcHBleAgLEhUeAAAAAAAAAQEAAAAAAAAABQAAAAAAAAAAAAAAAAAAAFs='
+# Its options: automatic appearance + the custom tint color
+SCREENSAVER_OPTIONS='YnBsaXN0MDDRAQJWdmFsdWVz0wMEBQYNGlphcHBlYXJhbmNlW2N1c3RvbUNvbG9yXxAgbGVnYWN5U2NyZWVuU2F2ZXJHZW5lcmF0aW9uQ291bnTRBwhWcGlja2Vy0QkKUl8w0QsMUmlkWWF1dG9tYXRpY9EOD1Vjb2xvctEJENEOEdISExQZWmNvbXBvbmVudHNaY29sb3JTcGFjZaQVFhcYIz+/mCEf0oa1Iz/BmFJ/6T8qIz/J7JxABg0yIz/wAAAAAAAATxArYnBsaXN0MDAQBwgAAAAAAAABAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAACtEHG9EJHNELHVEyCAsSGSQwU1ZdYGNmaXN2fH+Ch5Kdoqu0vcb09/r9AAAAAAAAAQEAAAAAAAAAHgAAAAAAAAAAAAAAAAAAAP8='
+
+if [ -f "$WALLPAPER_STORE" ] && plutil -extract \
+  'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' raw "$WALLPAPER_STORE" >/dev/null 2>&1; then
+  # Skip the rewrite (and the restart) when the screen saver already matches.
+  if [ "$(plutil -extract 'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' raw "$WALLPAPER_STORE" 2>/dev/null)" != "$SCREENSAVER_MODULE" ]; then
+    cp "$WALLPAPER_STORE" "$WALLPAPER_STORE.backup.$(date +%Y%m%d%H%M%S)"
+    plutil -replace 'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' \
+      -data "$SCREENSAVER_MODULE" "$WALLPAPER_STORE"
+    plutil -replace 'AllSpacesAndDisplays.Idle.Content.EncodedOptionValues' \
+      -data "$SCREENSAVER_OPTIONS" "$WALLPAPER_STORE"
+    killall WallpaperAgent >/dev/null 2>&1 || true
+  fi
+else
+  echo "screen saver store not found — pick a screen saver once in System Settings, then re-run" >&2
+fi
 
 # Require the password 5 seconds after the screensaver starts. sysadminctl
 # prompts for your account password, so run it manually once per machine:
