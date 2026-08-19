@@ -1,20 +1,18 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run the `open default settings` command
-// from the command palette or from `Zed` application menu.
+// Zed settings — symlinked to ~/.config/zed/settings.json by ./install.sh.
+// Every option carries a short comment. Docs: https://zed.dev/docs/configuring-zed
 {
+  // No minimap column.
   "minimap": {
     "show": "never"
   },
+  // Highlight the current line and its gutter.
   "current_line_highlight": "all",
+  // Fonts tried when Monaspace Argon misses a glyph.
   "buffer_font_fallbacks": [
     "Fira Code",
     "Monaco"
   ],
+  // Treat .env as dotenv and .dockerignore as shell for highlighting.
   "file_types": {
     "dotenv": [
       ".env"
@@ -23,13 +21,21 @@
       ".dockerignore"
     ]
   },
+  // Rename paired HTML/JSX tags together.
   "linked_edits": true,
+  // Show inline (ghost text) edit predictions.
   "show_edit_predictions": true,
+  // Ensure files end with a newline on save.
   "ensure_final_newline_on_save": true,
+  // Format every file on save.
   "format_on_save": "on",
+  // Two-space indentation.
   "tab_size": 2,
+  // Font size of the markdown preview pane.
   "markdown_preview_font_size": 13.0,
+  // Font size of the agent panel UI.
   "agent_ui_font_size": 16.0,
+  // External agent available in the agent panel: Claude Code via ACP.
   "agent_servers": {
     "claude-acp": {
       "default_config_options": {
@@ -40,28 +46,38 @@
       "type": "registry"
     }
   },
+  // `zed <path>` from the terminal opens a new window.
   "cli_default_open_behavior": "new_window",
+  // File icon theme (default icons in both appearances).
   "icon_theme": {
     "mode": "dark",
     "light": "Zed (Default)",
     "dark": "Zed (Default)"
   },
+  // Collaboration sidebar docked right.
   "collaboration_panel": {
     "dock": "right",
   },
+  // Outline (symbols) sidebar docked right.
   "outline_panel": {
     "dock": "right",
   },
+  // Inline predictions come from Zed's own model (not Copilot).
   "edit_predictions": {
     "provider": "zed",
   },
+  // Closing the last tab keeps the window open.
   "when_closing_with_no_tabs": "keep_window_open",
+  // Use VSCode-style default shortcuts as the base keymap.
   "base_keymap": "VSCode",
+  // Follow the system appearance: One Light / Tokyo Night Storm.
   "theme": {
     "mode": "dark",
     "light": "One Light",
     "dark": "Tokyo Night Storm"
   },
+  // Darker background variant + unified hover/selection tint (#1f2335 /
+  // #2c324a) to match the VSCode and Warp customizations.
   "theme_overrides": {
     "Tokyo Night Storm": {
       "editor.background": "#1f2335",
@@ -76,25 +92,32 @@
       "element.selected": "#2c324a",
     },
   },
+  // Show the git branch status icon in the title bar.
   "title_bar": {
     "show_branch_status_icon": true
   },
+  // Tabs: color by git status, show error/warning dots, no close button.
   "tabs": {
     "git_status": true,
     "show_diagnostics": "all",
     "show_close_button": "hidden",
   },
+  // Quick-fix (code action) button in the toolbar.
   "toolbar": {
     "code_actions": true,
   },
+  // Show diagnostics inline at the end of the line (like Error Lens).
   "diagnostics": {
     "inline": {
       "enabled": true,
     },
   },
+  // UI font and size.
   "ui_font_family": "Monaspace Argon",
   "ui_font_size": 16.0,
+  // Editor font.
   "buffer_font_family": "Monaspace Argon",
+  // Enable all Monaspace ligature/stylistic sets (arrows, ===, etc.).
   "buffer_font_features": {
     "calt": true,
     "ss01": true,
@@ -108,28 +131,37 @@
     "ss09": true,
     "liga": true,
   },
+  // Small editor font with double line height (matches VSCode).
   "buffer_font_size": 11.0,
   "buffer_line_height": {
     "custom": 2.0,
   },
+  // Vertical guide line at 80 characters.
   "wrap_guides": [
     80
   ],
+  // Indent guides colored per indentation level.
   "indent_guides": {
     "coloring": "indent_aware",
   },
+  // Render spaces/tabs as visible dots/arrows.
   "show_whitespaces": "all",
+  // Search is case-insensitive until the query has an uppercase letter.
   "use_smartcase_search": true,
+  // File tree: left dock, 400px, folders never auto-collapse into a/b/c.
   "project_panel": {
     "dock": "left",
     "default_width": 400.0,
     "auto_fold_dirs": false,
   },
+  // Inline git blame shows the commit summary text too.
   "git": {
     "inline_blame": {
       "show_commit_summary": true,
     },
   },
+  // Git panel: left dock, tree view, full diffs for untracked files,
+  // status shown by coloring the file label.
   "git_panel": {
     "collapse_untracked_diff": false,
     "dock": "left",
@@ -137,6 +169,8 @@
     "default_width": 400,
     "status_style": "label_color",
   },
+  // Terminal: right dock, 800px, blinking cursor, small font, double line
+  // height, no breadcrumbs bar.
   "terminal": {
     "blinking": "on",
     "toolbar": {
@@ -149,6 +183,8 @@
       "custom": 2.0,
     },
   },
+  // Built-in AI agent panel: fully disabled (button hidden); the remaining
+  // keys only matter if it gets re-enabled.
   "agent": {
     "button": false,
     "enabled": false,
@@ -162,12 +198,18 @@
       "model": "gpt-4.1",
     },
   },
+  // Font size inside agent conversations.
   "agent_buffer_font_size": 13.0,
+  // Telemetry: no usage metrics, crash diagnostics allowed.
   "telemetry": {
     "metrics": false,
     "diagnostics": true,
   },
+  // Per-language overrides. Each web language repeats the same editor
+  // defaults and formats with the project-local Biome binary
+  // (./node_modules/@biomejs/biome) instead of Zed's built-in formatter.
   "languages": {
+    // Diff: same editor defaults, no external formatter.
     "Diff": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -179,6 +221,7 @@
       ],
       "tab_size": 2
     },
+    // CSS: format with project-local Biome.
     "CSS": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -201,6 +244,7 @@
         },
       },
     },
+    // TSX: same pattern as CSS.
     "TSX": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -223,6 +267,7 @@
         },
       },
     },
+    // TypeScript: same pattern as CSS.
     "TypeScript": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -245,6 +290,7 @@
         },
       },
     },
+    // JavaScript: same pattern as CSS.
     "JavaScript": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -267,6 +313,7 @@
         },
       },
     },
+    // JSON: same pattern as CSS.
     "JSON": {
       "linked_edits": true,
       "show_whitespaces": "all",
@@ -289,6 +336,7 @@
         },
       },
     },
+    // JSONC: same pattern as CSS.
     "JSONC": {
       "linked_edits": true,
       "show_whitespaces": "all",

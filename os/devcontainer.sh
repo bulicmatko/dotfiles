@@ -24,6 +24,7 @@ if command -v apt-get >/dev/null 2>&1; then
   if ! command -v zsh >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1; then
     info "installing base packages"
     $SUDO apt-get update || warn "apt-get update failed"
+    # zsh (the shell), git (plugin clones), curl (oh-my-zsh installer)
     $SUDO apt-get install -y zsh git curl || warn "package install failed — continuing"
   fi
 fi

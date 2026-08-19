@@ -1,30 +1,48 @@
 # ~/.gitignore_global — OS and editor junk ignored in every repository.
 # Project-specific ignores belong in each project's own .gitignore.
+# NOTE: gitignore has no trailing comments — a # only counts at line start.
 
 # macOS
+# Finder folder-view metadata
 .DS_Store
+# resource forks on non-Apple filesystems
 .AppleDouble
+# custom "open with" app bindings
 .LSOverride
+# custom folder icons
 Icon?
+# AppleDouble sidecar files on external drives
 ._*
+# Spotlight index on external drives
 .Spotlight-V100
+# trash folder on external drives
 .Trashes
 
 # Linux
+# editor backup files (nano, gedit, emacs)
 *~
+# KDE folder-view metadata
 .directory
+# trash folder on external drives
 .Trash-*
 
 # Windows
+# Explorer thumbnail cache
 Thumbs.db
+# Explorer folder settings
 Desktop.ini
 
 # Editors
+# JetBrains project settings
 .idea/
+# vim swap files
 *.swp
 *.swo
+# merge-conflict leftovers
 *.orig
 
 # Misc
+# local secrets that must never be committed
 .env.local
+# npm crash logs
 npm-debug.log*

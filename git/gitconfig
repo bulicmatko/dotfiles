@@ -2,10 +2,12 @@
 # Machine-specific settings belong in ~/.gitconfig.local (included at the end,
 # so anything set there overrides this file).
 
+# Identity on every commit (override per machine in ~/.gitconfig.local).
 [user]
   name = Matko Bulić
   email = bulicmatko@gmail.com
 
+# `git init` creates "main" instead of "master".
 [init]
   defaultBranch = main
 
@@ -97,14 +99,17 @@
   # Keep LF endings in the repository and on Mac/Linux checkouts
   autocrlf = input
 
+# Colored output whenever the target is a terminal.
 [color]
   ui = auto
 
+# Colors for `git branch` output.
 [color "branch"]
   local = yellow
   current = yellow reverse
   remote = green
 
+# Colors for `git diff` output.
 [color "diff"]
   meta = yellow bold
   frag = magenta bold # line info
@@ -112,6 +117,7 @@
   new = green reverse # additions
   whitespace = white reverse
 
+# Colors for `git status` output.
 [color "status"]
   added = yellow
   changed = green
@@ -135,6 +141,7 @@
   log = true
 
 [push]
+  # `git push` targets the branch's configured upstream.
   default = upstream
   # Make `git push` push relevant annotated tags when pushing branches out
   followTags = true
@@ -143,6 +150,9 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # URL shorthands
+#
+# Lets you type short remotes: `git clone gh:user/repo` clones over SSH,
+# `github:user/repo` fetches anonymously but pushes over SSH; same for gists.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 [url "git@github.com:"]

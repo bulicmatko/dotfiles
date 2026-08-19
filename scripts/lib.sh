@@ -328,12 +328,15 @@ setup_zsh() {
 
   local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
+  # spaceship — the prompt theme (git branch/status, language versions, ...).
   clone_repo https://github.com/spaceship-prompt/spaceship-prompt.git "$custom/themes/spaceship-prompt"
   if [ ! -e "$custom/themes/spaceship.zsh-theme" ]; then
     ln -s "$custom/themes/spaceship-prompt/spaceship.zsh-theme" "$custom/themes/spaceship.zsh-theme"
   fi
 
+  # zsh-nvm — installs/loads nvm and auto-switches Node versions via .nvmrc.
   clone_repo https://github.com/lukechilds/zsh-nvm.git "$custom/plugins/zsh-nvm"
+  # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
 
   link_file zsh/zshrc "$HOME/.zshrc"

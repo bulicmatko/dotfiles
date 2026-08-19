@@ -1,3 +1,5 @@
+# Custom Warp theme — Tokyo Night Storm palette, matching the Zed and VSCode
+# themes (same #1f2335 background). Referenced from settings.toml.
 accent: "#7aa2f7"
 # background: "#24283b"
 background: "#1f2335"

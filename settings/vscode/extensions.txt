@@ -1,35 +1,73 @@
+# VSCode extensions — installed by ./install.sh (one id per line).
+# Lines starting with # are ignored. List with: code --list-extensions
+
+# Better Comments — colorize !, ?, TODO comment markers
 aaron-bond.better-comments
+# Claude Code — Anthropic coding agent inside VSCode
 anthropic.claude-code
+# Astro — language support for the Astro web framework
 astro-build.astro-vscode
+# Biome — fast JS/TS formatter+linter (the default formatter in settings)
 biomejs.biome
+# Tailwind CSS — class autocomplete and hover docs
 bradlc.vscode-tailwindcss
+# Multi-cursor case preserve — keeps casing when replacing with multiple cursors
 cardinal90.multi-cursor-case-preserve
+# Quill icons — minimal file icon theme (active via workbench.iconTheme)
 cdonohue.quill-icons
+# Path Intellisense — autocompletes file paths in imports/strings
 christian-kohler.path-intellisense
+# ESLint — surfaces eslint diagnostics
 dbaeumer.vscode-eslint
+# Deno — Deno runtime/language support
 denoland.vscode-deno
+# GitLens — inline blame, history, and rich git views
 eamodio.gitlens
+# EditorConfig — respects .editorconfig files in projects
 editorconfig.editorconfig
+# Tokyo Night — the active color theme
 enkia.tokyo-night
+# Prettier — formatter used for JSON/HTML/Markdown/YAML overrides
 esbenp.prettier-vscode
+# Go — official Go language support
 golang.go
+# GraphQL syntax — highlighting for .graphql and gql tags
 graphql.vscode-graphql-syntax
+# Terraform — HCL language support + formatter
 hashicorp.terraform
+# ElixirLS — Elixir language server (used as Elixir formatter)
 jakebecker.elixir-ls
+# SVG — preview and edit SVG files (default SVG formatter)
 jock.svg
+# DotENV — syntax highlighting for .env files
 mikestead.dotenv
+# Containers — build/manage container images from VSCode
 ms-azuretools.vscode-containers
+# Kubernetes Tools — cluster explorer, manifests, helm
 ms-kubernetes-tools.vscode-kubernetes-tools
+# Dev Containers — open projects in devcontainers (runs these dotfiles there)
 ms-vscode-remote.remote-containers
+# Bun — Bun runtime support and debugger
 oven.bun-vscode
+# Oxc — very fast JS/TS linter
 oxc.oxc-vscode
+# Phoenix — Phoenix framework (HEEx templates) support
 phoenixframework.phoenix
+# Prisma — schema highlighting, formatting, autocomplete
 prisma.prisma
+# XML — Red Hat XML language support
 redhat.vscode-xml
+# YAML — schema-aware YAML (formatter for compose/GitHub Actions)
 redhat.vscode-yaml
+# Live Server — one-click static file server with live reload
 ritwickdey.liveserver
+# styled-components — CSS-in-JS highlighting and IntelliSense
 styled-components.vscode-styled-components
+# Even Better TOML — TOML language support
 tamasfe.even-better-toml
+# MDX — markdown + JSX support
 unifiedjs.vscode-mdx
+# Error Lens — shows errors/warnings inline at the end of the line
 usernamehw.errorlens
+# nginx — nginx config syntax highlighting
 william-voyek.vscode-nginx

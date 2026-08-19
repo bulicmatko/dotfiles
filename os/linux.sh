@@ -28,6 +28,10 @@ if ! command -v apt-get >/dev/null 2>&1; then
   warn "apt-get not found — install zsh, git, curl, and keychain manually"
 elif confirm "Install base packages via apt?"; then
   $SUDO apt-get update
+  # zsh      — the shell itself
+  # git      — clones oh-my-zsh plugins (and everything else)
+  # curl     — fetches the oh-my-zsh installer
+  # keychain — keeps one ssh-agent alive across sessions (used in zsh/zshrc)
   $SUDO apt-get install -y zsh git curl keychain
 else
   warn "skipping packages"

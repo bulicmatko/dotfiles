@@ -1,41 +1,43 @@
-// Zed keymap
-//
-// For information on binding keys, see the Zed
-// documentation: https://zed.dev/docs/key-bindings
-//
-// To see the default key bindings run `zed: open default keymap`
-// from the command palette.
+// Zed keymap — symlinked to ~/.config/zed/keymap.json by ./install.sh.
+// Mirrors the custom VSCode shortcuts (see settings/vscode/keybindings.json)
+// so both editors feel identical. Docs: https://zed.dev/docs/key-bindings
 [
+  // cmd+shift+g toggles the git panel (same as VSCode source control).
   {
     "context": "Workspace",
     "bindings": {
       "cmd-shift-g": "git_panel::ToggleFocus"
     }
   },
+  // alt+space opens completions (ctrl+space is taken by macOS input switch).
   {
     "context": "Editor",
     "bindings": {
       "alt-space": "editor::ShowCompletions"
     }
   },
+  // Free cmd+r at the workspace level...
   {
     "context": "Workspace",
     "bindings": {
       "cmd-r": null
     }
   },
+  // ...so cmd+r renames the symbol under the cursor (as in VSCode).
   {
     "context": "Editor",
     "bindings": {
       "cmd-r": "editor::Rename"
     }
   },
+  // cmd+j joins lines (as in VSCode).
   {
     "context": "Workspace",
     "bindings": {
       "cmd-j": "editor::JoinLines"
     }
   },
+  // cmd+shift+r finds all references (as in VSCode).
   {
     "context": "Editor",
     "bindings": {
