@@ -4,14 +4,15 @@
 # to see the rewrite as a diff in this repo (that is the sync working).
 
 # Text rendering: FiraCode Nerd Font (terminal ligatures live in its default
-# liga set, and the nerd glyphs cover starship presets and eza icons),
-# double line height.
+# liga set, and the nerd glyphs cover starship presets and eza icons).
+# Line height 1.4: Warp adds all extra leading ABOVE the glyphs, so taller
+# values make background-painted prompts look bottom-aligned.
 [appearance]
 spacing = "normal"
 
 [appearance.text]
 match_ai_font = true
-line_height_ratio = 2.0
+line_height_ratio = 1.4
 font_size = 13.0
 notebook_font_size = 14.0
 ai_font_name = "FiraCode Nerd Font"
