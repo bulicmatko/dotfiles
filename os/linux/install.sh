@@ -38,20 +38,14 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + fnm."
+step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + nvm."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
   setup_zsh
+  setup_nvm
 else
   warn "skipping shell setup"
-fi
-
-# fnm — Node version manager (installed to ~/.local/share/fnm, wired up
-# by zsh/zshrc; on macOS it comes from the Brewfile instead).
-if ! command -v fnm >/dev/null 2>&1 && [ ! -d "$HOME/.local/share/fnm" ]; then
-  info "installing fnm"
-  curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell || warn "fnm install failed"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

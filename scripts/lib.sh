@@ -354,14 +354,27 @@ setup_zsh() {
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
 
-  # Node versions are managed by fnm, not a zsh plugin — clear out the
+  # nvm is wired directly in zsh/zshrc, not via a plugin — clear out the
   # zsh-nvm clone if a previous setup left one behind.
   if [ -d "$custom/plugins/zsh-nvm" ]; then
     rm -rf "$custom/plugins/zsh-nvm"
-    ok "removed stale zsh-nvm plugin (fnm manages Node)"
+    ok "removed stale zsh-nvm plugin (nvm is wired directly in zshrc)"
   fi
 
   link_file zsh/zshrc "$HOME/.zshrc"
+}
+
+# setup_nvm — official installer, pinned release, no shell-profile edits
+# (zsh/zshrc sources nvm and adds the .nvmrc auto-switch hook itself).
+# nvm upstream does not support Homebrew installs, hence not in the Brewfile.
+setup_nvm() {
+  if [ -s "$HOME/.nvm/nvm.sh" ]; then
+    ok "nvm already installed"
+    return 0
+  fi
+  info "installing nvm"
+  PROFILE=/dev/null bash -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh)" \
+    || warn "nvm install failed"
 }
 
 # set_default_shell_zsh — best effort, never fatal (chsh may prompt or be absent).

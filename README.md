@@ -90,7 +90,8 @@ waiting for input.
 ### What it does on macOS
 
 1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)
-2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-autosuggestions
+2. Installs oh-my-zsh (unattended) + spaceship prompt + zsh-autosuggestions,
+   and nvm via its official installer
 3. Symlinks zsh, git, and ssh config (see table below), and asks for your
    git commit name/email — stored in untracked `~/.gitconfig.local`, asked
    only once per machine
@@ -109,7 +110,7 @@ waiting for input.
 ### What it does on Linux
 
 Installs `zsh git curl keychain` via apt, sets up the same shell/git/ssh
-config plus fnm, links editor settings, and makes zsh the default shell.
+config plus nvm, links editor settings, and makes zsh the default shell.
 `keychain` keeps one ssh-agent alive across sessions (wired up in `zsh/zshrc`).
 
 ### What it does in devcontainers
@@ -168,8 +169,9 @@ brew bundle --file=~/Projects/dotfiles/Brewfile
   (then review the diff — it will also pick up dependencies you may not want
   listed) or just add the line by hand.
 - `brew bundle cleanup --file=Brewfile` shows what is installed but not listed.
-- Node versions are managed by **fnm** (in the Brewfile) — it auto-switches
-  per project using `.nvmrc` / `.node-version`, wired up in `zsh/zshrc`.
+- Node versions are managed by **nvm** — installed by the install script
+  (nvm upstream does not support Homebrew installs), with `.nvmrc`
+  auto-switching via nvm's own zsh hook in `zsh/zshrc`.
 
 ## Devcontainers
 

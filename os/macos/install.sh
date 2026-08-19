@@ -52,11 +52,12 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions."
+step "Shell" "oh-my-zsh + spaceship prompt + zsh-autosuggestions + nvm."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Set up zsh (links ~/.zshrc into this repo)?"; then
   setup_zsh
+  setup_nvm
 else
   warn "skipping shell setup"
 fi
