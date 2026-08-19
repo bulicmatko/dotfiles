@@ -43,5 +43,27 @@
     "bindings": {
       "cmd-shift-r": "editor::FindAllReferences"
     }
+  },
+  // cmd+g cmd+t opens the symbol outline (as in VSCode's goto-symbol chord).
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-g cmd-t": "outline::Toggle"
+    }
+  },
+  // alt+cmd+o opens recent projects (as in VSCode's open-recent).
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-cmd-o": "projects::OpenRecent"
+    }
+  },
+  // shift+enter in the terminal sends ESC+CR — newline in Claude Code CLI
+  // and other TUIs instead of submitting (as in VSCode's terminal).
+  {
+    "context": "Terminal",
+    "bindings": {
+      "shift-enter": ["terminal::SendText", "\u001b\r"]
+    }
   }
 ]

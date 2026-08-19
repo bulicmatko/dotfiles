@@ -526,6 +526,7 @@ setup_warp() {
 
 setup_claude_code() {
   link_file settings/claude/settings.json "$HOME/.claude/settings.json"
+  link_file settings/claude/statusline.sh "$HOME/.claude/statusline.sh"
 }
 
 # Only gh's config.yml is synced — hosts.yml holds auth tokens and must

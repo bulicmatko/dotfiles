@@ -39,8 +39,6 @@ jock.svg
 mikestead.dotenv
 # Containers — build/manage container images from VSCode
 ms-azuretools.vscode-containers
-# Kubernetes Tools — cluster explorer, manifests, helm
-ms-kubernetes-tools.vscode-kubernetes-tools
 # Dev Containers — open projects in devcontainers (runs these dotfiles there)
 ms-vscode-remote.remote-containers
 # Bun — Bun runtime support and debugger
@@ -61,5 +59,3 @@ tamasfe.even-better-toml
 unifiedjs.vscode-mdx
 # Error Lens — shows errors/warnings inline at the end of the line
 usernamehw.errorlens
-# nginx — nginx config syntax highlighting
-william-voyek.vscode-nginx

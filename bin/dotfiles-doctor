@@ -46,6 +46,7 @@ check_link ssh/config "$HOME/.ssh/config"
 check_link settings/zed/settings.json "$HOME/.config/zed/settings.json"
 check_link settings/zed/keymap.json "$HOME/.config/zed/keymap.json"
 check_link settings/claude/settings.json "$HOME/.claude/settings.json"
+check_link settings/claude/statusline.sh "$HOME/.claude/statusline.sh"
 check_link settings/gh/config.yml "$HOME/.config/gh/config.yml"
 
 if [ "$(uname -s)" = "Darwin" ]; then
