@@ -14,6 +14,7 @@ install.sh                  entrypoint — detects the platform and dispatches
 Brewfile                    every macOS app/CLI, installed in one call
 os/
   macos.sh                  macOS installer
+  macos-defaults.sh         macOS system + Finder settings (defaults write)
   linux.sh                  Linux (Debian/Ubuntu) installer
   devcontainer.sh           devcontainer / Codespaces installer (headless)
 scripts/
@@ -57,6 +58,11 @@ be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 5. Sets git's credential helper to `osxkeychain` (in `~/.gitconfig.local`)
 6. Symlinks Zed, VSCode, and Warp settings; installs VSCode extensions from
    [extensions.txt](settings/vscode/extensions.txt)
+7. Applies macOS system settings via [os/macos-defaults.sh](os/macos-defaults.sh)
+   — keyboard repeat, tap to click, Finder view/search/hidden files, Dock
+   behavior — so System Settings never needs a manual walkthrough. Also runs
+   standalone: `./os/macos-defaults.sh` (restarts Dock and Finder; some
+   changes need a logout). Extra opt-in tweaks are included commented out.
 
 ### What it does on Linux
 

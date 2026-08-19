@@ -74,4 +74,11 @@ setup_vscode "$HOME/Library/Application Support/Code/User"
 install_vscode_extensions
 setup_warp
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# System settings (defaults write — restarts Dock and Finder)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+info "applying macOS system settings"
+bash "$DOTFILES_DIR/os/macos-defaults.sh"
+
 ok "macOS setup complete — open a new terminal to load the new shell config"
