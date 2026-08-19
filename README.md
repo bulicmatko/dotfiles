@@ -225,7 +225,7 @@ Two pieces make containers feel like home:
 
 ## SSH keys on a brand-new Mac
 
-`os/macos.sh` generates `~/.ssh/id_ed25519` if missing and stores the
+`os/macos/install.sh` generates `~/.ssh/id_ed25519` if missing and stores the
 passphrase in the Apple keychain. Add the printed public key to
 [GitHub](https://github.com/settings/keys), then switch this repo's remote to
 SSH if it was cloned over HTTPS:
@@ -233,3 +233,7 @@ SSH if it was cloned over HTTPS:
 ```sh
 git remote set-url origin git@github.com:bulicmatko/dotfiles.git
 ```
+
+## License
+
+[MIT](LICENSE)
