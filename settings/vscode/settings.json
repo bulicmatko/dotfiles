@@ -65,7 +65,7 @@
   "workbench.fontAliasing": "auto",
   // Preselect the first entry in the suggest list.
   "editor.suggestSelection": "first",
-  // Marker written by the (removed) IntelliCode extension; harmless.
+  // Marker left behind by the IntelliCode extension (not installed); harmless.
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   // JavaScript: Prettier formats.
   "[javascript]": {
@@ -137,7 +137,7 @@
     },
   },
   // Project Manager extension settings (extension not in extensions.txt —
-  // these four keys are inert unless it gets reinstalled).
+  // these four keys are inert unless it gets installed).
   "projectManager.git.baseFolders": ["~/Projects"],
   "projectManager.groupList": true,
   "projectManager.filterOnFullPath": true,
@@ -155,7 +155,7 @@
   "editor.renderWhitespace": "all",
   // Keep the find widget from pushing the first line down.
   "editor.find.addExtraSpaceOnTop": false,
-  // App opened by "Open in external terminal" (stale — iTerm2 not installed).
+  // App opened by "Open in external terminal" (iTerm2 is not installed).
   "terminal.external.osxExec": "iTerm2.app",
   // Format every file on save.
   "editor.formatOnSave": true,

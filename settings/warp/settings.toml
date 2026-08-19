@@ -214,8 +214,8 @@ ssh_tmux_deprecation_notice_pending = false
 [session]
 startup_shell_override = "/bin/zsh"
 
-# Warp's own settings sync — redundant now that this repo syncs the file;
-# candidate to disable to avoid tug-of-war.
+# Warp's own settings sync — this repo already syncs the file, so this is
+# a candidate to disable to avoid tug-of-war.
 [account]
 is_settings_sync_enabled = true
 

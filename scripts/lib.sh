@@ -53,7 +53,7 @@ step() {
 }
 
 # confirm <question> — returns 0 on yes (default), 1 on no. Auto-yes when
-# there is no TTY so unattended runs behave like the pre-interactive installer.
+# there is no TTY so unattended runs proceed without blocking.
 confirm() {
   local reply
   is_interactive || return 0

@@ -71,7 +71,8 @@ space toggle · ↑/↓ (or j/k) move · a select all · n select none · enter 
 
 Already-installed packages are annotated, and everything starts selected.
 Without a TTY (Codespaces, scripted runs) there are no prompts: every step
-runs and the full Brewfile is installed, same as before.
+runs and the full Brewfile is installed, so unattended setups never hang
+waiting for input.
 
 ### What it does on macOS
 
