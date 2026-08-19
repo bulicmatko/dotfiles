@@ -1,0 +1,11 @@
+# ~/.gitconfig.local — machine-specific git config, NOT tracked in dotfiles.
+# Everything here overrides the shared ~/.gitconfig.
+#
+# The install script sets credential.helper per OS. Other common overrides:
+#
+# [user]
+#   email = work@example.com
+#
+# [credential]
+#   helper = osxkeychain   # macOS (set automatically by os/macos.sh)
+#   helper = cache         # Linux (set automatically by os/linux.sh)

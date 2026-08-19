@@ -1,35 +1,41 @@
-# IMPORTANT NOTE!
-# This install script is used for Github Codespaces
+#!/usr/bin/env bash
+#
+# Single entrypoint. Detects where it is running and dispatches to the right
+# installer in os/. Safe to re-run at any time — every step is idempotent.
+#
+#   ./install.sh              auto-detect (macOS / Linux / devcontainer)
+#   ./install.sh macos        force a specific installer
+#   ./install.sh linux
+#   ./install.sh devcontainer
+#
+# GitHub Codespaces and the VSCode Dev Containers extension run this file
+# automatically when this repo is configured as your dotfiles repository.
 
-# Prepare
-sudo apt update
-sudo apt upgrade -y
-sudo apt install keychain
-sudp apt install zsh -y
+set -euo pipefail
 
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Install Spacehip Theme
-git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
-ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+detect_target() {
+  if [ -n "${CODESPACES:-}" ] || [ -n "${REMOTE_CONTAINERS:-}" ] || [ -f /.dockerenv ]; then
+    echo "devcontainer"
+    return
+  fi
 
-# Install zsh-nvm
-git clone https://github.com/lukechilds/zsh-nvm "$ZSH_CUSTOM/plugins/zsh-nvm"
+  case "$(uname -s)" in
+    Darwin) echo "macos" ;;
+    Linux)  echo "linux" ;;
+    *)      echo "unsupported" ;;
+  esac
+}
 
-# Install zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+TARGET="${1:-$(detect_target)}"
 
-# Symlink .zshrc
-mv ~/.zshrc ~/.zshrc.backup
-ln -s $(pwd)/templates/.zshrc ~/.zshrc
-
-# Symlink .gitconfig
-mv ~/.gitconfig ~/.gitconfig.backup
-ln -s $(pwd)/templates/.gitconfig ~/.gitconfig
-
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-
-# Set zsh as default shell
-# chsh -s $(which zsh)
+case "$TARGET" in
+  macos|linux|devcontainer)
+    exec bash "$DOTFILES_DIR/os/$TARGET.sh"
+    ;;
+  *)
+    echo "Unsupported platform: $TARGET (expected macos, linux, or devcontainer)" >&2
+    exit 1
+    ;;
+esac

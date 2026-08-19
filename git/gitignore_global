@@ -1,0 +1,30 @@
+# ~/.gitignore_global — OS and editor junk ignored in every repository.
+# Project-specific ignores belong in each project's own .gitignore.
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editors
+.idea/
+*.swp
+*.swo
+*.orig
+
+# Misc
+.env.local
+npm-debug.log*

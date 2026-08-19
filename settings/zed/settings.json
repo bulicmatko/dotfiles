@@ -1,0 +1,315 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+  "minimap": {
+    "show": "never"
+  },
+  "current_line_highlight": "all",
+  "buffer_font_fallbacks": [
+    "Fira Code",
+    "Monaco"
+  ],
+  "file_types": {
+    "dotenv": [
+      ".env"
+    ],
+    "shellscript": [
+      ".dockerignore"
+    ]
+  },
+  "linked_edits": true,
+  "show_edit_predictions": true,
+  "ensure_final_newline_on_save": true,
+  "format_on_save": "on",
+  "tab_size": 2,
+  "markdown_preview_font_size": 13.0,
+  "agent_ui_font_size": 16.0,
+  "agent_servers": {
+    "claude-acp": {
+      "default_config_options": {
+        "mode": "auto",
+        "effort": "default",
+        "model": "default"
+      },
+      "type": "registry"
+    }
+  },
+  "cli_default_open_behavior": "new_window",
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)"
+  },
+  "collaboration_panel": {
+    "dock": "right",
+  },
+  "outline_panel": {
+    "dock": "right",
+  },
+  "edit_predictions": {
+    "provider": "zed",
+  },
+  "when_closing_with_no_tabs": "keep_window_open",
+  "base_keymap": "VSCode",
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Tokyo Night Storm"
+  },
+  "theme_overrides": {
+    "Tokyo Night Storm": {
+      "editor.background": "#1f2335",
+      "editor.gutter.background": "#1f2335",
+      "tab.active_background": "#2c324a",
+      "tab.inactive_background": "#1f2335",
+      "ghost_element.background": "#1f2335",
+      "ghost_element.hover": "#2c324a",
+      "ghost_element.selected": "#2c324a",
+      // "ghost_element.active": "#2c324a",
+      "element.hover": "#2c324a",
+      "element.selected": "#2c324a",
+    },
+  },
+  "title_bar": {
+    "show_branch_status_icon": true
+  },
+  "tabs": {
+    "git_status": true,
+    "show_diagnostics": "all",
+    "show_close_button": "hidden",
+  },
+  "toolbar": {
+    "code_actions": true,
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
+  "ui_font_family": "Monaspace Argon",
+  "ui_font_size": 16.0,
+  "buffer_font_family": "Monaspace Argon",
+  "buffer_font_features": {
+    "calt": true,
+    "ss01": true,
+    "ss02": true,
+    "ss03": true,
+    "ss04": true,
+    "ss05": true,
+    "ss06": true,
+    "ss07": true,
+    "ss08": true,
+    "ss09": true,
+    "liga": true,
+  },
+  "buffer_font_size": 11.0,
+  "buffer_line_height": {
+    "custom": 2.0,
+  },
+  "wrap_guides": [
+    80
+  ],
+  "indent_guides": {
+    "coloring": "indent_aware",
+  },
+  "show_whitespaces": "all",
+  "use_smartcase_search": true,
+  "project_panel": {
+    "dock": "left",
+    "default_width": 400.0,
+    "auto_fold_dirs": false,
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+    },
+  },
+  "git_panel": {
+    "collapse_untracked_diff": false,
+    "dock": "left",
+    "tree_view": true,
+    "default_width": 400,
+    "status_style": "label_color",
+  },
+  "terminal": {
+    "blinking": "on",
+    "toolbar": {
+      "breadcrumbs": false,
+    },
+    "dock": "right",
+    "default_width": 800,
+    "font_size": 11.0,
+    "line_height": {
+      "custom": 2.0,
+    },
+  },
+  "agent": {
+    "button": false,
+    "enabled": false,
+    "dock": "right",
+    "default_profile": "write",
+    "use_modifier_to_send": true,
+    "enable_feedback": true,
+    "default_width": 800,
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1",
+    },
+  },
+  "agent_buffer_font_size": 13.0,
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": true,
+  },
+  "languages": {
+    "Diff": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2
+    },
+    "CSS": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "TSX": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "TypeScript": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "JavaScript": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "JSON": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "JSONC": {
+      "linked_edits": true,
+      "show_whitespaces": "all",
+      "show_edit_predictions": true,
+      "ensure_final_newline_on_save": true,
+      "format_on_save": "on",
+      "wrap_guides": [
+        80
+      ],
+      "tab_size": 2,
+      "formatter": {
+        "external": {
+          "command": "./node_modules/@biomejs/biome/bin/biome",
+          "arguments": [
+            "check",
+            "--write",
+            "--stdin-file-path",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+  },
+}

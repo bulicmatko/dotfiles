@@ -1,3 +1,14 @@
+# ~/.gitconfig — managed by https://github.com/bulicmatko/dotfiles
+# Machine-specific settings belong in ~/.gitconfig.local (included at the end,
+# so anything set there overrides this file).
+
+[user]
+  name = Matko Bulić
+  email = bulicmatko@gmail.com
+
+[init]
+  defaultBranch = main
+
 [alias]
   # Fetch all
   fa = fetch --all
@@ -20,8 +31,8 @@
   # Pull with rebase
   pullr = pull --rebase
 
-  # Delete any branches that have been merged into current branch, except 'master' and 'develop'
-  delete-merged-branches = !"git branch --merged | egrep -v \"(^\\*|master|develop)\" | xargs git branch -d"
+  # Delete any branches that have been merged into current branch, except 'main', 'master' and 'develop'
+  delete-merged-branches = !"git branch --merged | egrep -v \"(^\\*|main|master|develop)\" | xargs git branch -d"
 
   # Clone a repository including all submodules
   clone-all = clone --recursive
@@ -61,66 +72,38 @@
   # Credit an author on the latest commit
   credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-  # Interactive rebase with the given number of latest commits
-  # reb = "!r() { git rebase -i HEAD~$1; }; r"
-
-  # Remove the old tag with this name and tag the latest commit with it.
-  # retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
-
-  # Find branches containing commit
-  # fb = "!f() { git branch -a --contains $1; }; f"
-
-  # Find tags containing commit
-  # ft = "!f() { git describe --always --contains $1; }; f"
-
-  # Find commits by source code
-  # fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-
-  # Find commits by commit message
-  # fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-
   # List contributors with number of commits
   contributors = shortlog --summary --numbered
-
 
 [apply]
   # Detect whitespace errors when applying a patch
   whitespace = fix
 
-
 [core]
-  # Use custom `.gitignore` and `.gitattributes`
+  # Use custom `.gitignore` and `.gitattributes` (linked by install.sh)
   excludesfile = ~/.gitignore_global
   attributesfile = ~/.gitattributes
 
   # Treat spaces before tabs and all kinds of trailing whitespace as an error
-  # [default] trailing-space: looks for spaces at the end of a line
-  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
   whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
-  # Make `git rebase` safer on OS X
+  # Make `git rebase` safer on macOS
   # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
   trustctime = false
 
-  # Prevent showing files whose names contain non-ASCII symbols as unversioned.
-  # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+  # Prevent showing files whose names contain non-ASCII symbols as unversioned
   precomposeunicode = false
 
-  # Set CRLF endings in Windows checkouts but LF endings on Mac and Linux systems and in the repository
+  # Keep LF endings in the repository and on Mac/Linux checkouts
   autocrlf = input
 
-
 [color]
-  # Use colors in Git commands that are capable of colored output when
-  # outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
   ui = auto
-
 
 [color "branch"]
   local = yellow
   current = yellow reverse
   remote = green
-
 
 [color "diff"]
   meta = yellow bold
@@ -129,47 +112,34 @@
   new = green reverse # additions
   whitespace = white reverse
 
-
 [color "status"]
   added = yellow
   changed = green
   untracked = cyan
   branch = magenta
 
-
 [diff]
   # Detect copies as well as renames
   renames = copies
-
 
 [diff "bin"]
   # Use `hexdump` to diff binary files
   textconv = hexdump -v -C
 
-
 [help]
   # Automatically correct and execute mistyped commands
   autocorrect = 1
 
-
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
-  # tool = opendiff
-
 
 [push]
-  # Use the Git 1.x.x default to avoid errors on machines with old Git
-  # installations. To use `simple` instead, add this to your `~/.extra` file:
-  # `git config --global push.default simple`. See http://git.io/mMah-w.
   default = upstream
-  # Push changes only on current branch
-  # default = matching
-  # Make `git push` push relevant annotated tags when pushing branches out.
+  # Make `git push` push relevant annotated tags when pushing branches out
   followTags = true
-  # Automatically setup upstream when pushing a new branch.
-	autoSetupRemote = true
-
+  # Automatically set up upstream when pushing a new branch
+  autoSetupRemote = true
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # URL shorthands
@@ -180,28 +150,20 @@
   pushInsteadOf = "github:"
   pushInsteadOf = "git://github.com/"
 
-
 [url "git://github.com/"]
   insteadOf = "github:"
-
 
 [url "git@gist.github.com:"]
   insteadOf = "gst:"
   pushInsteadOf = "gist:"
   pushInsteadOf = "git://gist.github.com/"
 
-
 [url "git://gist.github.com/"]
   insteadOf = "gist:"
 
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# User Configuration
+# Machine-local overrides — keep this include LAST so it wins
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-[user]
-  name = Matko Bulić
-  email = bulicmatko@gmail.com
-
-[init]
-  defaultBranch = main
+[include]
+  path = ~/.gitconfig.local

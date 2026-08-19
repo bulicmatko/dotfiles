@@ -1,0 +1,9 @@
+# ~/.ssh/config — managed by https://github.com/bulicmatko/dotfiles
+#
+# UseKeychain is macOS-only; IgnoreUnknown makes this file valid on Linux too.
+
+Host *
+    IgnoreUnknown UseKeychain
+    UseKeychain yes
+    AddKeysToAgent yes
+    IdentityFile ~/.ssh/id_ed25519
