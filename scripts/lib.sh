@@ -112,6 +112,23 @@ ask() {
   [ -n "$reply" ] && printf '%s' "$reply" || printf '%s' "$default"
 }
 
+# discard_escape_tail — swallow the rest of an escape sequence.
+#
+# A wheel scroll arrives as something like ESC [ < 64;10;10 M. Only the first
+# three bytes are read before it is recognized as uninteresting; the rest must
+# be dropped here, or the digits and letters left behind are read one by one
+# as if they were keystrokes. Every such sequence ends with a byte in the
+# @-to-~ range, and the timeout covers a lone Escape with no tail at all.
+discard_escape_tail() {
+  local ch
+  while IFS= read -rsn1 -t 1 ch </dev/tty; do
+    case "$ch" in
+      [@A-Za-z~]) break ;;
+    esac
+  done
+  return 0
+}
+
 # multiselect <title>
 #
 # Checkbox picker on the terminal's alternate screen. Items are provided via
@@ -172,15 +189,24 @@ multiselect() {
       fi
     } >/dev/tty
 
-    IFS= read -rsn1 key </dev/tty || key=""
-    if [ "$key" = $'\x1b' ]; then
-      seq=""
-      IFS= read -rsn2 -t 1 seq </dev/tty || true
-      case "$seq" in
-        '[A') key="up" ;;
-        '[B') key="down" ;;
-        *) key="" ;;
-      esac
+    # An empty read is how Enter arrives (read -n1 swallows the newline as its
+    # delimiter), so anything else that produces no usable key must say so
+    # with a name of its own rather than an empty string — otherwise a mouse
+    # wheel would confirm the selection and start installing.
+    if IFS= read -rsn1 key </dev/tty; then
+      if [ "$key" = $'\x1b' ]; then
+        seq=""
+        IFS= read -rsn2 -t 1 seq </dev/tty || true
+        case "$seq" in
+          '[A') key="up" ;;
+          '[B') key="down" ;;
+          # Scroll wheels, page keys, and a bare Escape all land here.
+          *) discard_escape_tail; key="ignored" ;;
+        esac
+      fi
+    else
+      # The terminal went away; stop rather than spin on end-of-input.
+      break
     fi
 
     case "$key" in
@@ -426,6 +452,45 @@ link_entry() {
   dst="$(dotfiles_links macos | awk -F '\t' -v s="$src" '$1 == s { print $2 }')"
   [ -n "$dst" ] || fail "no manifest entry for: $src"
   link_file "$src" "$dst"
+}
+
+# with_heartbeat <label> <command> [args...]
+#
+# Runs a long command and prints how long it has been going every 20 seconds,
+# so a big download reads as progress rather than a stalled script.
+#
+# The command keeps the terminal: its output is never captured and it runs in
+# the foreground. That matters more than a tidier animation — some casks ask
+# for a password partway through, and a spinner drawn over that prompt (or a
+# command pushed into the background, where reading the terminal would stop
+# it) turns a five-minute install into one that waits forever for a password
+# nobody was asked for.
+with_heartbeat() {
+  local label="$1"; shift
+  local heartbeat_pid status
+
+  # Unattended runs have nobody to reassure, and their logs read better
+  # without the interruptions.
+  if ! is_interactive; then
+    "$@"
+    return $?
+  fi
+
+  (
+    elapsed=0
+    while true; do
+      sleep 20
+      elapsed=$((elapsed + 20))
+      printf '\033[2m   … still %s (%ss)\033[0m\n' "$label" "$elapsed" >/dev/tty
+    done
+  ) &
+  heartbeat_pid=$!
+
+  if "$@"; then status=0; else status=$?; fi
+
+  kill "$heartbeat_pid" 2>/dev/null || true
+  wait "$heartbeat_pid" 2>/dev/null || true
+  return $status
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

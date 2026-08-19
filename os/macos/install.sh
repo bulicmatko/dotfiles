@@ -45,7 +45,9 @@ elif confirm "Choose and install applications from the Brewfile?"; then
   if [ -n "$BREWFILE_TO_USE" ]; then
     # Guarded so one failing formula/cask (e.g. an app that already exists in
     # /Applications from a manual install) never aborts the remaining steps.
-    brew bundle --file="$BREWFILE_TO_USE" \
+    # Large apps take many minutes, hence the heartbeat.
+    with_heartbeat "installing applications" \
+      brew bundle --file="$BREWFILE_TO_USE" \
       || warn "brew bundle reported issues — fix them and re-run ./install.sh"
   fi
 else
