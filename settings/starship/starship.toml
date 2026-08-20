@@ -1,7 +1,8 @@
 # Starship prompt — symlinked to ~/.config/starship.toml by ./install.sh.
 #
-# Everything else is starship's defaults: directory, git branch + status,
-# language versions, command duration, and the ❯ arrow — fast and minimal.
+# A 🌵 marks the git branch; everything else is starship's defaults:
+# directory, git status, language versions, command duration, and the ❯
+# arrow — fast and minimal.
 # Full option reference: https://starship.rs/config/
 
 # How long a command gets before starship abandons it and warns. The default
@@ -12,3 +13,7 @@ command_timeout = 1000
 # Alternative look: presets/tokyo-night.toml (powerline segments). Try it in
 # one terminal with STARSHIP_CONFIG=<repo>/settings/starship/presets/tokyo-night.toml,
 # or make it permanent by copying it over this file.
+
+# Cactus instead of the default git branch glyph.
+[git_branch]
+symbol = "🌵 "
