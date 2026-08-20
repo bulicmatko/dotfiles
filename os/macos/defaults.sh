@@ -80,6 +80,52 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 # Applications — which is what a Mac ships with, so there is nothing to set.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Spotlight
+#
+# Spotlight as a launcher rather than a search engine: apps, the calculator,
+# System Settings panes, and code stay on, and every category that turns a
+# keystroke into a list of documents, mail, and web suggestions stays off.
+#
+# The order below is the order Spotlight lists the categories in, and the
+# whole array is written at once because that is how the preference is
+# stored — leaving one out drops it from the results entirely.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+spotlight_items=()
+while IFS='|' read -r item_name item_enabled; do
+  [ -n "$item_name" ] || continue
+  spotlight_items[${#spotlight_items[@]}]="<dict><key>enabled</key><$item_enabled/><key>name</key><string>$item_name</string></dict>"
+done <<'EOF'
+APPLICATIONS|true
+MENU_EXPRESSION|true
+CONTACT|false
+MENU_CONVERSION|false
+MENU_DEFINITION|false
+DOCUMENTS|false
+EVENT_TODO|false
+DIRECTORIES|false
+FONTS|false
+IMAGES|false
+MESSAGES|false
+MOVIES|false
+MUSIC|false
+MENU_OTHER|false
+PDF|false
+PRESENTATIONS|false
+MENU_SPOTLIGHT_SUGGESTIONS|false
+SPREADSHEETS|false
+SYSTEM_PREFS|true
+TIPS|false
+BOOKMARKS|false
+SOURCE|true
+EOF
+defaults write com.apple.Spotlight orderedItems -array "${spotlight_items[@]}"
+
+# Clipboard history, kept for half an hour.
+defaults write com.apple.Spotlight PasteboardHistoryEnabled -bool true
+defaults write com.apple.Spotlight PasteboardHistoryTimeout -int 1800
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Screensaver
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -169,7 +215,7 @@ defaults write com.apple.dock wvous-br-corner -int 1
 # Apply
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-for app in Dock Finder SystemUIServer; do
+for app in Dock Finder SystemUIServer Spotlight; do
   killall "$app" &>/dev/null || true
 done
 
