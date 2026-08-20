@@ -148,19 +148,59 @@ SCREENSAVER_MODULE='YnBsaXN0MDDRAQJWbW9kdWxl0QMEWHJlbGF0aXZlXxA6ZmlsZTovLy9TeXN0
 # Its options: automatic appearance + the custom tint color
 SCREENSAVER_OPTIONS='YnBsaXN0MDDRAQJWdmFsdWVz0wMEBQYNGlphcHBlYXJhbmNlW2N1c3RvbUNvbG9yXxAgbGVnYWN5U2NyZWVuU2F2ZXJHZW5lcmF0aW9uQ291bnTRBwhWcGlja2Vy0QkKUl8w0QsMUmlkWWF1dG9tYXRpY9EOD1Vjb2xvctEJENEOEdISExQZWmNvbXBvbmVudHNaY29sb3JTcGFjZaQVFhcYIz+/mCEf0oa1Iz/BmFJ/6T8qIz/J7JxABg0yIz/wAAAAAAAATxArYnBsaXN0MDAQBwgAAAAAAAABAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAACtEHG9EJHNELHVEyCAsSGSQwU1ZdYGNmaXN2fH+Ch5Kdoqu0vcb09/r9AAAAAAAAAQEAAAAAAAAAHgAAAAAAAAAAAAAAAAAAAP8='
 
-if [ -f "$WALLPAPER_STORE" ] && plutil -extract \
-  'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' raw "$WALLPAPER_STORE" >/dev/null 2>&1; then
-  # Skip the rewrite (and the restart) when the screen saver already matches.
-  if [ "$(plutil -extract 'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' raw "$WALLPAPER_STORE" 2>/dev/null)" != "$SCREENSAVER_MODULE" ]; then
-    cp "$WALLPAPER_STORE" "$WALLPAPER_STORE.backup.$(date +%Y%m%d%H%M%S)"
-    plutil -replace 'AllSpacesAndDisplays.Idle.Content.Choices.0.Configuration' \
-      -data "$SCREENSAVER_MODULE" "$WALLPAPER_STORE"
-    plutil -replace 'AllSpacesAndDisplays.Idle.Content.EncodedOptionValues' \
-      -data "$SCREENSAVER_OPTIONS" "$WALLPAPER_STORE"
-    killall WallpaperAgent >/dev/null 2>&1 || true
-  fi
+# The store keeps the screen saver in two places and macOS holds them in
+# step: AllSpacesAndDisplays is the live choice, SystemDefault the one a
+# fresh display or space inherits. Writing only the first leaves the second
+# describing a different screen saver, and the stale one is what a new
+# machine ends up showing — so both are written, and whichever ones the
+# machine actually has are the ones that count.
+SCREENSAVER_SECTIONS="AllSpacesAndDisplays SystemDefault"
+
+# screen_saver_is_set — true when every section present already names Drift.
+screen_saver_is_set() {
+  local section current found=0
+  for section in $SCREENSAVER_SECTIONS; do
+    current="$(plutil -extract "$section.Idle.Content.Choices.0.Configuration" raw "$WALLPAPER_STORE" 2>/dev/null || true)"
+    [ -n "$current" ] || continue
+    found=1
+    [ "$current" = "$SCREENSAVER_MODULE" ] || return 1
+  done
+  [ "$found" = "1" ]
+}
+
+if [ ! -f "$WALLPAPER_STORE" ]; then
+  echo "screen saver not set: no wallpaper store yet — open System Settings › Screen Saver once, then re-run" >&2
+elif screen_saver_is_set; then
+  echo "screen saver already Drift"
 else
-  echo "screen saver store not found — pick a screen saver once in System Settings, then re-run" >&2
+  cp "$WALLPAPER_STORE" "$WALLPAPER_STORE.backup.$(date +%Y%m%d%H%M%S)"
+
+  wrote_screensaver=0
+  for screensaver_section in $SCREENSAVER_SECTIONS; do
+    plutil -extract "$screensaver_section.Idle.Content.Choices.0.Configuration" raw \
+      "$WALLPAPER_STORE" >/dev/null 2>&1 || continue
+    plutil -replace "$screensaver_section.Idle.Content.Choices.0.Configuration" \
+      -data "$SCREENSAVER_MODULE" "$WALLPAPER_STORE" || continue
+    plutil -replace "$screensaver_section.Idle.Content.EncodedOptionValues" \
+      -data "$SCREENSAVER_OPTIONS" "$WALLPAPER_STORE" || true
+    wrote_screensaver=1
+  done
+
+  # WallpaperAgent serves the setting from memory, so it has to reload before
+  # the change is visible anywhere.
+  killall WallpaperAgent >/dev/null 2>&1 || true
+  sleep 2
+
+  # Read the file back after the restart: the agent rewrites this store
+  # itself, and a write it decides to overwrite would otherwise look like a
+  # success in a script that never checks.
+  if [ "$wrote_screensaver" = "0" ]; then
+    echo "screen saver not set: the store has no screen saver entry — open System Settings › Screen Saver once, then re-run" >&2
+  elif screen_saver_is_set; then
+    echo "screen saver set to Drift"
+  else
+    echo "screen saver not set: the change did not survive — pick Drift once in System Settings › Screen Saver" >&2
+  fi
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
