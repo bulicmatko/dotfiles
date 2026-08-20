@@ -70,6 +70,18 @@
   "when_closing_with_no_tabs": "keep_window_open",
   // Use VSCode-style default shortcuts as the base keymap.
   "base_keymap": "VSCode",
+  // Extensions Zed installs by itself on first launch, so a new machine has
+  // them without a trip through the extension list. The theme below comes
+  // from one of them: naming a theme Zed does not have installed leaves it
+  // on its default instead.
+  "auto_install_extensions": {
+    "docker-compose": true,
+    "dockerfile": true,
+    "git-firefly": true,
+    "html": true,
+    "terraform": true,
+    "tokyo-night": true
+  },
   // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
   // applies if "mode" is ever switched to "system".)
   "theme": {
