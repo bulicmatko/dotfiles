@@ -27,7 +27,7 @@
     "**/.idea": true,
     "**/.next": false,
     "**/.vscode": false,
-    "**/node_modules": false
+    "**/node_modules": false,
   },
   // Fetch remotes automatically in the background.
   "git.autofetch": true,
@@ -41,20 +41,20 @@
   "gitlens.hovers.currentLine.over": "line",
   // Never auto-organize imports on save (global default).
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "never"
+    "source.organizeImports": "never",
   },
   // TypeScript family: oxfmt formats (oxc extension).
   "[typescript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
   },
   // Let macOS decide font smoothing.
   "workbench.fontAliasing": "auto",
@@ -64,11 +64,11 @@
   "workbench.settings.openDefaultKeybindings": true,
   // YAML: Red Hat YAML extension formats.
   "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   // JSON: Prettier formats.
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   // No GitLens code lens above functions/classes.
   "gitlens.codeLens.enabled": false,
@@ -81,16 +81,16 @@
   // Markdown: Prettier formats; whitespace-only diff changes stay visible.
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "diffEditor.ignoreTrimWhitespace": false
+    "diffEditor.ignoreTrimWhitespace": false,
   },
   // Per-theme color tweaks (background unified with Zed/Warp: #1f2335).
   "workbench.colorCustomizations": {
     "[Tokyo Night]": {
       "editorCodeLens.foreground": "#7982a9",
-      "terminal.ansiBrightBlack": "#00000000"
+      "terminal.ansiBrightBlack": "#00000000",
     },
     "[Tokyo Night Storm]": {
-      "editor.background": "#1f2335"
+      "editor.background": "#1f2335",
       // "activityBar.foreground": "#bdc7f0",
       // "activityBar.inactiveForeground": "#787c99",
       // "foreground": "#959cbd",
@@ -115,11 +115,11 @@
       // "input.foreground": "#959cbd",
       // "input.placeholderForeground": "#959cbd",
       // "gitDecoration.ignoredResourceForeground": "#696d87"
-    }
+    },
   },
   // HTML: Prettier formats.
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   // Don't suggest auto-import paths from TS server (path-intellisense does it).
   "typescript.suggest.paths": false,
@@ -146,7 +146,7 @@
   "terminal.integrated.letterSpacing": 1,
   // JSONC: Prettier formats.
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   // No telemetry from Red Hat extensions.
   "redhat.telemetry.enabled": false,
@@ -180,7 +180,7 @@
   "svg.preview.mode": "svg",
   // SVG files: format with the SVG extension.
   "[svg]": {
-    "editor.defaultFormatter": "jock.svg"
+    "editor.defaultFormatter": "jock.svg",
   },
   // "search.mode": "reuseEditor",
   // Don't flag invisible unicode characters (noisy in some files).
@@ -192,7 +192,7 @@
   // Treat these filenames as the given language.
   "files.associations": {
     ".env": "dotenv",
-    ".dockerignore": "shellscript"
+    ".dockerignore": "shellscript",
   },
   // Font stack for inlay hints (matches the editor font).
   "editor.inlayHints.fontFamily": "'MonaspiceAr NF', 'FiraCode Nerd Font', Monaco",
@@ -216,7 +216,7 @@
     "contributors": true,
     "repositories": true,
     "searchAndCompare": true,
-    "launchpad": true
+    "launchpad": true,
   },
   // Keep suggesting the next path segment after completing one.
   "path-intellisense.autoTriggerNextSuggestion": true,
@@ -233,11 +233,11 @@
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
     "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   // GitHub Actions workflows: YAML extension formats.
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   // No sticky command header in the terminal.
   "terminal.integrated.stickyScroll.enabled": false,
@@ -254,16 +254,16 @@
     "mailto",
     "vscode",
     "vscode-insiders",
-    "docker-desktop"
+    "docker-desktop",
   ],
   // Compose language server off (noisy diagnostics).
   "docker.extension.enableComposeLanguageServer": false,
   // Terraform: official extension formats .tf and .tfvars.
   "[terraform-vars]": {
-    "editor.defaultFormatter": "hashicorp.terraform"
+    "editor.defaultFormatter": "hashicorp.terraform",
   },
   "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform"
+    "editor.defaultFormatter": "hashicorp.terraform",
   },
   // Claude Code lives in the sidebar (not the panel).
   "claudeCode.preferredLocation": "sidebar",
@@ -281,18 +281,18 @@
     "https://json.schemastore.org/": true,
     "https://json-schema.org/": true,
     "https://developer.microsoft.com/json-schemas/": true,
-    "https://biomejs.dev": true
+    "https://biomejs.dev": true,
   },
   // No "Type to search" hint in fresh terminals.
   "terminal.integrated.initialHint": false,
   // Claude Code skill files: ignore whitespace-only diff noise.
   "window.zoomLevel": 1,
   "[skill]": {
-    "diffEditor.ignoreTrimWhitespace": true
+    "diffEditor.ignoreTrimWhitespace": true,
   },
   // Active color theme.
   "workbench.colorTheme": "Tokyo Night Storm",
   "dotfiles.repository": "bulicmatko/dotfiles",
   "dotfiles.targetPath": "~/dotfiles",
-  "dotfiles.installCommand": "install.sh"
+  "dotfiles.installCommand": "install.sh",
 }

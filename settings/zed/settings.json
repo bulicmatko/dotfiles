@@ -3,23 +3,16 @@
 {
   // No minimap column.
   "minimap": {
-    "show": "never"
+    "show": "never",
   },
   // Highlight the current line and its gutter.
   "current_line_highlight": "all",
   // Fonts tried when the main font misses a glyph.
-  "buffer_font_fallbacks": [
-    "FiraCode Nerd Font",
-    "Monaco"
-  ],
+  "buffer_font_fallbacks": ["FiraCode Nerd Font", "Monaco"],
   // Treat .env as dotenv and .dockerignore as shell for highlighting.
   "file_types": {
-    "dotenv": [
-      ".env"
-    ],
-    "shellscript": [
-      ".dockerignore"
-    ]
+    "dotenv": [".env"],
+    "shellscript": [".dockerignore"],
   },
   // Rename paired HTML/JSX tags together.
   "linked_edits": true,
@@ -32,19 +25,19 @@
   // Two-space indentation.
   "tab_size": 2,
   // Font size of the markdown preview pane.
-  "markdown_preview_font_size": 13.0,
+  "markdown_preview_font_size": 15.0,
   // Font size of the agent panel UI.
-  "agent_ui_font_size": 16.0,
+  "agent_ui_font_size": 13.0,
   // External agent available in the agent panel: Claude Code via ACP.
   "agent_servers": {
     "claude-acp": {
       "default_config_options": {
         "mode": "auto",
         "effort": "default",
-        "model": "default"
+        "model": "default",
       },
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   // `zed <path>` from the terminal opens a new window.
   "cli_default_open_behavior": "new_window",
@@ -52,7 +45,7 @@
   "icon_theme": {
     "mode": "dark",
     "light": "Zed (Default)",
-    "dark": "Zed (Default)"
+    "dark": "Zed (Default)",
   },
   // Collaboration sidebar docked right.
   "collaboration_panel": {
@@ -80,14 +73,14 @@
     "git-firefly": true,
     "html": true,
     "terraform": true,
-    "tokyo-night": true
+    "tokyo-night": true,
   },
   // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
   // applies if "mode" is ever switched to "system".)
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Tokyo Night Storm"
+    "dark": "Tokyo Night Storm",
   },
   // Darker background variant + unified hover/selection tint (#1f2335 /
   // #2c324a) to match the VSCode and Warp customizations.
@@ -107,7 +100,7 @@
   },
   // Show the git branch status icon in the title bar.
   "title_bar": {
-    "show_branch_status_icon": true
+    "show_branch_status_icon": true,
   },
   // Tabs: color by git status, show error/warning dots, no close button.
   "tabs": {
@@ -145,14 +138,12 @@
     "liga": true,
   },
   // Small editor font with double line height (matches VSCode).
-  "buffer_font_size": 11.0,
+  "buffer_font_size": 13.0,
   "buffer_line_height": {
     "custom": 2.0,
   },
   // Vertical guide line at 80 characters.
-  "wrap_guides": [
-    80
-  ],
+  "wrap_guides": [80],
   // Indent guides colored per indentation level.
   "indent_guides": {
     "coloring": "indent_aware",
@@ -191,7 +182,7 @@
     },
     "dock": "right",
     "default_width": 800,
-    "font_size": 11.0,
+    "font_size": 13.0,
     "line_height": {
       "custom": 2.0,
     },
@@ -203,7 +194,7 @@
     "enabled": false,
     "dock": "right",
     "use_modifier_to_send": true,
-    "enable_feedback": true,
+    "enable_feedback": false,
     "default_width": 800,
   },
   // Font size inside agent conversations.
