@@ -71,7 +71,6 @@
     "astro": true,
     "docker-compose": true,
     "dockerfile": true,
-    "git-firefly": true,
     "html": true,
     "sql": true,
     "terraform": true,
