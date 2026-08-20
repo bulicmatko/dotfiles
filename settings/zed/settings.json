@@ -74,6 +74,7 @@
     "html": true,
     "terraform": true,
     "tokyo-night": true,
+    "toml": true,
   },
   // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
   // applies if "mode" is ever switched to "system".)
