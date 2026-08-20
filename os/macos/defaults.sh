@@ -258,6 +258,41 @@ defaults write com.apple.dock minimize-to-application -bool false
 defaults write com.apple.dock wvous-br-corner -int 1
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Login items
+#
+# Apps that should already be running by the time the desktop appears. The
+# Login Items list in System Settings is what System Events calls login
+# items, so that is what this writes — the first run may raise the same
+# one-time prompt for permission to automate System Events that setting the
+# wallpaper can.
+#
+# An app that is not installed is skipped rather than added as a broken
+# entry, so a machine that left it out of the Brewfile picker stays tidy.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+while IFS='|' read -r login_name login_path; do
+  [ -n "$login_name" ] || continue
+
+  if [ ! -d "$login_path" ]; then
+    echo "login item skipped: $login_name is not installed"
+    continue
+  fi
+
+  if [ "$(osascript -e "tell application \"System Events\" to exists login item \"$login_name\"" 2>/dev/null)" = "true" ]; then
+    continue
+  fi
+
+  if osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$login_path\", hidden:false}" >/dev/null 2>&1; then
+    echo "login item added: $login_name"
+  else
+    echo "login item not added: $login_name — grant the terminal Automation permission and re-run" >&2
+  fi
+done <<EOF
+Docker|/Applications/Docker.app
+Moom|/Applications/Moom.app
+EOF
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Opt-ins — not part of the harvested setup, uncomment if wanted
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
