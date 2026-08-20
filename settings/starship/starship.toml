@@ -1,8 +1,13 @@
 # Starship prompt — symlinked to ~/.config/starship.toml by ./install.sh.
 #
-# An empty config means starship's defaults: directory, git branch + status,
+# Everything else is starship's defaults: directory, git branch + status,
 # language versions, command duration, and the ❯ arrow — fast and minimal.
 # Full option reference: https://starship.rs/config/
+
+# How long a command gets before starship abandons it and warns. The default
+# half second is tight for git in a repository large enough to need a moment,
+# and the warning it prints is noisier than the wait it saves.
+command_timeout = 1000
 #
 # Alternative look: presets/tokyo-night.toml (powerline segments). Try it in
 # one terminal with STARSHIP_CONFIG=<repo>/settings/starship/presets/tokyo-night.toml,
