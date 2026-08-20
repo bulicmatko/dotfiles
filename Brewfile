@@ -73,6 +73,7 @@ cask "tableplus"          # database GUI (Postgres, MySQL, SQLite, ...)
 cask "postman"            # API client for testing HTTP endpoints
 cask "lens"               # Kubernetes IDE — browse clusters visually
 cask "drawio"             # diagrams and flowcharts
+cask "linear"             # Linear — issue tracking and project planning
 
 # AI tooling
 cask "claude"             # Claude desktop app
@@ -84,7 +85,6 @@ cask "lm-studio"          # download and run local LLMs with a GUI
 # Browsers
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cask "arc"                # Arc browser
 cask "google-chrome"      # Chrome — testing + fallback browser
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -107,7 +107,6 @@ cask "the-unarchiver"     # extract rar/7z/... archives Finder cannot open
 cask "notion"             # notes and docs
 cask "openvpn-connect"    # VPN client
 cask "wireshark-app"      # Wireshark GUI network packet analyzer
-cask "freecad"            # 3D CAD modeling
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fonts
