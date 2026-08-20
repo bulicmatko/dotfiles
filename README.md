@@ -100,27 +100,14 @@ be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 
 When run from a terminal the installer is **guided**: it shows a banner, walks
 through numbered steps, and asks before each one (Enter = yes). The
-applications step opens the Brewfile in a picker — so the Brewfile can list
-*everything*, and each machine installs only what it needs:
+applications step opens a checkbox picker built from the Brewfile — so the
+Brewfile can list *everything*, and each machine installs only what it needs:
 
 ```
-tab toggle · type to filter · ctrl-a / ctrl-d whole matches · enter confirm · esc skip
+space toggle · ↑/↓ (or j/k) move · a select all · n select none · enter confirm
 ```
 
-Everything starts selected, so the picker is a matter of dropping what this
-machine does not need. Each entry carries its description and section, and
-typing filters across all three — "browser", "font", or part of a name all
-narrow the list. Packages already installed are marked as such.
-
-`ctrl-a` and `ctrl-d` apply to whatever the filter currently matches, which
-is the quick way to drop a whole group: type `communication`, press `ctrl-d`,
-and those five apps are gone from the selection. Escape skips the
-applications step entirely rather than installing everything.
-
-The picker is [fzf](https://github.com/junegunn/fzf), which the Brewfile
-installs; on a machine that does not have it yet the installer fetches it
-first.
-
+Already-installed packages are annotated, and everything starts selected.
 Without a TTY (Codespaces, scripted runs) there are no prompts: every step
 runs and the full Brewfile is installed, so unattended setups never hang
 waiting for input.
