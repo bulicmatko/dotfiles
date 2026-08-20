@@ -87,7 +87,6 @@ brew "hashicorp/tap/terraform" # infrastructure as code
 cask "google-chrome" # Chrome — testing + fallback browser
 cask "postman"       # API client for testing HTTP endpoints
 brew "mkcert"        # locally-trusted HTTPS certificates for dev servers
-cask "tableplus"     # database GUI (Postgres, MySQL, SQLite, ...)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # AI tooling
@@ -129,7 +128,6 @@ cask "wireshark-app"   # Wireshark GUI network packet analyzer
 # macOS utilities
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cask "moom"           # window manager — move/resize windows with shortcuts
 cask "the-unarchiver" # extract rar/7z/... archives Finder cannot open
 brew "mas"            # install Mac App Store apps from this file
 # mas "Xcode", id: 497799835   # example — list App Store apps like this
