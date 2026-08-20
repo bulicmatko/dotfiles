@@ -63,8 +63,8 @@
     "dock": "right",
   },
   // Inline predictions come from Zed's own model (not Copilot).
-  "features": {
-    "edit_prediction_provider": "zed",
+  "edit_predictions": {
+    "provider": "zed",
   },
   // Closing the last tab keeps the window open.
   "when_closing_with_no_tabs": "keep_window_open",
