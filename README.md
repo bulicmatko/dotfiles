@@ -221,6 +221,9 @@ The [Brewfile](Brewfile) is the app manifest. One call installs everything:
 brew bundle --file ~/Projects/dotfiles/Brewfile
 ```
 
+- Sections group packages by what they are for — a CLI tool beside the GUI app
+  it belongs with — and become the headings in the installer's picker. A
+  third-party tap sits directly above the package it provides.
 - Packages from third-party taps (like `oven-sh/bun`) load only after the tap
   is trusted on that machine. The installer and `dotfiles-update` ask for
   every tap the Brewfile lists; Homebrew keeps the answer per machine in
