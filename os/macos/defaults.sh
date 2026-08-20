@@ -163,9 +163,36 @@ else
   echo "screen saver store not found — pick a screen saver once in System Settings, then re-run" >&2
 fi
 
-# Require the password 5 seconds after the screensaver starts. sysadminctl
-# prompts for your account password, so run it manually once per machine:
-#   sysadminctl -screenLock 5 -password -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Lock screen
+#
+# Both settings here need an administrator, which the rest of this file does
+# not: each one is checked first and only asks for a password when the
+# machine does not already match, so a second run is silent. Without a
+# terminal to ask on they are reported and skipped rather than left hanging.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# The password is required 5 seconds after the screen saver starts.
+screen_lock_delay="$(sysadminctl -screenLock status 2>&1 | sed -n 's/.*delay is \([0-9]*\) seconds.*/\1/p')"
+if [ "$screen_lock_delay" != "5" ]; then
+  if [ -t 0 ]; then
+    echo "setting the screen lock delay — sysadminctl asks for your account password"
+    sysadminctl -screenLock 5 -password - || echo "could not set the screen lock delay" >&2
+  else
+    echo "screen lock delay left alone — run: sysadminctl -screenLock 5 -password -" >&2
+  fi
+fi
+
+# The display never turns itself off; the screen saver and its lock cover
+# an idle machine instead.
+if pmset -g custom | awk '/displaysleep/ { if ($2+0 != 0) found = 1 } END { exit !found }'; then
+  if [ -t 0 ]; then
+    echo "turning off display sleep — pmset needs an administrator"
+    sudo pmset -a displaysleep 0 || echo "could not change display sleep" >&2
+  else
+    echo "display sleep left alone — run: sudo pmset -a displaysleep 0" >&2
+  fi
+fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Dock
