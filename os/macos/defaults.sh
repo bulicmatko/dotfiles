@@ -143,10 +143,15 @@ defaults -currentHost write com.apple.screensaver showClock -bool true
 defaults -currentHost write com.apple.screensaver moduleDict '<dict><key>moduleName</key><string>Drift</string><key>path</key><string>/System/Library/ExtensionKit/Extensions/Drift.appex</string><key>type</key><integer>0</integer></dict>'
 
 WALLPAPER_STORE="$HOME/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-# Drift, as file:///System/Library/ExtensionKit/Extensions/Drift.appex
-SCREENSAVER_MODULE='YnBsaXN0MDDRAQJWbW9kdWxl0QMEWHJlbGF0aXZlXxA6ZmlsZTovLy9TeXN0ZW0vTGlicmFyeS9FeHRlbnNpb25LaXQvRXh0ZW5zaW9ucy9EcmlmdC5hcHBleAgLEhUeAAAAAAAAAQEAAAAAAAAABQAAAAAAAAAAAAAAAAAAAFs='
-# Its options: automatic appearance + the custom tint color
-SCREENSAVER_OPTIONS='YnBsaXN0MDDRAQJWdmFsdWVz0wMEBQYNGlphcHBlYXJhbmNlW2N1c3RvbUNvbG9yXxAgbGVnYWN5U2NyZWVuU2F2ZXJHZW5lcmF0aW9uQ291bnTRBwhWcGlja2Vy0QkKUl8w0QsMUmlkWWF1dG9tYXRpY9EOD1Vjb2xvctEJENEOEdISExQZWmNvbXBvbmVudHNaY29sb3JTcGFjZaQVFhcYIz+/mCEf0oa1Iz/BmFJ/6T8qIz/J7JxABg0yIz/wAAAAAAAATxArYnBsaXN0MDAQBwgAAAAAAAABAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAACtEHG9EJHNELHVEyCAsSGSQwU1ZdYGNmaXN2fH+Ch5Kdoqu0vcb09/r9AAAAAAAAAQEAAAAAAAAAHgAAAAAAAAAAAAAAAAAAAP8='
+
+# The entry is written whole, from screensaver.plist next to this script: the
+# provider, the module, and the module's options belong together. Writing the
+# module into an entry whose provider still says something else — an aerial,
+# say, which is what a machine that has never been touched may have — leaves
+# a provider that cannot read the configuration under it, and the screen goes
+# blank rather than to a screen saver.
+SCREENSAVER_ENTRY="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/screensaver.plist"
+SCREENSAVER_MODULE="$(plutil -extract 'Choices.0.Configuration' raw "$SCREENSAVER_ENTRY" 2>/dev/null || true)"
 
 # The store keeps the screen saver in two places and macOS holds them in
 # step: AllSpacesAndDisplays is the live choice, SystemDefault the one a
@@ -168,7 +173,9 @@ screen_saver_is_set() {
   [ "$found" = "1" ]
 }
 
-if [ ! -f "$WALLPAPER_STORE" ]; then
+if [ ! -f "$SCREENSAVER_ENTRY" ] || [ -z "$SCREENSAVER_MODULE" ]; then
+  echo "screen saver not set: screensaver.plist is missing or unreadable" >&2
+elif [ ! -f "$WALLPAPER_STORE" ]; then
   echo "screen saver not set: no wallpaper store yet — open System Settings › Screen Saver once, then re-run" >&2
 elif screen_saver_is_set; then
   echo "screen saver already Drift"
@@ -176,13 +183,12 @@ else
   cp "$WALLPAPER_STORE" "$WALLPAPER_STORE.backup.$(date +%Y%m%d%H%M%S)"
 
   wrote_screensaver=0
+  screensaver_xml="$(cat "$SCREENSAVER_ENTRY")"
   for screensaver_section in $SCREENSAVER_SECTIONS; do
-    plutil -extract "$screensaver_section.Idle.Content.Choices.0.Configuration" raw \
+    plutil -extract "$screensaver_section.Idle.Content" raw \
       "$WALLPAPER_STORE" >/dev/null 2>&1 || continue
-    plutil -replace "$screensaver_section.Idle.Content.Choices.0.Configuration" \
-      -data "$SCREENSAVER_MODULE" "$WALLPAPER_STORE" || continue
-    plutil -replace "$screensaver_section.Idle.Content.EncodedOptionValues" \
-      -data "$SCREENSAVER_OPTIONS" "$WALLPAPER_STORE" || true
+    plutil -replace "$screensaver_section.Idle.Content" \
+      -xml "$screensaver_xml" "$WALLPAPER_STORE" || continue
     wrote_screensaver=1
   done
 

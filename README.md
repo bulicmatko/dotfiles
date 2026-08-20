@@ -52,6 +52,7 @@ os/
   macos/
     defaults.sh               macOS system + Finder settings (defaults write)
     install.sh                macOS installer
+    screensaver.plist         the screen saver entry defaults.sh writes
 scripts/
   lib.sh                      shared helpers (linking, cloning, guided UI)
 settings/

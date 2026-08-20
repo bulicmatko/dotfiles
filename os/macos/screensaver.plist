@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Choices</key>
+	<array>
+		<dict>
+			<key>Configuration</key>
+			<data>
+			YnBsaXN0MDDRAQJWbW9kdWxl0QMEWHJlbGF0aXZlXxA6ZmlsZTov
+			Ly9TeXN0ZW0vTGlicmFyeS9FeHRlbnNpb25LaXQvRXh0ZW5zaW9u
+			cy9EcmlmdC5hcHBleAgLEhUeAAAAAAAAAQEAAAAAAAAABQAAAAAA
+			AAAAAAAAAAAAAFs=
+			</data>
+			<key>Files</key>
+			<array/>
+			<key>Provider</key>
+			<string>com.apple.wallpaper.choice.screen-saver</string>
+		</dict>
+	</array>
+	<key>EncodedOptionValues</key>
+	<data>
+	YnBsaXN0MDDRAQJWdmFsdWVz0wMEBQYNGlphcHBlYXJhbmNlW2N1c3RvbUNvbG9yXxAg
+	bGVnYWN5U2NyZWVuU2F2ZXJHZW5lcmF0aW9uQ291bnTRBwhWcGlja2Vy0QkKUl8w0QsM
+	UmlkWWF1dG9tYXRpY9EOD1Vjb2xvctEJENEOEdISExQZWmNvbXBvbmVudHNaY29sb3JT
+	cGFjZaQVFhcYIz+/mCEf0oa1Iz/BmFJ/6T8qIz/J7JxABg0yIz/wAAAAAAAATxArYnBs
+	aXN0MDAQBwgAAAAAAAABAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAACtEHG9EJHNELHVEy
+	CAsSGSQwU1ZdYGNmaXN2fH+Ch5Kdoqu0vcb09/r9AAAAAAAAAQEAAAAAAAAAHgAAAAAA
+	AAAAAAAAAAAAAP8=
+	</data>
+	<key>Shuffle</key>
+	<string>$null</string>
+</dict>
+</plist>

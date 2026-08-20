@@ -36,6 +36,16 @@ jobs:
       - name: zshrc syntax
         run: zsh -n zsh/zshrc
 
+      - name: screen saver entry is a valid plist
+        run: |
+          plutil -lint os/macos/screensaver.plist
+          # The entry is only usable if its provider and module agree; a
+          # half-edited file would otherwise ship and blank the screen.
+          test "$(plutil -extract Choices.0.Provider raw os/macos/screensaver.plist)" \
+            = "com.apple.wallpaper.choice.screen-saver"
+          plutil -extract Choices.0.Configuration raw os/macos/screensaver.plist > /dev/null
+          echo "OK screensaver.plist"
+
       - name: git config parses
         run: |
           git config --file git/gitconfig --list > /dev/null
