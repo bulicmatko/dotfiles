@@ -112,149 +112,6 @@ ask() {
   [ -n "$reply" ] && printf '%s' "$reply" || printf '%s' "$default"
 }
 
-# discard_escape_tail — swallow the rest of an escape sequence.
-#
-# A wheel scroll arrives as something like ESC [ < 64;10;10 M. Only the first
-# three bytes are read before it is recognized as uninteresting; the rest must
-# be dropped here, or the digits and letters left behind are read one by one
-# as if they were keystrokes. Every such sequence ends with a byte in the
-# @-to-~ range, and the timeout covers a lone Escape with no tail at all.
-discard_escape_tail() {
-  local ch
-  while IFS= read -rsn1 -t 1 ch </dev/tty; do
-    case "$ch" in
-      [@A-Za-z~]) break ;;
-    esac
-  done
-  return 0
-}
-
-# multiselect <title>
-#
-# Checkbox picker on the terminal's alternate screen. Items are provided via
-# three parallel global arrays (bash 3.2 has no namerefs):
-#   MS_KINDS[i]   "item" or "header" (headers are display-only)
-#   MS_LABELS[i]  text to show
-#   MS_CHECKED[i] 1 = selected (updated in place with the user's choices)
-# Keys: up/down or j/k move, space toggles, a = all, n = none, enter confirms.
-multiselect() {
-  local title="$1"
-  local total=${#MS_LABELS[@]}
-  local cursor=0 offset=0 i key seq rows cols window line mark pointer
-
-  # Start on the first real item.
-  while [ "${MS_KINDS[$cursor]}" = "header" ] && [ $cursor -lt $((total - 1)) ]; do
-    cursor=$((cursor + 1))
-  done
-
-  # Leave the alternate screen intact on Ctrl-C, then re-raise the signal.
-  trap 'printf "\033[?25h\033[?1049l" >/dev/tty; trap - INT; kill -INT $$' INT
-  printf '\033[?1049h\033[?25l' >/dev/tty
-
-  while true; do
-    rows=$(stty size </dev/tty 2>/dev/null | awk '{print $1}'); rows=${rows:-24}
-    cols=$(stty size </dev/tty 2>/dev/null | awk '{print $2}'); cols=${cols:-80}
-    window=$((rows - 6)); [ $window -lt 3 ] && window=3
-
-    # Keep the cursor inside the visible window.
-    [ $cursor -lt $offset ] && offset=$cursor
-    [ $cursor -ge $((offset + window)) ] && offset=$((cursor - window + 1))
-
-    {
-      printf '\033[H\033[2J'
-      printf '\033[1m%s\033[0m\n' "$title"
-      printf '\033[2mspace toggle · ↑/↓ move · a all · n none · enter confirm\033[0m\n'
-      [ $offset -gt 0 ] && printf '\033[2m  ↑ more\033[0m\n' || printf '\n'
-
-      i=$offset
-      while [ $i -lt $((offset + window)) ] && [ $i -lt "$total" ]; do
-        if [ "${MS_KINDS[$i]}" = "header" ]; then
-          line="  \033[1;34m${MS_LABELS[$i]}\033[0m"
-        else
-          [ "${MS_CHECKED[$i]}" = "1" ] && mark="\033[32m[x]\033[0m" || mark="[ ]"
-          line="  $mark ${MS_LABELS[$i]}"
-        fi
-        if [ $i -eq $cursor ]; then
-          pointer="\033[36m›\033[0m"
-        else
-          pointer=" "
-        fi
-        # Truncate to the terminal width (escape codes make this approximate).
-        printf "%b%b\033[0m\n" "$pointer" "$line" | cut -c 1-$((cols + 30))
-        i=$((i + 1))
-      done
-
-      if [ $((offset + window)) -lt "$total" ]; then
-        printf '\033[2m  ↓ more\033[0m\n'
-      fi
-    } >/dev/tty
-
-    # An empty read is how Enter arrives (read -n1 swallows the newline as its
-    # delimiter), so anything else that produces no usable key must say so
-    # with a name of its own rather than an empty string — otherwise a mouse
-    # wheel would confirm the selection and start installing.
-    if IFS= read -rsn1 key </dev/tty; then
-      if [ "$key" = $'\x1b' ]; then
-        seq=""
-        IFS= read -rsn2 -t 1 seq </dev/tty || true
-        case "$seq" in
-          '[A') key="up" ;;
-          '[B') key="down" ;;
-          # Scroll wheels, page keys, and a bare Escape all land here.
-          *) discard_escape_tail; key="ignored" ;;
-        esac
-      fi
-    else
-      # The terminal went away; stop rather than spin on end-of-input.
-      break
-    fi
-
-    case "$key" in
-      up|k)
-        i=$cursor
-        while [ $i -gt 0 ]; do
-          i=$((i - 1))
-          if [ "${MS_KINDS[$i]}" = "item" ]; then cursor=$i; break; fi
-        done
-        ;;
-      down|j)
-        i=$cursor
-        while [ $i -lt $((total - 1)) ]; do
-          i=$((i + 1))
-          if [ "${MS_KINDS[$i]}" = "item" ]; then cursor=$i; break; fi
-        done
-        ;;
-      ' ')
-        if [ "${MS_CHECKED[$cursor]}" = "1" ]; then
-          MS_CHECKED[cursor]=0
-        else
-          MS_CHECKED[cursor]=1
-        fi
-        ;;
-      a)
-        i=0
-        while [ $i -lt "$total" ]; do
-          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[i]=1
-          i=$((i + 1))
-        done
-        ;;
-      n)
-        i=0
-        while [ $i -lt "$total" ]; do
-          [ "${MS_KINDS[$i]}" = "item" ] && MS_CHECKED[i]=0
-          i=$((i + 1))
-        done
-        ;;
-      ''|$'\n'|$'\r')
-        break
-        ;;
-    esac
-  done
-
-  printf '\033[?25h\033[?1049l' >/dev/tty
-  trap - INT
-}
-
 # trust_brew_taps [brewfile]
 #
 # Homebrew refuses to load formulae and casks from a third-party tap until
@@ -300,94 +157,100 @@ EOF
 
 # choose_brew_packages
 #
-# Parses the Brewfile into the multiselect picker (section headers included,
-# already-installed items annotated) and writes the selection to
-# ~/.Brewfile.local — this machine's untracked subset, installed here and
-# re-used by dotfiles-update so updates respect the choice. Sets
-# BREWFILE_TO_USE; empty string means nothing was selected. Without a TTY the
-# full Brewfile is used, matching unattended behavior.
+# Presents the Brewfile in fzf — every entry selected to begin with, its
+# section and description alongside it, and the ones already on this machine
+# marked — and writes what survives to ~/.Brewfile.local, this machine's
+# untracked subset. dotfiles-update installs from that file, so a machine
+# keeps its choice. Sets BREWFILE_TO_USE; an empty string means nothing was
+# selected. Without a TTY the full Brewfile is used, matching unattended
+# behavior.
 # shellcheck disable=SC2034  # BREWFILE_TO_USE is consumed by os/macos/install.sh
 choose_brew_packages() {
   BREWFILE_TO_USE="$DOTFILES_DIR/Brewfile"
   is_interactive || return 0
 
-  local parsed installed_formulae installed_casks
-  parsed="$(awk '
+  # The picker runs on fzf, which the Brewfile installs anyway; fetching it
+  # first is what lets a brand-new machine choose rather than take everything.
+  if ! command -v fzf >/dev/null 2>&1; then
+    info "installing fzf — the application picker runs on it"
+    brew install fzf >/dev/null 2>&1 || true
+  fi
+  if ! command -v fzf >/dev/null 2>&1; then
+    warn "fzf unavailable — installing the whole Brewfile"
+    return 0
+  fi
+
+  local installed_formulae installed_casks entries selection selected total
+  installed_formulae=" $(brew list --formula 2>/dev/null | tr '\n' ' ') "
+  installed_casks=" $(brew list --cask 2>/dev/null | tr '\n' ' ') "
+
+  # kind <tab> name <tab> label. Only the label is shown and filtered on, so
+  # the section name travels with each entry and typing "browser" narrows to
+  # that group — the job the old section headings did, minus the rows that
+  # existed only to be skipped over.
+  entries="$(awk -v formulae="$installed_formulae" -v casks="$installed_casks" '
     /^# - - / { dash = 1; next }
-    dash && /^# [^-]/ { sub(/^# /, ""); print "header\t" $0 "\t"; dash = 0; next }
+    dash && /^# [^-]/ { section = $0; sub(/^# /, "", section); dash = 0; next }
     { dash = 0 }
     /^(brew|cask) "/ {
-      type = $1
+      kind = $1
       match($0, /"[^"]+"/)
       name = substr($0, RSTART + 1, RLENGTH - 2)
       desc = ""
       rest = substr($0, RSTART + RLENGTH)
       if (match(rest, /# /)) { desc = substr(rest, RSTART + 2) }
-      print type "\t" name "\t" desc
+
+      short = name
+      sub(/.*\//, "", short)
+      state = ""
+      if (kind == "brew" && index(formulae, " " short " ")) { state = "  (installed)" }
+      if (kind == "cask" && index(casks, " " short " "))    { state = "  (installed)" }
+
+      label = sprintf("%-26s %s", name, desc)
+      if (section != "") { label = label "  · " section }
+      print kind "\t" name "\t" label state
     }
   ' "$DOTFILES_DIR/Brewfile")"
 
-  installed_formulae=" $(brew list --formula 2>/dev/null | tr '\n' ' ') "
-  installed_casks=" $(brew list --cask 2>/dev/null | tr '\n' ' ') "
+  # fzf exits non-zero when the picker is dismissed, which reads the same as
+  # selecting nothing: install none of it rather than all of it.
+  selection="$(printf '%s\n' "$entries" | fzf \
+    --multi \
+    --delimiter=$'\t' \
+    --with-nth=3 \
+    --bind 'load:select-all,ctrl-a:select-all,ctrl-d:deselect-all' \
+    --header='tab toggle · type to filter · ctrl-a / ctrl-d whole matches · enter confirm · esc skip' \
+    --prompt='applications › ' \
+    --pointer='›' \
+    --marker='x ' \
+    --no-mouse)" || true
 
-  MS_KINDS=() MS_LABELS=() MS_CHECKED=()
-  local kinds=() names=()
-  local kind name desc label short state
-
-  while IFS=$'\t' read -r kind name desc; do
-    [ -n "$kind" ] || continue
-    if [ "$kind" = "header" ]; then
-      MS_KINDS[${#MS_KINDS[@]}]="header"
-      MS_LABELS[${#MS_LABELS[@]}]="$name"
-      MS_CHECKED[${#MS_CHECKED[@]}]=0
-      kinds[${#kinds[@]}]="header"; names[${#names[@]}]=""
-      continue
-    fi
-    short="${name##*/}"
-    state=""
-    case "$kind" in
-      brew) case "$installed_formulae" in *" $short "*) state=" (installed)";; esac ;;
-      cask) case "$installed_casks"    in *" $short "*) state=" (installed)";; esac ;;
-    esac
-    label="$name"
-    [ -n "$desc" ] && label="$label — $desc"
-    [ -n "$state" ] && label="$label$state"
-    MS_KINDS[${#MS_KINDS[@]}]="item"
-    MS_LABELS[${#MS_LABELS[@]}]="$label"
-    MS_CHECKED[${#MS_CHECKED[@]}]=1
-    kinds[${#kinds[@]}]="$kind"; names[${#names[@]}]="$name"
-  done <<EOF
-$parsed
-EOF
-
-  multiselect "Select applications to install (all selected by default)"
-
-  local selection="$HOME/.Brewfile.local" selected=0 skipped=0 i=0
+  local selection_file="$HOME/.Brewfile.local"
   {
     printf '%s\n' "# ~/.Brewfile.local — this machine's Brewfile subset, written by the"
     printf '%s\n' "# installer's picker. dotfiles-update installs from it; re-run ./install.sh"
     printf '%s\n' "# to change the selection or pick up new Brewfile entries."
     grep '^tap ' "$DOTFILES_DIR/Brewfile" || true
-  } > "$selection"
+  } > "$selection_file"
 
-  while [ $i -lt ${#names[@]} ]; do
-    if [ "${kinds[$i]}" != "header" ]; then
-      if [ "${MS_CHECKED[$i]}" = "1" ]; then
-        printf '%s "%s"\n' "${kinds[$i]}" "${names[$i]}" >> "$selection"
-        selected=$((selected + 1))
-      else
-        skipped=$((skipped + 1))
-      fi
-    fi
-    i=$((i + 1))
-  done
+  selected=0
+  while IFS=$'\t' read -r kind name _label; do
+    [ -n "$kind" ] || continue
+    printf '%s "%s"\n' "$kind" "$name" >> "$selection_file"
+    selected=$((selected + 1))
+  done <<EOF
+$selection
+EOF
 
-  if [ $selected -eq 0 ]; then
+  total="$(printf '%s\n' "$entries" | grep -c . || true)"
+
+  if [ "$selected" -eq 0 ]; then
     BREWFILE_TO_USE=""
+    rm -f "$selection_file"
     warn "no applications selected — skipping brew bundle"
   else
-    BREWFILE_TO_USE="$selection"
-    ok "$selected application(s) selected, $skipped skipped (saved to ~/.Brewfile.local)"
+    BREWFILE_TO_USE="$selection_file"
+    ok "$selected of $total application(s) selected (saved to ~/.Brewfile.local)"
   fi
 }
 
