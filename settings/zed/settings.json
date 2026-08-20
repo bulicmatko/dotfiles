@@ -68,12 +68,16 @@
   // from one of them: naming a theme Zed does not have installed leaves it
   // on its default instead.
   "auto_install_extensions": {
+    "astro": true,
     "docker-compose": true,
     "dockerfile": true,
     "git-firefly": true,
     "html": true,
+    "sql": true,
     "terraform": true,
     "tokyo-night": true,
+    "toml": true,
+    "xml": true,
   },
   // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
   // applies if "mode" is ever switched to "system".)
