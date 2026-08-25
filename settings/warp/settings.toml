@@ -215,6 +215,7 @@ at_context_menu_in_terminal_mode = false
 [warpify.ssh]
 use_ssh_tmux_wrapper = false
 ssh_tmux_deprecation_notice_pending = false
+ssh_extension_install_mode = "never_install"
 
 # Always start zsh regardless of the system login shell.
 [session]

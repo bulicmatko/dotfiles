@@ -170,11 +170,12 @@
   // Git panel: left dock, tree view, full diffs for untracked files,
   // status shown by coloring the file label.
   "git_panel": {
-    "collapse_untracked_diff": false,
     "dock": "left",
     "tree_view": true,
-    "default_width": 400,
+    "group_by": "staging",
     "status_style": "label_color",
+    "collapse_untracked_diff": false,
+    "default_width": 400,
   },
   // Terminal: right dock, 800px, blinking cursor, small font, double line
   // height, no breadcrumbs bar.
