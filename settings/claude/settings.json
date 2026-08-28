@@ -25,7 +25,7 @@
       "Bash(dotfiles-doctor)"
     ]
   },
-  "model": "fable",
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
@@ -36,7 +36,7 @@
     "typescript-lsp@claude-plugins-official": true
   },
   "outputStyle": "Concise",
-  "tui": "fullscreen",
+  "tui": "default",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
