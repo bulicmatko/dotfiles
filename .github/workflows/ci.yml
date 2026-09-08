@@ -11,7 +11,7 @@ jobs:
   validate:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # full history for the secret scan
 
@@ -72,12 +72,16 @@ jobs:
               brew) url="https://formulae.brew.sh/api/formula/$name.json" ;;
               cask) url="https://formulae.brew.sh/api/cask/$name.json" ;;
             esac
-            if curl -fsS --retry 3 --retry-delay 2 --connect-timeout 10 -o /dev/null "$url"; then
-              echo "OK   $kind $name"
-            else
-              echo "GONE $kind $name — removed from Homebrew, or renamed"
-              missing=1
-            fi
+            # Only a definitive 404 proves the entry is gone. Anything else
+            # (5xx, timeout, reset) is the API having a bad moment, and
+            # failing the build on that would flag packages that still exist.
+            code=$(curl -sS --retry 3 --retry-delay 2 --retry-all-errors \
+              --connect-timeout 10 -o /dev/null -w '%{http_code}' "$url") || code=000
+            case "$code" in
+              200) echo "OK   $kind $name" ;;
+              404) echo "GONE $kind $name — removed from Homebrew, or renamed"; missing=1 ;;
+              *)   echo "WARN $kind $name — API returned $code, could not verify" ;;
+            esac
           done < <(awk '/^(brew|cask) "/ { t=$1; match($0,/"[^"]+"/); print t, substr($0,RSTART+1,RLENGTH-2) }' Brewfile)
           exit $missing
 
