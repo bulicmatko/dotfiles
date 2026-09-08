@@ -6,64 +6,64 @@
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-shift-g": "git_panel::ToggleFocus"
-    }
+      "cmd-shift-g": "git_panel::ToggleFocus",
+    },
   },
   // alt+space opens completions (ctrl+space is taken by macOS input switch).
   {
     "context": "Editor",
     "bindings": {
-      "alt-space": "editor::ShowCompletions"
-    }
+      "alt-space": "editor::ShowCompletions",
+    },
   },
   // Free cmd+r at the workspace level...
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-r": null
-    }
+      "cmd-r": null,
+    },
   },
   // ...so cmd+r renames the symbol under the cursor (as in VSCode).
   {
     "context": "Editor",
     "bindings": {
-      "cmd-r": "editor::Rename"
-    }
+      "cmd-r": "editor::Rename",
+    },
   },
   // cmd+j joins lines (as in VSCode).
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-j": "editor::JoinLines"
-    }
+      "cmd-j": "editor::JoinLines",
+    },
   },
   // cmd+shift+r finds all references (as in VSCode).
   {
     "context": "Editor",
     "bindings": {
-      "cmd-shift-r": "editor::FindAllReferences"
-    }
+      "cmd-shift-r": "editor::FindAllReferences",
+    },
   },
   // cmd+g cmd+t opens the symbol outline (as in VSCode's goto-symbol chord).
   {
     "context": "Editor",
     "bindings": {
-      "cmd-g cmd-t": "outline::Toggle"
-    }
+      "cmd-g cmd-t": "outline::Toggle",
+    },
   },
   // alt+cmd+o opens recent projects (as in VSCode's open-recent).
   {
     "context": "Workspace",
     "bindings": {
-      "alt-cmd-o": "projects::OpenRecent"
-    }
+      "alt-cmd-o": "projects::OpenRecent",
+    },
   },
   // shift+enter in the terminal sends ESC+CR — newline in Claude Code CLI
   // and other TUIs instead of submitting (as in VSCode's terminal).
   {
     "context": "Terminal",
     "bindings": {
-      "shift-enter": ["terminal::SendText", "\u001b\r"]
-    }
-  }
+      "shift-enter": ["terminal::SendText", "\u001b\r"],
+    },
+  },
 ]

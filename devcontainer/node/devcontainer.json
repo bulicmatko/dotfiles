@@ -15,24 +15,21 @@
     // zsh preinstalled so the dotfiles install is instant
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
-      "configureZshAsDefaultShell": true
-    }
+      "configureZshAsDefaultShell": true,
+    },
     // "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh"
+        "terminal.integrated.defaultProfile.linux": "zsh",
       },
       // Project-relevant extensions only — personal ones sync separately.
-      "extensions": [
-        "editorconfig.editorconfig",
-        "oxc.oxc-vscode"
-      ]
-    }
+      "extensions": ["editorconfig.editorconfig", "oxc.oxc-vscode"],
+    },
   },
 
   "remoteUser": "node",
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "npm install",
 }

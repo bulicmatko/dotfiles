@@ -2,6 +2,23 @@
 // Every option carries a short comment. Docs: https://zed.dev/docs/configuring-zed
 {
   // No minimap column.
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+      "enable_lsp_tasks": true,
+    },
+  },
   "minimap": {
     "show": "never",
   },

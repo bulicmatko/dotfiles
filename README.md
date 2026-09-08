@@ -11,7 +11,7 @@ Personal dotfiles — the single source of truth for every machine I use:
 macOS laptops, Linux boxes, and devcontainers/Codespaces.
 
 Everything is **symlinked** from this repo into place, so editing a setting in
-any tool changes the file *in this repo*. Commit and push on one machine,
+any tool changes the file _in this repo_. Commit and push on one machine,
 pull on another — done.
 
 The repo contains **no personal identity**: the installer asks for a git
@@ -102,7 +102,7 @@ be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 When run from a terminal the installer is **guided**: it shows a banner, walks
 through numbered steps, and asks before each one (Enter = yes). The
 applications step opens a checkbox picker built from the Brewfile — so the
-Brewfile can list *everything*, and each machine installs only what it needs:
+Brewfile can list _everything_, and each machine installs only what it needs:
 
 ```
 space toggle · ↑/↓ (or j/k) move · a select all · n select none · enter confirm
@@ -150,23 +150,23 @@ Headless subset: zsh + oh-my-zsh + starship + git config only. No SSH keys
 
 ## Symlink map
 
-| Repo file                          | Linked to                                             |
-| ---------------------------------- | ----------------------------------------------------- |
-| `git/gitattributes`                | `~/.gitattributes`                                    |
-| `git/gitconfig`                    | `~/.gitconfig`                                        |
-| `git/gitignore_global`             | `~/.gitignore_global`                                 |
-| `settings/claude/settings.json`    | `~/.claude/settings.json`                             |
-| `settings/claude/statusline.sh`    | `~/.claude/statusline.sh`                             |
-| `settings/gh/config.yml`           | `~/.config/gh/config.yml`                             |
-| `settings/starship/starship.toml`  | `~/.config/starship.toml`                             |
-| `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                 |
+| Repo file                          | Linked to                                                                                                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `git/gitattributes`                | `~/.gitattributes`                                                                                            |
+| `git/gitconfig`                    | `~/.gitconfig`                                                                                                |
+| `git/gitignore_global`             | `~/.gitignore_global`                                                                                         |
+| `settings/claude/settings.json`    | `~/.claude/settings.json`                                                                                     |
+| `settings/claude/statusline.sh`    | `~/.claude/statusline.sh`                                                                                     |
+| `settings/gh/config.yml`           | `~/.config/gh/config.yml`                                                                                     |
+| `settings/starship/starship.toml`  | `~/.config/starship.toml`                                                                                     |
+| `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                                                                         |
 | `settings/vscode/settings.json`    | `~/Library/Application Support/Code/User/settings.json` (macOS) / `~/.config/Code/User/settings.json` (Linux) |
-| `settings/warp/themes/`            | `~/.warp/themes` (macOS)                              |
-| `settings/warp/settings.toml`      | `~/.warp/settings.toml` (macOS)                       |
-| `settings/zed/keymap.json`         | `~/.config/zed/keymap.json`                           |
-| `settings/zed/settings.json`       | `~/.config/zed/settings.json`                         |
-| `ssh/config`                       | `~/.ssh/config`                                       |
-| `zsh/zshrc`                        | `~/.zshrc`                                            |
+| `settings/warp/themes/`            | `~/.warp/themes` (macOS)                                                                                      |
+| `settings/warp/settings.toml`      | `~/.warp/settings.toml` (macOS)                                                                               |
+| `settings/zed/keymap.json`         | `~/.config/zed/keymap.json`                                                                                   |
+| `settings/zed/settings.json`       | `~/.config/zed/settings.json`                                                                                 |
+| `ssh/config`                       | `~/.ssh/config`                                                                                               |
+| `zsh/zshrc`                        | `~/.zshrc`                                                                                                    |
 
 ## Keeping machines in sync
 
@@ -207,12 +207,12 @@ dotfiles-doctor
 
 ## Machine-specific overrides (not tracked)
 
-| File                | Purpose                                              |
-| ------------------- | ---------------------------------------------------- |
-| `~/.zshrc.local`    | extra shell config, sourced at the end of `zshrc`    |
-| `~/.gitconfig.local`| commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
-| `~/.ssh/config.local`| private SSH hosts (VPS IPs, work jumphosts) — Included from the synced `ssh/config` |
-| `~/.Brewfile.local` | this machine's picker selection from the Brewfile — `dotfiles-update` installs from it, so deselected apps never come back |
+| File                  | Purpose                                                                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `~/.zshrc.local`      | extra shell config, sourced at the end of `zshrc`                                                                                  |
+| `~/.gitconfig.local`  | commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
+| `~/.ssh/config.local` | private SSH hosts (VPS IPs, work jumphosts) — Included from the synced `ssh/config`                                                |
+| `~/.Brewfile.local`   | this machine's picker selection from the Brewfile — `dotfiles-update` installs from it, so deselected apps never come back         |
 
 ## Homebrew (macOS apps)
 
@@ -245,8 +245,8 @@ Two pieces make containers feel like home:
    `"dotfiles.repository": "bulicmatko/dotfiles"` (already in
    [settings/vscode/settings.json](settings/vscode/settings.json)) clones this
    repo into every container and runs `install.sh`. For GitHub Codespaces,
-   enable it once at <https://github.com/settings/codespaces> → *Automatically
-   install dotfiles* → select this repo.
+   enable it once at <https://github.com/settings/codespaces> → _Automatically
+   install dotfiles_ → select this repo.
 2. **Project config, per repo**: copy the matching template —
    [node](devcontainer/node/devcontainer.json) (Node LTS),
    [bun](devcontainer/bun/devcontainer.json), or
