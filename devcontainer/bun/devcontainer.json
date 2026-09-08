@@ -9,7 +9,7 @@
 {
   "name": "Bun",
   // Official Bun image (Debian based) — bump the tag when a project needs it.
-  "image": "oven/bun:1.3.14",
+  "image": "oven/bun:1.4.0",
 
   "features": {
     // The bun image ships without git — required for plugins and dotfiles.
