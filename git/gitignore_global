@@ -43,7 +43,7 @@ Thumbs.db
 Desktop.ini
 
 # Vim — exception to the no-editor rule: vim/vi ships with every OS and is
-# this setup's fallback editor on headless machines, so its transient swap
-# files are environment junk everywhere (and never legitimately tracked).
+# this setup's default editor, so its transient swap files are environment
+# junk everywhere (and never legitimately tracked).
 *.swp
 *.swo
