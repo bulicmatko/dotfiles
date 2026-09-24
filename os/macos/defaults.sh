@@ -29,6 +29,12 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Show scroll bars only when scrolling
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 
+# App icons and widgets are tinted Graphite, following the light or dark
+# appearance. The icon style and its tint are separate settings from the
+# accent color, and both need a logout to reach every icon.
+defaults write NSGlobalDomain AppleIconAppearanceTheme -string "TintedAutomatic"
+defaults write NSGlobalDomain AppleIconAppearanceTintColor -string "Graphite"
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Keyboard & text input
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
