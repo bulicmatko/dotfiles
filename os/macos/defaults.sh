@@ -29,17 +29,7 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Show scroll bars only when scrolling
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 
-# Accent color Graphite. Finder folder icons, selection highlights, and
-# controls follow it. Graphite is -1 with aqua variant 6; the highlight color
-# is the matching RGB triple System Settings writes alongside.
-defaults write NSGlobalDomain AppleAccentColor -int -1
-defaults write NSGlobalDomain AppleAquaColorVariant -int 6
-defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745 Graphite"
-
-# App icons and widgets are tinted Graphite, following the light or dark
-# appearance. The icon style and its tint are separate settings from the
-# accent color, and both need a logout to reach every icon.
-defaults write NSGlobalDomain AppleIconAppearanceTheme -string "TintedAutomatic"
+# Folder color Graphite. Needs a logout to reach every folder.
 defaults write NSGlobalDomain AppleIconAppearanceTintColor -string "Graphite"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
