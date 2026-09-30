@@ -4,29 +4,11 @@
     "DISABLE_TELEMETRY": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000"
   },
   "permissions": {
-    "allow": [
-      "Bash(ls:*)",
-      "Bash(tree:*)",
-      "Bash(grep:*)",
-      "Bash(rg:*)",
-      "Bash(git status:*)",
-      "Bash(git log:*)",
-      "Bash(git diff:*)",
-      "Bash(git show:*)",
-      "Bash(git branch)",
-      "Bash(brew list:*)",
-      "Bash(brew info:*)",
-      "Bash(brew search:*)",
-      "Bash(brew bundle check:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr checks:*)",
-      "Bash(gh run view:*)",
-      "Bash(dotfiles-doctor)"
-    ]
+    "defaultMode": "auto"
   },
   "tui": "default",
   "outputStyle": "Concise",
@@ -39,5 +21,6 @@
   "skipWorkflowUsageWarning": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
+  "spinnerTipsEnabled": false,
   "cleanupPeriodDays": 90
 }
