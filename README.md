@@ -185,8 +185,8 @@ if it caches config). Since this repo is the source of truth, consider turning
 the tools' own settings-sync off to avoid tug-of-war.
 
 To update a machine wholesale — repo, Homebrew packages, oh-my-zsh + plugins,
-missing VSCode extensions — run the one command (it lives in `bin/`, which
-`zshrc` puts on PATH):
+new config symlinks, missing VSCode extensions, macOS system settings — run
+the one command (it lives in `bin/`, which `zshrc` puts on PATH):
 
 ```sh
 dotfiles-update

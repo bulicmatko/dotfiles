@@ -2,7 +2,9 @@
 #
 # dotfiles-update — bring this machine up to date in one command:
 # pull the dotfiles repo, upgrade Homebrew packages, update oh-my-zsh and
-# its plugins/theme, and install any missing VSCode extensions.
+# its plugins/theme, link any config files newly added to the manifest,
+# install any missing VSCode extensions, and re-apply the macOS system
+# settings so new `defaults write` tweaks reach this machine.
 #
 # Lives on PATH via zsh/zshrc, so it runs from anywhere.
 
@@ -46,6 +48,23 @@ for repo in "$HOME/.oh-my-zsh" \
   fi
 done
 
+# Re-link every manifest entry so config files added to the repo since the
+# last run get their symlink here too (link_file is a no-op when already
+# linked). Same manifest dotfiles-doctor checks against.
+info "linking config files"
+while IFS=$'\t' read -r src dst; do
+  link_file "$src" "$dst"
+done <<EOF
+$(dotfiles_links "$(detect_target)")
+EOF
+
 install_vscode_extensions
+
+# Re-apply macOS defaults so tweaks added to the repo since the last run land
+# here too. Dock and Finder restart briefly; some keys need a logout.
+if [ "$(uname -s)" = "Darwin" ]; then
+  info "applying macOS system settings (Dock and Finder will restart)"
+  bash "$DOTFILES_DIR/os/macos/defaults.sh" || warn "macOS defaults reported issues"
+fi
 
 ok "everything up to date"
