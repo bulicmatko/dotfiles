@@ -1,6 +1,9 @@
 {
-  "cleanupPeriodDays": 90,
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
@@ -25,23 +28,16 @@
       "Bash(dotfiles-doctor)"
     ]
   },
+  "tui": "default",
+  "outputStyle": "Concise",
   "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": false,
-    "superpowers@claude-plugins-official": false,
-    "typescript-lsp@claude-plugins-official": true
-  },
-  "outputStyle": "Concise",
-  "tui": "default",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "editorMode": "normal",
-  "preferredNotifChannel": "auto",
-  "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "cleanupPeriodDays": 90
 }
