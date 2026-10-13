@@ -57,7 +57,6 @@ brew "glab"      # GitLab CLI — same idea for GitLab
 
 tap "oven-sh/bun"      # the only source of the bun formula
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
-brew "deno"            # Deno — secure TypeScript/JavaScript runtime
 brew "go"              # Go compiler and toolchain
 brew "vite-plus"       # Vite+ (vp) — unified web toolchain: dev, build, test, lint
 
