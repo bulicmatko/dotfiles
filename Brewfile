@@ -41,7 +41,6 @@ brew "btop"    # pretty resource monitor (htop successor)
 
 cask "visual-studio-code" # VSCode — primary editor
 cask "zed"                # Zed — fast native editor
-cask "cursor"             # Cursor — AI-first VSCode fork
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Git & code hosting
