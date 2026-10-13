@@ -17,8 +17,6 @@ cdonohue.quill-icons
 christian-kohler.path-intellisense
 # ESLint — surfaces eslint diagnostics
 dbaeumer.vscode-eslint
-# Deno — Deno runtime/language support
-denoland.vscode-deno
 # GitLens — inline blame, history, and rich git views
 eamodio.gitlens
 # EditorConfig — respects .editorconfig files in projects

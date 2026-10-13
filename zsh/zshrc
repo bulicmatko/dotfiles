@@ -151,15 +151,14 @@ if command -v nvm >/dev/null 2>&1; then
   load-nvmrc
 fi
 
-# deno — binaries installed by `deno install` land in ~/.deno/bin.
-export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
 # bun — PATH for curl-installed bun (Linux); brew handles it on macOS.
 export BUN_INSTALL="$HOME/.bun"
 [[ -d "$BUN_INSTALL/bin" ]] && export PATH="$BUN_INSTALL/bin:$PATH"
 # bun shell completions, if generated.
 [[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
+
+# Vite+ — PATH, the `vp env use` wrapper and completions, written by its installer.
+[[ -f "$HOME/.config/vite-plus/env" ]] && source "$HOME/.config/vite-plus/env"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Aliases

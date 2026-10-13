@@ -41,7 +41,6 @@ brew "btop"    # pretty resource monitor (htop successor)
 
 cask "visual-studio-code" # VSCode — primary editor
 cask "zed"                # Zed — fast native editor
-cask "cursor"             # Cursor — AI-first VSCode fork
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Git & code hosting
@@ -57,7 +56,7 @@ brew "glab"      # GitLab CLI — same idea for GitLab
 
 tap "oven-sh/bun"      # the only source of the bun formula
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
-brew "deno"            # Deno — secure TypeScript/JavaScript runtime
+brew "vite-plus"       # Vite+ (vp) — unified web toolchain: dev, build, test, lint
 brew "go"              # Go compiler and toolchain
 
 # Node is absent on purpose: its versions are managed by nvm, which the install
