@@ -56,8 +56,8 @@ brew "glab"      # GitLab CLI — same idea for GitLab
 
 tap "oven-sh/bun"      # the only source of the bun formula
 brew "oven-sh/bun/bun" # Bun — fast JS runtime, bundler, package manager
-brew "go"              # Go compiler and toolchain
 brew "vite-plus"       # Vite+ (vp) — unified web toolchain: dev, build, test, lint
+brew "go"              # Go compiler and toolchain
 
 # Node is absent on purpose: its versions are managed by nvm, which the install
 # script fetches from upstream because nvm does not support Homebrew installs.

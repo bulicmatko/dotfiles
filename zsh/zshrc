@@ -157,6 +157,9 @@ export BUN_INSTALL="$HOME/.bun"
 # bun shell completions, if generated.
 [[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
 
+# Vite+ — PATH, the `vp env use` wrapper and completions, written by its installer.
+[[ -f "$HOME/.config/vite-plus/env" ]] && source "$HOME/.config/vite-plus/env"
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Aliases
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
