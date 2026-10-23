@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude Code status line — model · effort · folder on branch · context, in Tokyo Night colors.
+# Claude Code status line — model · effort · folder on branch · context %, in Tokyo Night colors.
 # Inside a linked git worktree the folder shows the repo name plus the worktree name.
 # Claude Code pipes session JSON to stdin; the first stdout line is displayed.
 # Docs: https://code.claude.com/docs/en/statusline
@@ -62,7 +62,7 @@ if [ -n "$context" ]; then
   else
     color="$green"
   fi
-  out="${out} ${dim}·${reset} ${color}${context}%${reset} ${dim}context${reset}"
+  out="${out} ${dim}·${reset} ${color}${context}%${reset}"
 fi
 
 printf '%s' "$out"
