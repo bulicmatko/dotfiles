@@ -44,7 +44,7 @@ reset=$'\033[0m'
 
 out="${teal}${model}${reset}"
 if [ -n "$effort" ]; then
-  out="${out} ${dim}·${reset} ${orange}${effort}${reset} ${dim}effort${reset}"
+  out="${out} ${dim}·${reset} ${orange}${effort}${reset}"
 fi
 out="${out} ${dim}·${reset} ${blue}${folder}${reset}"
 if [ -n "$worktree" ]; then
