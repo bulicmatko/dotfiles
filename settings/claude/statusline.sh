@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Claude Code status line — model · effort · folder on branch · context % · session cost, in Tokyo Night colors.
+# Claude Code status line in Tokyo Night colors, on two lines:
+#   model · effort · session cost · context %
+#   folder on branch
 # Inside a linked git worktree the folder shows the repo name plus the worktree name.
-# Claude Code pipes session JSON to stdin; the first stdout line is displayed.
+# Claude Code pipes session JSON to stdin; each stdout line is a status line row.
 # Docs: https://code.claude.com/docs/en/statusline
 
 input="$(cat)"
@@ -44,17 +46,12 @@ red=$'\033[38;2;247;118;142m'
 dim=$'\033[2m'
 reset=$'\033[0m'
 
-out="${teal}${model}${reset}"
+line1="${teal}${model}${reset}"
 if [ -n "$effort" ]; then
-  out="${out} ${dim}·${reset} ${orange}${effort}${reset}"
+  line1="${line1} ${dim}·${reset} ${orange}${effort}${reset}"
 fi
-out="${out} ${dim}·${reset} ${blue}${folder}${reset}"
-if [ -n "$worktree" ]; then
-  out="${out} ${dim}in worktree${reset} ${blue}${worktree}${reset}"
-fi
-# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
-if [ -n "$branch" ] && [ "$branch" != "worktree-${worktree}" ]; then
-  out="${out} ${dim}on${reset} ${purple}${branch}${reset}"
+if [ -n "$cost" ]; then
+  line1="${line1} ${dim}·${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
 fi
 if [ -n "$context" ]; then
   if [ "$context" -ge 80 ]; then
@@ -64,10 +61,16 @@ if [ -n "$context" ]; then
   else
     color="$green"
   fi
-  out="${out} ${dim}·${reset} ${color}${context}%${reset}"
-fi
-if [ -n "$cost" ]; then
-  out="${out} ${dim}·${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
+  line1="${line1} ${dim}·${reset} ${color}${context}%${reset}"
 fi
 
-printf '%s' "$out"
+line2="${blue}${folder}${reset}"
+if [ -n "$worktree" ]; then
+  line2="${line2} ${dim}in worktree${reset} ${blue}${worktree}${reset}"
+fi
+# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
+if [ -n "$branch" ] && [ "$branch" != "worktree-${worktree}" ]; then
+  line2="${line2} ${dim}on${reset} ${purple}${branch}${reset}"
+fi
+
+printf '%s\n%s' "$line1" "$line2"
