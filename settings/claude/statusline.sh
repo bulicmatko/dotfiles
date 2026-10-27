@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude Code status line — model · effort · folder on branch · context %, in Tokyo Night colors.
+# Claude Code status line — model · effort · folder on branch · context % · session cost, in Tokyo Night colors.
 # Inside a linked git worktree the folder shows the repo name plus the worktree name.
 # Claude Code pipes session JSON to stdin; the first stdout line is displayed.
 # Docs: https://code.claude.com/docs/en/statusline
@@ -12,12 +12,14 @@ if command -v jq >/dev/null 2>&1; then
   dir="$(printf '%s' "$input" | jq -r '.workspace.current_dir // "."')"
   worktree="$(printf '%s' "$input" | jq -r '.workspace.git_worktree // empty')"
   context="$(printf '%s' "$input" | jq -r '.context_window.used_percentage // 0 | floor')"
+  cost="$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // empty')"
 else
   model="Claude"
   effort=""
   dir="$PWD"
   worktree=""
   context=""
+  cost=""
 fi
 
 branch="$(git -C "$dir" branch --show-current 2>/dev/null || true)"
@@ -63,6 +65,9 @@ if [ -n "$context" ]; then
     color="$green"
   fi
   out="${out} ${dim}·${reset} ${color}${context}%${reset}"
+fi
+if [ -n "$cost" ]; then
+  out="${out} ${dim}·${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
 fi
 
 printf '%s' "$out"
