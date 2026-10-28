@@ -144,16 +144,24 @@ dim=$'\033[2m'
 reset=$'\033[0m'
 sep="${dim}·${reset}"
 
-# Green below 50%, yellow below 80%, red from 80% up.
+# A percentage in green, turning yellow at the second argument and red at the third.
 percent() {
   local color="$green"
-  if [ "$1" -ge 80 ]; then
+  if [ "$1" -ge "$3" ]; then
     color="$red"
-  elif [ "$1" -ge 50 ]; then
+  elif [ "$1" -ge "$2" ]; then
     color="$yellow"
   fi
   printf '%s%s%%%s' "$color" "$1" "$reset"
 }
+
+# Context answers degrade well before the window fills, and every turn resends it,
+# so context turns yellow at 40% and red at 70%.
+context_percent() { percent "$1" 40 70; }
+
+# Plan usage matters only near the limit. Claude Code warns at 75% of a limit and
+# again at 95%, so plan figures turn yellow and red at those points.
+plan_percent() { percent "$1" 75 95; }
 
 # Effort levels run from cool to warm: light blue for low, pale neutral for medium,
 # peach for high and orange for xhigh. Max is a rainbow, as in Claude Code's
@@ -200,15 +208,15 @@ if [ -n "$cost" ]; then
   line1="${line1} ${sep} ${yellow}${cost}${reset}"
 fi
 if [ -n "$context" ]; then
-  line1="${line1} ${sep} $(percent "$context")"
+  line1="${line1} ${sep} $(context_percent "$context")"
 fi
 if [ -n "$five_hour" ]; then
-  line1="${line1} ${sep} ${dim}5h${reset} $(percent "$five_hour")$(at_time "$five_hour_reset" '%H:%M')"
+  line1="${line1} ${sep} ${dim}5h${reset} $(plan_percent "$five_hour")$(at_time "$five_hour_reset" '%H:%M')"
 fi
 if [ -n "$seven_day" ]; then
-  line1="${line1} ${sep} ${dim}wk${reset} $(percent "$seven_day")"
+  line1="${line1} ${sep} ${dim}wk${reset} $(plan_percent "$seven_day")"
   if [ -n "$model_week" ]; then
-    line1="${line1} ${dim}[${reset}$(percent "$model_week")${dim}]${reset}"
+    line1="${line1} ${dim}[${reset}$(plan_percent "$model_week")${dim}]${reset}"
   fi
   line1="${line1}$(at_time "$seven_day_reset" '%a %H:%M')"
 fi
