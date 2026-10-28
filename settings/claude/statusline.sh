@@ -137,6 +137,7 @@ green=$'\033[38;2;158;206;106m'
 yellow=$'\033[38;2;224;175;104m'
 orange=$'\033[38;2;255;158;100m'
 red=$'\033[38;2;247;118;142m'
+cyan=$'\033[38;2;125;207;255m'
 dim=$'\033[2m'
 reset=$'\033[0m'
 sep="${dim}·${reset}"
@@ -152,6 +153,29 @@ percent() {
   printf '%s%s%%%s' "$color" "$1" "$reset"
 }
 
+# Effort levels follow the colors of Claude Code's effort picker: low warning, medium
+# success, high permission, xhigh auto-accept, and max as a rainbow, which is spread
+# across the letters because a status line cannot animate. Low uses orange rather than
+# yellow so it stands apart from the cost beside it.
+effort_label() {
+  local rainbow=("$red" "$orange" "$yellow" "$green" "$cyan" "$blue" "$purple")
+  local i last out=""
+  case "$1" in
+    low) printf '%s%s%s' "$orange" "$1" "$reset" ;;
+    medium) printf '%s%s%s' "$green" "$1" "$reset" ;;
+    high) printf '%s%s%s' "$blue" "$1" "$reset" ;;
+    xhigh) printf '%s%s%s' "$purple" "$1" "$reset" ;;
+    max)
+      last=$((${#1} - 1))
+      for ((i = 0; i <= last; i++)); do
+        out="${out}${rainbow[i * 6 / (last > 0 ? last : 1)]}${1:i:1}"
+      done
+      printf '%s%s' "$out" "$reset"
+      ;;
+    *) printf '%s%s%s' "$orange" "$1" "$reset" ;;
+  esac
+}
+
 # Dimmed "@ <time>" for a reset time in Unix epoch seconds, when one is known.
 at_time() {
   local when
@@ -163,7 +187,7 @@ at_time() {
 
 line1="${teal}${model}${reset}"
 if [ -n "$effort" ]; then
-  line1="${line1} ${sep} ${orange}${effort}${reset}"
+  line1="${line1} ${sep} $(effort_label "$effort")"
 fi
 if [ -n "$cost" ]; then
   # Whole dollars from $100 up keep the widest line within 80 columns.
