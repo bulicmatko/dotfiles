@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/readme/banner.svg" alt="bulicmatko/dotfiles" width="806">
+  <img src="assets/readme/banner.svg" alt="bulicmatko/dotfiles" width="100%">
 </p>
 
 [![CI](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml)
@@ -21,7 +21,9 @@ dotfiles as-is, customized entirely through the untracked local files.
 Warp, Zed, and VSCode share one Tokyo Night Storm palette, defined for Warp in
 [tokyo_night_storm.yml](settings/warp/themes/tokyo_night_storm.yml).
 
-![The Tokyo Night Storm palette: terminal colors plus background, foreground, and accent](assets/readme/theme.svg)
+<p align="center">
+  <img src="assets/readme/theme.svg" alt="The Tokyo Night Storm palette: terminal colors plus background, foreground, and accent" width="100%">
+</p>
 
 Claude Code gets a two-line status line from
 [statusline.sh](settings/claude/statusline.sh). The first line shows the
@@ -30,7 +32,9 @@ the 5-hour and weekly windows with the local time each one resets. When the
 current model has its own weekly limit, its figure follows in brackets. The
 second line shows the folder and branch.
 
-![Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch](assets/readme/statusline.svg)
+<p align="center">
+  <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">
+</p>
 
 - Effort runs from light blue at low to orange at xhigh, and max is a rainbow.
 - Context turns yellow at 40% and red at 70%. Plan usage turns yellow at 75%
@@ -122,14 +126,18 @@ be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 When run from a terminal the installer is **guided**: it shows a banner, walks
 through numbered steps, and asks before each one (Enter = yes).
 
-![The guided installer: banner with target, user, and host, then numbered steps that ask before running](assets/readme/installer.svg)
+<p align="center">
+  <img src="assets/readme/installer.svg" alt="The guided installer: banner with target, user, and host, then numbered steps that ask before running" width="100%">
+</p>
 
 The applications step opens a checkbox picker built from the Brewfile — so the
 Brewfile can list _everything_, and each machine installs only what it needs.
 Space toggles, ↑/↓ (or j/k) move, `a` selects all, `n` selects none, and Enter
 confirms:
 
-![The Brewfile picker: sections as headings, every package checked by default, installed ones annotated](assets/readme/picker.svg)
+<p align="center">
+  <img src="assets/readme/picker.svg" alt="The Brewfile picker: sections as headings, every package checked by default, installed ones annotated" width="100%">
+</p>
 
 Already-installed packages are annotated, and everything starts selected.
 Without a TTY (Codespaces, scripted runs) there are no prompts: every step
@@ -228,7 +236,9 @@ repo, git identity set, shell components present — run:
 dotfiles-doctor
 ```
 
-![dotfiles-doctor on a healthy Mac: every symlink, the local overrides and git identity, shell components, Homebrew, and leftover backups](assets/readme/doctor.svg)
+<p align="center">
+  <img src="assets/readme/doctor.svg" alt="dotfiles-doctor on a healthy Mac: every symlink, the local overrides and git identity, shell components, Homebrew, and leftover backups" width="100%">
+</p>
 
 ## Machine-specific overrides (not tracked)
 

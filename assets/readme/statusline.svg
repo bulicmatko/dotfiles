@@ -1,20 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="657" height="175" viewBox="0 0 657 175" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="175" viewBox="0 0 880 175" role="img" aria-labelledby="t d">
 <title id="t">claude</title>
 <desc id="d">Claude Code with the status line: model, effort, session cost, context use, 5-hour and weekly usage with reset times, then folder and branch.</desc>
-<defs><clipPath id="w"><rect width="657" height="175" rx="10"/></clipPath></defs>
+<defs><clipPath id="w"><rect width="880" height="175" rx="10"/></clipPath></defs>
 <g clip-path="url(#w)">
-<rect width="657" height="175" fill="#1f2335"/>
-<rect width="657" height="34" fill="#1a1b26"/>
-<line x1="0" y1="33.5" x2="657" y2="33.5" stroke="#2f334d"/>
+<rect width="880" height="175" fill="#1f2335"/>
+<rect width="880" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="880" y2="33.5" stroke="#2f334d"/>
 <circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
 <circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
 <circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
-<text x="328.5" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">claude</text>
+<text x="440.0" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">claude</text>
 </g>
-<rect x="0.5" y="0.5" width="656" height="174" rx="9.5" fill="none" stroke="#2f334d"/>
+<rect x="0.5" y="0.5" width="879" height="174" rx="9.5" fill="none" stroke="#2f334d"/>
 <g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
 <text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#73daca">Fable 5.1</tspan><tspan x="106.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="122.8" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#ff9e64">xhigh</tspan><tspan x="173.2" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="190.0" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#e0af68">$2.47</tspan><tspan x="240.4" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="257.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">18%</tspan><tspan x="290.8" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="307.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">5h</tspan><tspan x="332.8" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">35%</tspan><tspan x="366.4" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">@ 18:00</tspan><tspan x="433.6" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="450.4" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">wk</tspan><tspan x="475.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">6%</tspan><tspan x="500.8" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">[</tspan><tspan x="509.2" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">5%</tspan><tspan x="526.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">]</tspan><tspan x="542.8" textLength="92.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">@ Tue 02:00</tspan></text>
 <text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">dotfiles</tspan><tspan x="97.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">on</tspan><tspan x="122.8" textLength="33.6" lengthAdjust="spacingAndGlyphs" fill="#bb9af7">main</tspan></text>
-<rect x="16" y="48" width="625.2" height="44" rx="7" fill="none" stroke="#565f89"/><text y="76" xml:space="preserve"><tspan x="26" fill="#a9b1d6" fill-opacity="0.55">&gt;</tspan><tspan x="42.8" fill="#a9b1d6">Add the weekly usage to the statusline</tspan></text>
+<rect x="16" y="48" width="848.0" height="44" rx="7" fill="none" stroke="#565f89"/><text y="76" xml:space="preserve"><tspan x="26" fill="#a9b1d6" fill-opacity="0.55">&gt;</tspan><tspan x="42.8" fill="#a9b1d6">Add the weekly usage to the statusline</tspan></text>
 </g>
 </svg>
