@@ -139,7 +139,7 @@ orange=$'\033[38;2;255;158;100m'
 red=$'\033[38;2;247;118;142m'
 cyan=$'\033[38;2;125;207;255m'
 pale=$'\033[38;2;192;202;245m'
-dark_orange=$'\033[38;2;224;102;46m'
+peach=$'\033[38;2;255;192;140m'
 dim=$'\033[2m'
 reset=$'\033[0m'
 sep="${dim}·${reset}"
@@ -156,7 +156,7 @@ percent() {
 }
 
 # Effort levels run from cool to warm: light blue for low, pale neutral for medium,
-# orange for high and dark orange for xhigh. Max is a rainbow, as in Claude Code's
+# peach for high and orange for xhigh. Max is a rainbow, as in Claude Code's
 # effort picker, spread across the letters because a status line cannot animate.
 effort_label() {
   local rainbow=("$red" "$orange" "$yellow" "$green" "$cyan" "$blue" "$purple")
@@ -164,8 +164,8 @@ effort_label() {
   case "$1" in
     low) printf '%s%s%s' "$cyan" "$1" "$reset" ;;
     medium) printf '%s%s%s' "$pale" "$1" "$reset" ;;
-    high) printf '%s%s%s' "$orange" "$1" "$reset" ;;
-    xhigh) printf '%s%s%s' "$dark_orange" "$1" "$reset" ;;
+    high) printf '%s%s%s' "$peach" "$1" "$reset" ;;
+    xhigh) printf '%s%s%s' "$orange" "$1" "$reset" ;;
     max)
       last=$((${#1} - 1))
       for ((i = 0; i <= last; i++)); do
