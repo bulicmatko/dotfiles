@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
-# Claude Code status line in Tokyo Night colors, on two lines:
-#   model · effort · session cost · context % · 5h usage · weekly usage · model weekly usage · resets left
-#   folder on branch
-# Inside a linked git worktree the folder shows the repo name plus the worktree name.
-# Usage shows only for claude.ai plans, once the session's first response arrives.
+# Claude Code status line in Tokyo Night colors, on two lines of at most 80 columns:
+#   Fable 5.1 · xhigh · $5.31 · 16% · 5h 35% @ 18:00 · wk 6% [5%] @ Tue 02:00
+#   dotfiles in worktree statusline-usage
+# The first line is the model, effort, session cost, context use, then claude.ai plan
+# usage for the 5-hour and weekly windows with the local time each one resets. The
+# bracketed figure is the current model's own weekly limit, when it has one. Plan
+# usage shows only for claude.ai plans, once the session's first response arrives.
+# The second line is the folder and branch. Inside a linked git worktree it shows the
+# repo name plus the worktree name, and a name that would push the line past 80
+# columns is shortened with an ellipsis.
 # Claude Code pipes session JSON to stdin; each stdout line is a status line row.
 # Docs: https://code.claude.com/docs/en/statusline
 #
 # Claude Code sends the 5-hour and weekly usage itself. The current model's own weekly
-# limit and the limit resets left come from the claude.ai usage endpoint behind /usage.
-# A detached background call reads it with the Claude Code login, at most once every
-# five minutes across all sessions, and caches the reply. Renders only read the cache.
+# limit comes from the claude.ai usage endpoint behind /usage. A detached background
+# call reads it with the Claude Code login, at most once every five minutes across all
+# sessions, and caches the reply. Renders only read the cache.
 
 input="$(cat)"
 
-usage_url="https://api.anthropic.com/api/oauth/usage?cedar_ember=1"
+max_width=80
+usage_url="https://api.anthropic.com/api/oauth/usage"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline"
 usage_file="$cache_dir/usage.json"
 stamp_file="$cache_dir/usage.stamp"
@@ -29,6 +35,12 @@ file_age() {
     return
   }
   echo $(($(date +%s) - mtime))
+}
+
+# Local time for Unix epoch seconds, with BSD date on macOS or GNU date on Linux.
+format_time() {
+  [ -n "$1" ] || return
+  date -r "$1" +"$2" 2>/dev/null || date -d "@$1" +"$2" 2>/dev/null
 }
 
 # The Claude Code login lives in the macOS Keychain, or in a file on Linux.
@@ -67,6 +79,8 @@ if command -v jq >/dev/null 2>&1; then
   cost="$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // empty')"
   five_hour="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty | floor')"
   seven_day="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty | floor')"
+  five_hour_reset="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty | floor')"
+  seven_day_reset="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty | floor')"
 else
   model="Claude"
   effort=""
@@ -76,13 +90,12 @@ else
   cost=""
   five_hour=""
   seven_day=""
+  five_hour_reset=""
+  seven_day_reset=""
 fi
 
 # Plan usage in the input means a claude.ai login, so the usage endpoint applies.
-model_label=""
 model_week=""
-resets_left=""
-resets_total=""
 if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
   if [ "$(file_age "$stamp_file")" -ge "$fetch_every" ]; then
     mkdir -p "$cache_dir" && touch "$stamp_file"
@@ -92,23 +105,20 @@ if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
   if [ -r "$usage_file" ] && [ "$(file_age "$usage_file")" -lt "$stale_after" ]; then
     # A weekly limit scoped to one model carries the model's short name, such as Fable,
     # which starts the session's model display name, such as Fable 5.1.
-    IFS=$'\t' read -r model_label model_week resets_left resets_total < <(
-      jq -r --arg model "$model" '
-        (first(.limits[]?
-          | select(.kind == "weekly_scoped")
-          | select((.scope.model.display_name // "") as $name | $name != "" and ($model | startswith($name)))
-          | [.scope.model.display_name, .percent]) // ["", ""]) as $scoped
-        | [.cedar_ember.grants[]? | select(.paused != true)] as $grants
-        | ($grants | map(.resets_total // 0) | add // 0) as $total
-        | $scoped + (if $total > 0 then [($grants | map(.resets_left // 0) | add), $total] else ["", ""] end)
-        | map(tostring) | join("\t")
-      ' "$usage_file" 2>/dev/null
-    )
-    model_week="${model_week%%.*}"
+    model_week="$(jq -r --arg model "$model" '
+      first(.limits[]?
+        | select(.kind == "weekly_scoped")
+        | select((.scope.model.display_name // "") as $name | $name != "" and ($model | startswith($name)))
+        | .percent | numbers | floor) // empty
+    ' "$usage_file" 2>/dev/null)"
   fi
 fi
 
 branch="$(git -C "$dir" branch --show-current 2>/dev/null || true)"
+# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
+if [ -n "$worktree" ] && [ "$branch" = "worktree-${worktree}" ]; then
+  branch=""
+fi
 
 folder="${dir##*/}"
 if [ -n "$worktree" ]; then
@@ -127,49 +137,117 @@ green=$'\033[38;2;158;206;106m'
 yellow=$'\033[38;2;224;175;104m'
 orange=$'\033[38;2;255;158;100m'
 red=$'\033[38;2;247;118;142m'
+cyan=$'\033[38;2;125;207;255m'
+pale=$'\033[38;2;192;202;245m'
+peach=$'\033[38;2;255;192;140m'
 dim=$'\033[2m'
 reset=$'\033[0m'
+sep="${dim}·${reset}"
 
-# Green below 50%, yellow below 80%, red from 80% up.
-percent_color() {
-  if [ "$1" -ge 80 ]; then
-    printf '%s' "$red"
-  elif [ "$1" -ge 50 ]; then
-    printf '%s' "$yellow"
-  else
-    printf '%s' "$green"
+# A percentage in green, turning yellow at the second argument and red at the third.
+percent() {
+  local color="$green"
+  if [ "$1" -ge "$3" ]; then
+    color="$red"
+  elif [ "$1" -ge "$2" ]; then
+    color="$yellow"
+  fi
+  printf '%s%s%%%s' "$color" "$1" "$reset"
+}
+
+# Context answers degrade well before the window fills, and every turn resends it,
+# so context turns yellow at 40% and red at 70%.
+context_percent() { percent "$1" 40 70; }
+
+# Plan usage matters only near the limit. Claude Code warns at 75% of a limit and
+# again at 95%, so plan figures turn yellow and red at those points.
+plan_percent() { percent "$1" 75 95; }
+
+# Effort levels run from cool to warm: light blue for low, pale neutral for medium,
+# peach for high and orange for xhigh. Max is a rainbow, as in Claude Code's
+# effort picker, spread across the letters because a status line cannot animate.
+effort_label() {
+  local rainbow=("$red" "$orange" "$yellow" "$green" "$cyan" "$blue" "$purple")
+  local i last out=""
+  case "$1" in
+    low) printf '%s%s%s' "$cyan" "$1" "$reset" ;;
+    medium) printf '%s%s%s' "$pale" "$1" "$reset" ;;
+    high) printf '%s%s%s' "$peach" "$1" "$reset" ;;
+    xhigh) printf '%s%s%s' "$orange" "$1" "$reset" ;;
+    max)
+      last=$((${#1} - 1))
+      for ((i = 0; i <= last; i++)); do
+        out="${out}${rainbow[i * 6 / (last > 0 ? last : 1)]}${1:i:1}"
+      done
+      printf '%s%s' "$out" "$reset"
+      ;;
+    *) printf '%s%s%s' "$orange" "$1" "$reset" ;;
+  esac
+}
+
+# Dimmed "@ <time>" for a reset time in Unix epoch seconds, when one is known.
+at_time() {
+  local when
+  when="$(format_time "$1" "$2")"
+  if [ -n "$when" ]; then
+    printf ' %s@ %s%s' "$dim" "$when" "$reset"
   fi
 }
 
 line1="${teal}${model}${reset}"
 if [ -n "$effort" ]; then
-  line1="${line1} ${dim}·${reset} ${orange}${effort}${reset}"
+  line1="${line1} ${sep} $(effort_label "$effort")"
 fi
 if [ -n "$cost" ]; then
-  line1="${line1} ${dim}·${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
+  # Whole dollars from $100 up keep the widest line within 80 columns.
+  if [ "${cost%%.*}" -ge 100 ] 2>/dev/null; then
+    cost="\$$(printf '%.0f' "$cost")"
+  else
+    cost="\$$(printf '%.2f' "$cost")"
+  fi
+  line1="${line1} ${sep} ${yellow}${cost}${reset}"
 fi
 if [ -n "$context" ]; then
-  line1="${line1} ${dim}·${reset} $(percent_color "$context")${context}%${reset}"
+  line1="${line1} ${sep} $(context_percent "$context")"
 fi
 if [ -n "$five_hour" ]; then
-  line1="${line1} ${dim}· 5h${reset} $(percent_color "$five_hour")${five_hour}%${reset}"
+  line1="${line1} ${sep} ${dim}5h${reset} $(plan_percent "$five_hour")$(at_time "$five_hour_reset" '%H:%M')"
 fi
 if [ -n "$seven_day" ]; then
-  line1="${line1} ${dim}· wk${reset} $(percent_color "$seven_day")${seven_day}%${reset}"
+  line1="${line1} ${sep} ${dim}wk${reset} $(plan_percent "$seven_day")"
+  if [ -n "$model_week" ]; then
+    line1="${line1} ${dim}[${reset}$(plan_percent "$model_week")${dim}]${reset}"
+  fi
+  line1="${line1}$(at_time "$seven_day_reset" '%a %H:%M')"
 fi
-if [ -n "$model_week" ]; then
-  line1="${line1} ${dim}· ${model_label}${reset} $(percent_color "$model_week")${model_week}%${reset}"
-fi
-if [ -n "$resets_total" ]; then
-  line1="${line1} ${dim}· resets${reset} ${teal}${resets_left}/${resets_total}${reset}"
+
+# The location ends with the branch, the worktree or the folder, and that last name
+# gives up columns when the line would run past the maximum width.
+location_plain="$folder"
+[ -n "$worktree" ] && location_plain="${location_plain} in worktree ${worktree}"
+[ -n "$branch" ] && location_plain="${location_plain} on ${branch}"
+overflow=$((${#location_plain} - max_width))
+shorten() {
+  local keep=$((${#1} - overflow - 1))
+  if [ "$overflow" -gt 0 ] && [ "$keep" -ge 1 ]; then
+    printf '%s…' "${1:0:keep}"
+  else
+    printf '%s' "$1"
+  fi
+}
+if [ -n "$branch" ]; then
+  branch="$(shorten "$branch")"
+elif [ -n "$worktree" ]; then
+  worktree="$(shorten "$worktree")"
+else
+  folder="$(shorten "$folder")"
 fi
 
 line2="${blue}${folder}${reset}"
 if [ -n "$worktree" ]; then
   line2="${line2} ${dim}in worktree${reset} ${blue}${worktree}${reset}"
 fi
-# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
-if [ -n "$branch" ] && [ "$branch" != "worktree-${worktree}" ]; then
+if [ -n "$branch" ]; then
   line2="${line2} ${dim}on${reset} ${purple}${branch}${reset}"
 fi
 
