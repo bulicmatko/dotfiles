@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="538" viewBox="0 0 880 538" role="img" aria-labelledby="t d">
+<title id="t">bulicmatko/dotfiles</title>
+<desc id="d">The guided installer and the Brewfile picker beside dotfiles-doctor and the Claude Code status line, all in Tokyo Night Storm.</desc>
+<svg x="0.0" y="0.0" width="432.0" height="271.5" viewBox="0 0 880 553">
+<defs><linearGradient id="installer-rainbow" gradientUnits="userSpaceOnUse" x1="22" y1="0" x2="626.8" y2="0"><stop offset="0.000" stop-color="#f7768e"/><stop offset="0.167" stop-color="#ff9e64"/><stop offset="0.333" stop-color="#e0af68"/><stop offset="0.500" stop-color="#9ece6a"/><stop offset="0.667" stop-color="#7dcfff"/><stop offset="0.833" stop-color="#7aa2f7"/><stop offset="1.000" stop-color="#bb9af7"/></linearGradient><clipPath id="installer-w"><rect width="880" height="553" rx="10"/></clipPath></defs>
+<g clip-path="url(#installer-w)">
+<rect width="880" height="553" fill="#1f2335"/>
+<rect width="880" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="880" y2="33.5" stroke="#2f334d"/>
+<circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
+<circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
+<circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
+<text x="440.0" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">./install.sh</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="552" rx="9.5" fill="none" stroke="#2f334d"/>
+<g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
+<text y="66.0" xml:space="preserve"><tspan x="22.0" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6">🚧 </tspan><tspan x="47.2" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#7dcfff" font-weight="700">dotfiles</tspan><tspan x="114.4" textLength="33.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> on </tspan><tspan x="148.0" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">🌵 main</tspan></text>
+<text y="87.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#73daca" font-weight="700">❯</tspan><tspan x="30.4" textLength="109.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> ./install.sh</tspan></text>
+<text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="537.6" lengthAdjust="spacingAndGlyphs" fill="url(#installer-rainbow)"> _         _ _               _   _         __  _     _    __ _ _</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#installer-rainbow)">| |__ _  _| (_)__ _ __  __ _| |_| |_____  / /_| |___| |_ / _(_) |___ ___</tspan></text>
+<text y="171.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#installer-rainbow)">| &#x27;_ \ || | | / _| &#x27;  \/ _` |  _| / / _ \/ / _` / _ \  _|  _| | / -_|_-&lt;</tspan></text>
+<text y="192.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#installer-rainbow)">|_.__/\_,_|_|_\__|_|_|_\__,_|\__|_\_\___/_/\__,_\___/\__|_| |_|_\___/__/</tspan></text>
+<text y="234.0" xml:space="preserve"><tspan x="38.8" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">target:</tspan><tspan x="97.6" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> macOS   </tspan><tspan x="173.2" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">user:</tspan><tspan x="215.2" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> you   </tspan><tspan x="274.0" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">host:</tspan><tspan x="316.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> macbook</tspan></text>
+<text y="297.0" xml:space="preserve"><tspan x="22.0" textLength="210.0" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">── Step 1/7 · Homebrew ──</tspan></text>
+<text y="318.0" xml:space="preserve"><tspan x="22.0" textLength="436.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">Package manager used for everything in the Brewfile.</tspan></text>
+<text y="339.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="226.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> Homebrew already installed</tspan></text>
+<text y="381.0" xml:space="preserve"><tspan x="22.0" textLength="243.6" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">── Step 2/7 · Applications ──</tspan></text>
+<text y="402.0" xml:space="preserve"><tspan x="22.0" textLength="420.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">Pick which Brewfile formulae and casks to install.</tspan></text>
+<text y="423.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">?</tspan><tspan x="30.4" textLength="436.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> Choose and install applications from the Brewfile? </tspan><tspan x="467.2" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">[Y/n]</tspan></text>
+<text y="444.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="562.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> 42 application(s) selected, 3 skipped (saved to ~/.Brewfile.local)</tspan></text>
+<text y="486.0" xml:space="preserve"><tspan x="22.0" textLength="184.8" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">── Step 3/7 · Shell ──</tspan></text>
+<text y="507.0" xml:space="preserve"><tspan x="22.0" textLength="470.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">oh-my-zsh + starship prompt + zsh-autosuggestions + nvm.</tspan></text>
+<text y="528.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">?</tspan><tspan x="30.4" textLength="378.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> Set up zsh (links ~/.zshrc into this repo)? </tspan><tspan x="408.4" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">[Y/n]</tspan></text>
+<rect x="458.8" y="517.0" width="8.4" height="17" fill="#a9b1d6" fill-opacity="0.8"/>
+</g>
+</svg>
+<svg x="0.0" y="287.5" width="432.0" height="250.9" viewBox="0 0 880 511">
+<defs><clipPath id="picker-w"><rect width="880" height="511" rx="10"/></clipPath></defs>
+<g clip-path="url(#picker-w)">
+<rect width="880" height="511" fill="#1f2335"/>
+<rect width="880" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="880" y2="33.5" stroke="#2f334d"/>
+<circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
+<circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
+<circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
+<text x="440.0" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">./install.sh</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="510" rx="9.5" fill="none" stroke="#2f334d"/>
+<g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
+<text y="66.0" xml:space="preserve"><tspan x="22.0" textLength="470.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" font-weight="700">Select applications to install (all selected by default)</tspan></text>
+<text y="87.0" xml:space="preserve"><tspan x="22.0" textLength="470.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">space toggle · ↑/↓ move · a all · n none · enter confirm</tspan></text>
+<text y="129.0" xml:space="preserve"><tspan x="47.2" textLength="134.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Terminal &amp; shell</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="336.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> warp — Warp — main terminal (installed)</tspan></text>
+<text y="171.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="579.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> starship — the prompt — configured in settings/starship/ (installed)</tspan></text>
+<text y="192.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="571.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> fzf — fuzzy finder — Ctrl-R history, **&lt;Tab&gt; completion (installed)</tspan></text>
+<text y="213.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zoxide — smarter cd — `z dotf` jumps to ~/Projects/dotfiles (installed)</tspan></text>
+<text y="234.0" xml:space="preserve"><tspan x="47.2" textLength="168.0" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Files, text &amp; system</tspan></text>
+<text y="255.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="562.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> eza — modern ls — git status, icons (aliased in zshrc) (installed)</tspan></text>
+<text y="276.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="487.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> bat — cat with syntax highlighting and paging (installed)</tspan></text>
+<text y="297.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="378.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> tree — print directory trees in the terminal</tspan></text>
+<text y="318.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="436.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> ripgrep — rg — very fast recursive grep (installed)</tspan></text>
+<text y="339.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="378.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> jq — command-line JSON processor (installed)</tspan></text>
+<text y="360.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">›</tspan><tspan x="30.4" textLength="445.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6">  [ ] btop — pretty resource monitor (htop successor)</tspan></text>
+<text y="381.0" xml:space="preserve"><tspan x="47.2" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Editors</tspan></text>
+<text y="402.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="478.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> visual-studio-code — VSCode — primary editor (installed)</tspan></text>
+<text y="423.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="260.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zed — Zed — fast native editor</tspan></text>
+<text y="444.0" xml:space="preserve"><tspan x="47.2" textLength="151.2" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Git &amp; code hosting</tspan></text>
+<text y="465.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="554.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> git-delta — syntax-highlighted git diff pager (wired per machine)</tspan></text>
+<text y="486.0" xml:space="preserve"><tspan x="22.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">  ↓ more</tspan></text>
+
+</g>
+</svg>
+<svg x="448.0" y="0.0" width="432.0" height="405.5" viewBox="0 0 880 826">
+<defs><clipPath id="doctor-w"><rect width="880" height="826" rx="10"/></clipPath></defs>
+<g clip-path="url(#doctor-w)">
+<rect width="880" height="826" fill="#1f2335"/>
+<rect width="880" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="880" y2="33.5" stroke="#2f334d"/>
+<circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
+<circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
+<circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
+<text x="440.0" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">dotfiles-doctor</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="825" rx="9.5" fill="none" stroke="#2f334d"/>
+<g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
+<text y="66.0" xml:space="preserve"><tspan x="22.0" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6">🚧 </tspan><tspan x="47.2" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#7dcfff" font-weight="700">dotfiles</tspan><tspan x="114.4" textLength="33.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> on </tspan><tspan x="148.0" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">🌵 main</tspan></text>
+<text y="87.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#73daca" font-weight="700">❯</tspan><tspan x="30.4" textLength="134.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> dotfiles-doctor</tspan></text>
+<text y="108.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="462.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> dotfiles: /Users/you/Projects/dotfiles (target: macos)</tspan></text>
+<text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> symlinks</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="151.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.zshrc</tspan></text>
+<text y="171.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="277.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.config/starship.toml</tspan></text>
+<text y="192.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="184.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.gitconfig</tspan></text>
+<text y="213.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="243.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.gitignore_global</tspan></text>
+<text y="234.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="218.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.gitattributes</tspan></text>
+<text y="255.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="193.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.ssh/config</tspan></text>
+<text y="276.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="310.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.config/zed/settings.json</tspan></text>
+<text y="297.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="294.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.config/zed/keymap.json</tspan></text>
+<text y="318.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="277.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.claude/settings.json</tspan></text>
+<text y="339.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="277.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.claude/statusline.sh</tspan></text>
+<text y="360.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="277.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.config/gh/config.yml</tspan></text>
+<text y="381.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="529.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/Library/Application Support/Code/User/settings.json</tspan></text>
+<text y="402.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="554.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/Library/Application Support/Code/User/keybindings.json</tspan></text>
+<text y="423.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="260.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.warp/settings.toml</tspan></text>
+<text y="444.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="201.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.warp/themes</tspan></text>
+<text y="465.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="260.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> local overrides + git identity</tspan></text>
+<text y="486.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="235.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.gitconfig.local</tspan></text>
+<text y="507.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="243.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> /Users/you/.ssh/config.local</tspan></text>
+<text y="528.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="243.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> no ~/.zshrc.local (optional)</tspan></text>
+<text y="549.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="352.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> git identity: Your Name &lt;you@example.com&gt;</tspan></text>
+<text y="570.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="142.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> shell components</tspan></text>
+<text y="591.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="92.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> .oh-my-zsh</tspan></text>
+<text y="612.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="168.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zsh-autosuggestions</tspan></text>
+<text y="633.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="201.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zsh-syntax-highlighting</tspan></text>
+<text y="654.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> .nvm</tspan></text>
+<text y="675.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> starship</tspan></text>
+<text y="696.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="210.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> homebrew (informational)</tspan></text>
+<text y="717.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="218.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> .Brewfile.local satisfied</tspan></text>
+<text y="738.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">[info]</tspan><tspan x="72.4" textLength="277.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> leftover backups (informational)</tspan></text>
+<text y="759.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="168.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> no leftover backups</tspan></text>
+<text y="801.0" xml:space="preserve"><tspan x="22.0" textLength="50.4" lengthAdjust="spacingAndGlyphs" fill="#73daca">[ ok ]</tspan><tspan x="72.4" textLength="201.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> this machine is healthy</tspan></text>
+
+</g>
+</svg>
+<svg x="448.0" y="452.4" width="432.0" height="85.9" viewBox="0 0 880 175">
+<defs><clipPath id="statusline-w"><rect width="880" height="175" rx="10"/></clipPath></defs>
+<g clip-path="url(#statusline-w)">
+<rect width="880" height="175" fill="#1f2335"/>
+<rect width="880" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="880" y2="33.5" stroke="#2f334d"/>
+<circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
+<circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
+<circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
+<text x="440.0" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">claude</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="174" rx="9.5" fill="none" stroke="#2f334d"/>
+<g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
+<text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#73daca">Fable 5.1</tspan><tspan x="106.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="122.8" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#ff9e64">xhigh</tspan><tspan x="173.2" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="190.0" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#e0af68">$2.47</tspan><tspan x="240.4" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="257.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">18%</tspan><tspan x="290.8" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="307.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">5h</tspan><tspan x="332.8" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">35%</tspan><tspan x="366.4" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">@ 18:00</tspan><tspan x="433.6" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">·</tspan><tspan x="450.4" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">wk</tspan><tspan x="475.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">6%</tspan><tspan x="500.8" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">[</tspan><tspan x="509.2" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#9ece6a">5%</tspan><tspan x="526.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">]</tspan><tspan x="542.8" textLength="92.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">@ Tue 02:00</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7">dotfiles</tspan><tspan x="97.6" textLength="16.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">on</tspan><tspan x="122.8" textLength="33.6" lengthAdjust="spacingAndGlyphs" fill="#bb9af7">main</tspan></text>
+<rect x="16" y="48" width="848.0" height="44" rx="7" fill="none" stroke="#565f89"/><text y="76" xml:space="preserve"><tspan x="26" fill="#a9b1d6" fill-opacity="0.55">&gt;</tspan><tspan x="42.8" fill="#a9b1d6">Add the weekly usage to the statusline</tspan></text>
+</g>
+</svg>
+</svg>

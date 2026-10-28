@@ -46,18 +46,61 @@ detect_target() {
 
 is_interactive() { [ -t 0 ] && [ -r /dev/tty ] && [ -w /dev/tty ]; }
 
+# Rainbow stops for the banner, left to right: the same Tokyo Night Storm
+# colors as the logo in assets/readme/banner.svg.
+BANNER_STOPS=(f7768e ff9e64 e0af68 9ece6a 7dcfff 7aa2f7 bb9af7)
+
+# cube_level <0-255> — nearest step (0-5) of the xterm 256-color cube,
+# whose levels are 0, 95, 135, 175, 215, 255.
+cube_level() {
+  if [ "$1" -lt 48 ]; then echo 0
+  elif [ "$1" -lt 115 ]; then echo 1
+  else echo $(( ($1 - 35) / 40 ))
+  fi
+}
+
+# rainbow_line <text> <width> — prints <text> with a left-to-right gradient
+# spread over <width> columns. Uses 24-bit color when the terminal advertises
+# it through COLORTERM, and the nearest 256-color entry everywhere else.
+rainbow_line() {
+  local text="$1" width="$2" out="" i t seg f a b r g bl color
+  local esc=$'\033' last=$(( ${#BANNER_STOPS[@]} - 1 )) truecolor=0
+  case "${COLORTERM:-}" in truecolor|24bit) truecolor=1 ;; esac
+  [ "$width" -gt 1 ] || width=2
+  for ((i = 0; i < ${#text}; i++)); do
+    t=$(( i * last * 1000 / (width - 1) ))
+    seg=$(( t / 1000 )); f=$(( t % 1000 ))
+    if [ "$seg" -ge "$last" ]; then seg=$(( last - 1 )); f=1000; fi
+    a="${BANNER_STOPS[seg]}"; b="${BANNER_STOPS[seg + 1]}"
+    r=$((  (16#${a:0:2} * (1000 - f) + 16#${b:0:2} * f) / 1000 ))
+    g=$((  (16#${a:2:2} * (1000 - f) + 16#${b:2:2} * f) / 1000 ))
+    bl=$(( (16#${a:4:2} * (1000 - f) + 16#${b:4:2} * f) / 1000 ))
+    if [ "$truecolor" -eq 1 ]; then
+      color="38;2;$r;$g;$bl"
+    else
+      color="38;5;$(( 16 + 36 * $(cube_level "$r") + 6 * $(cube_level "$g") + $(cube_level "$bl") ))"
+    fi
+    out="${out}${esc}[${color}m${text:i:1}"
+  done
+  printf '%s%s[0m\n' "$out" "$esc"
+}
+
 # print_banner <target-label>
 print_banner() {
-  printf '\033[36m'
-  cat <<'BANNER'
-
+  local line width=0
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+    if [ "${#line}" -gt "$width" ]; then width=${#line}; fi
+  done <<'BANNER'
  _         _ _               _   _         __  _     _    __ _ _
 | |__ _  _| (_)__ _ __  __ _| |_| |_____  / /_| |___| |_ / _(_) |___ ___
 | '_ \ || | | / _| '  \/ _` |  _| / / _ \/ / _` / _ \  _|  _| | / -_|_-<
 |_.__/\_,_|_|_\__|_|_|_\__,_|\__|_\_\___/_/\__,_\___/\__|_| |_|_\___/__/
-
 BANNER
-  printf '\033[0m'
+  printf '\n'
+  for line in "${lines[@]}"; do rainbow_line "$line" "$width"; done
+  printf '\n'
   printf '  \033[2mtarget:\033[0m %s   \033[2muser:\033[0m %s   \033[2mhost:\033[0m %s\n\n' \
     "$1" "$(id -un)" "$(hostname -s 2>/dev/null || hostname)"
 }
