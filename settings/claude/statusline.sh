@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
-# Claude Code status line in Tokyo Night colors, on two lines:
-#   model: Opus 5.5 · effort: high · cost: $3.04 · context: 12% · session: 33% 17:00 · week: 5% Tue 02:00
-#   folder on branch
-# Session and week show plan usage with the local time each window resets. When the
-# current model has its own weekly limit, such as Fable, it follows the week, and
-# limit resets left out of the total come last.
-# Inside a linked git worktree the folder shows the repo name plus the worktree name.
-# Usage shows only for claude.ai plans, once the session's first response arrives.
+# Claude Code status line in Tokyo Night colors, on two lines of at most 80 columns:
+#   Fable 5.1 · xhigh · $1.23 · ctx 12% · dotfiles on main
+#   session 19% until 18:00 · week 4% [5%] until Tue 02:00
+# The first line is the model, effort, session cost, context use, folder and branch.
+# Inside a linked git worktree it shows the repo name plus the worktree name, and a
+# name that would push the line past 80 columns is shortened with an ellipsis.
+# The second line is claude.ai plan usage with the local time each window resets.
+# The bracketed figure is the current model's own weekly limit, when it has one.
+# Plan usage shows only for claude.ai plans, once the session's first response arrives.
 # Claude Code pipes session JSON to stdin; each stdout line is a status line row.
 # Docs: https://code.claude.com/docs/en/statusline
 #
 # Claude Code sends the 5-hour and weekly usage itself. The current model's own weekly
-# limit and the limit resets left come from the claude.ai usage endpoint behind /usage.
-# A detached background call reads it with the Claude Code login, at most once every
-# five minutes across all sessions, and caches the reply. Renders only read the cache.
+# limit comes from the claude.ai usage endpoint behind /usage. A detached background
+# call reads it with the Claude Code login, at most once every five minutes across all
+# sessions, and caches the reply. Renders only read the cache.
 
 input="$(cat)"
 
-usage_url="https://api.anthropic.com/api/oauth/usage?cedar_ember=1"
+max_width=80
+usage_url="https://api.anthropic.com/api/oauth/usage"
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline"
 usage_file="$cache_dir/usage.json"
 stamp_file="$cache_dir/usage.stamp"
@@ -92,11 +94,7 @@ else
 fi
 
 # Plan usage in the input means a claude.ai login, so the usage endpoint applies.
-model_label=""
 model_week=""
-model_week_reset=""
-resets_left=""
-resets_total=""
 if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
   if [ "$(file_age "$stamp_file")" -ge "$fetch_every" ]; then
     mkdir -p "$cache_dir" && touch "$stamp_file"
@@ -106,27 +104,20 @@ if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
   if [ -r "$usage_file" ] && [ "$(file_age "$usage_file")" -lt "$stale_after" ]; then
     # A weekly limit scoped to one model carries the model's short name, such as Fable,
     # which starts the session's model display name, such as Fable 5.1.
-    # Its resets_at is ISO 8601 with fractional seconds, which jq parses once trimmed.
-    # Fields are split on the unit separator, because read merges runs of tabs and
-    # would shift every value after an empty one.
-    IFS=$'\x1f' read -r model_label model_week model_week_reset resets_left resets_total < <(
-      jq -r --arg model "$model" '
-        def epoch: (sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601)? // "";
-        (first(.limits[]?
-          | select(.kind == "weekly_scoped")
-          | select((.scope.model.display_name // "") as $name | $name != "" and ($model | startswith($name)))
-          | [.scope.model.display_name, .percent, (.resets_at // "" | epoch)]) // ["", "", ""]) as $scoped
-        | [.cedar_ember.grants[]? | select(.paused != true)] as $grants
-        | ($grants | map(.resets_total // 0) | add // 0) as $total
-        | $scoped + (if $total > 0 then [($grants | map(.resets_left // 0) | add), $total] else ["", ""] end)
-        | map(tostring) | join("\u001f")
-      ' "$usage_file" 2>/dev/null
-    )
-    model_week="${model_week%%.*}"
+    model_week="$(jq -r --arg model "$model" '
+      first(.limits[]?
+        | select(.kind == "weekly_scoped")
+        | select((.scope.model.display_name // "") as $name | $name != "" and ($model | startswith($name)))
+        | .percent | numbers | floor) // empty
+    ' "$usage_file" 2>/dev/null)"
   fi
 fi
 
 branch="$(git -C "$dir" branch --show-current 2>/dev/null || true)"
+# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
+if [ -n "$worktree" ] && [ "$branch" = "worktree-${worktree}" ]; then
+  branch=""
+fi
 
 folder="${dir##*/}"
 if [ -n "$worktree" ]; then
@@ -147,58 +138,90 @@ orange=$'\033[38;2;255;158;100m'
 red=$'\033[38;2;247;118;142m'
 dim=$'\033[2m'
 reset=$'\033[0m'
+sep="${dim}·${reset}"
 
 # Green below 50%, yellow below 80%, red from 80% up.
-percent_color() {
+percent() {
+  local color="$green"
   if [ "$1" -ge 80 ]; then
-    printf '%s' "$red"
+    color="$red"
   elif [ "$1" -ge 50 ]; then
-    printf '%s' "$yellow"
-  else
-    printf '%s' "$green"
+    color="$yellow"
   fi
+  printf '%s%s%%%s' "$color" "$1" "$reset"
 }
 
-# A usage percentage followed by its dimmed local reset time, when one is known.
-usage() {
+# Dimmed "until <time>" for a reset time in Unix epoch seconds, when one is known.
+until_time() {
   local when
-  when="$(format_time "$2" "$3")"
-  printf '%s%s%%%s' "$(percent_color "$1")" "$1" "$reset"
+  when="$(format_time "$1" "$2")"
   if [ -n "$when" ]; then
-    printf ' %s%s%s' "$dim" "$when" "$reset"
+    printf ' %suntil %s%s' "$dim" "$when" "$reset"
   fi
 }
 
-line1="${dim}model:${reset} ${teal}${model}${reset}"
+# Line 1 keeps a plain copy alongside the colored one to measure its width.
+line1="${teal}${model}${reset}"
+plain1="$model"
 if [ -n "$effort" ]; then
-  line1="${line1} ${dim}· effort:${reset} ${orange}${effort}${reset}"
+  line1="${line1} ${sep} ${orange}${effort}${reset}"
+  plain1="${plain1} · ${effort}"
 fi
 if [ -n "$cost" ]; then
-  line1="${line1} ${dim}· cost:${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
+  cost="\$$(printf '%.2f' "$cost")"
+  line1="${line1} ${sep} ${yellow}${cost}${reset}"
+  plain1="${plain1} · ${cost}"
 fi
 if [ -n "$context" ]; then
-  line1="${line1} ${dim}· context:${reset} $(percent_color "$context")${context}%${reset}"
+  line1="${line1} ${sep} ${dim}ctx${reset} $(percent "$context")"
+  plain1="${plain1} · ctx ${context}%"
 fi
+
+# The location ends with the branch, the worktree or the folder, and that last name
+# gives up columns when the line would run past the maximum width.
+location_plain="$folder"
+[ -n "$worktree" ] && location_plain="${location_plain} in ${worktree}"
+[ -n "$branch" ] && location_plain="${location_plain} on ${branch}"
+overflow=$((${#plain1} + 3 + ${#location_plain} - max_width))
+shorten() {
+  local keep=$((${#1} - overflow - 1))
+  if [ "$overflow" -gt 0 ] && [ "$keep" -ge 1 ]; then
+    printf '%s…' "${1:0:keep}"
+  else
+    printf '%s' "$1"
+  fi
+}
+if [ -n "$branch" ]; then
+  branch="$(shorten "$branch")"
+elif [ -n "$worktree" ]; then
+  worktree="$(shorten "$worktree")"
+else
+  folder="$(shorten "$folder")"
+fi
+
+line1="${line1} ${sep} ${blue}${folder}${reset}"
+if [ -n "$worktree" ]; then
+  line1="${line1} ${dim}in${reset} ${blue}${worktree}${reset}"
+fi
+if [ -n "$branch" ]; then
+  line1="${line1} ${dim}on${reset} ${purple}${branch}${reset}"
+fi
+
+line2=""
 if [ -n "$five_hour" ]; then
-  line1="${line1} ${dim}· session:${reset} $(usage "$five_hour" "$five_hour_reset" '%H:%M')"
+  line2="${dim}session${reset} $(percent "$five_hour")$(until_time "$five_hour_reset" '%H:%M')"
 fi
 if [ -n "$seven_day" ]; then
-  line1="${line1} ${dim}· week:${reset} $(usage "$seven_day" "$seven_day_reset" '%a %H:%M')"
-fi
-if [ -n "$model_week" ]; then
-  line1="${line1} ${dim}· ${model_label} week:${reset} $(usage "$model_week" "$model_week_reset" '%a %H:%M')"
-fi
-if [ -n "$resets_total" ]; then
-  line1="${line1} ${dim}· limit resets:${reset} ${teal}${resets_left}/${resets_total}${reset}"
-fi
-
-line2="${blue}${folder}${reset}"
-if [ -n "$worktree" ]; then
-  line2="${line2} ${dim}in worktree${reset} ${blue}${worktree}${reset}"
-fi
-# Claude Code names its worktree branches worktree-<name>, which would repeat the worktree name.
-if [ -n "$branch" ] && [ "$branch" != "worktree-${worktree}" ]; then
-  line2="${line2} ${dim}on${reset} ${purple}${branch}${reset}"
+  week="${dim}week${reset} $(percent "$seven_day")"
+  if [ -n "$model_week" ]; then
+    week="${week} ${dim}[${reset}$(percent "$model_week")${dim}]${reset}"
+  fi
+  week="${week}$(until_time "$seven_day_reset" '%a %H:%M')"
+  line2="${line2:+${line2} ${sep} }${week}"
 fi
 
-printf '%s\n%s' "$line1" "$line2"
+if [ -n "$line2" ]; then
+  printf '%s\n%s' "$line1" "$line2"
+else
+  printf '%s' "$line1"
+fi
