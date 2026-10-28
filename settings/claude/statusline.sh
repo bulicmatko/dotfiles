@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Claude Code status line in Tokyo Night colors, on two lines of at most 80 columns:
-#   Fable 5.1 · xhigh · $1.23 · ctx 12% · dotfiles on main
-#   session 19% until 18:00 · week 4% [5%] until Tue 02:00
-# The first line is the model, effort, session cost, context use, folder and branch.
-# Inside a linked git worktree it shows the repo name plus the worktree name, and a
-# name that would push the line past 80 columns is shortened with an ellipsis.
-# The second line is claude.ai plan usage with the local time each window resets.
-# The bracketed figure is the current model's own weekly limit, when it has one.
-# Plan usage shows only for claude.ai plans, once the session's first response arrives.
+#   Fable 5.1 · xhigh · $5.31 · 16% · 5h 35% @ 18:00 · wk 6% [5%] @ Tue 02:00
+#   dotfiles in worktree statusline-usage
+# The first line is the model, effort, session cost, context use, then claude.ai plan
+# usage for the 5-hour and weekly windows with the local time each one resets. The
+# bracketed figure is the current model's own weekly limit, when it has one. Plan
+# usage shows only for claude.ai plans, once the session's first response arrives.
+# The second line is the folder and branch. Inside a linked git worktree it shows the
+# repo name plus the worktree name, and a name that would push the line past 80
+# columns is shortened with an ellipsis.
 # Claude Code pipes session JSON to stdin; each stdout line is a status line row.
 # Docs: https://code.claude.com/docs/en/statusline
 #
@@ -151,38 +152,48 @@ percent() {
   printf '%s%s%%%s' "$color" "$1" "$reset"
 }
 
-# Dimmed "until <time>" for a reset time in Unix epoch seconds, when one is known.
-until_time() {
+# Dimmed "@ <time>" for a reset time in Unix epoch seconds, when one is known.
+at_time() {
   local when
   when="$(format_time "$1" "$2")"
   if [ -n "$when" ]; then
-    printf ' %suntil %s%s' "$dim" "$when" "$reset"
+    printf ' %s@ %s%s' "$dim" "$when" "$reset"
   fi
 }
 
-# Line 1 keeps a plain copy alongside the colored one to measure its width.
 line1="${teal}${model}${reset}"
-plain1="$model"
 if [ -n "$effort" ]; then
   line1="${line1} ${sep} ${orange}${effort}${reset}"
-  plain1="${plain1} · ${effort}"
 fi
 if [ -n "$cost" ]; then
-  cost="\$$(printf '%.2f' "$cost")"
+  # Whole dollars from $100 up keep the widest line within 80 columns.
+  if [ "${cost%%.*}" -ge 100 ] 2>/dev/null; then
+    cost="\$$(printf '%.0f' "$cost")"
+  else
+    cost="\$$(printf '%.2f' "$cost")"
+  fi
   line1="${line1} ${sep} ${yellow}${cost}${reset}"
-  plain1="${plain1} · ${cost}"
 fi
 if [ -n "$context" ]; then
-  line1="${line1} ${sep} ${dim}ctx${reset} $(percent "$context")"
-  plain1="${plain1} · ctx ${context}%"
+  line1="${line1} ${sep} $(percent "$context")"
+fi
+if [ -n "$five_hour" ]; then
+  line1="${line1} ${sep} ${dim}5h${reset} $(percent "$five_hour")$(at_time "$five_hour_reset" '%H:%M')"
+fi
+if [ -n "$seven_day" ]; then
+  line1="${line1} ${sep} ${dim}wk${reset} $(percent "$seven_day")"
+  if [ -n "$model_week" ]; then
+    line1="${line1} ${dim}[${reset}$(percent "$model_week")${dim}]${reset}"
+  fi
+  line1="${line1}$(at_time "$seven_day_reset" '%a %H:%M')"
 fi
 
 # The location ends with the branch, the worktree or the folder, and that last name
 # gives up columns when the line would run past the maximum width.
 location_plain="$folder"
-[ -n "$worktree" ] && location_plain="${location_plain} in ${worktree}"
+[ -n "$worktree" ] && location_plain="${location_plain} in worktree ${worktree}"
 [ -n "$branch" ] && location_plain="${location_plain} on ${branch}"
-overflow=$((${#plain1} + 3 + ${#location_plain} - max_width))
+overflow=$((${#location_plain} - max_width))
 shorten() {
   local keep=$((${#1} - overflow - 1))
   if [ "$overflow" -gt 0 ] && [ "$keep" -ge 1 ]; then
@@ -199,29 +210,12 @@ else
   folder="$(shorten "$folder")"
 fi
 
-line1="${line1} ${sep} ${blue}${folder}${reset}"
+line2="${blue}${folder}${reset}"
 if [ -n "$worktree" ]; then
-  line1="${line1} ${dim}in${reset} ${blue}${worktree}${reset}"
+  line2="${line2} ${dim}in worktree${reset} ${blue}${worktree}${reset}"
 fi
 if [ -n "$branch" ]; then
-  line1="${line1} ${dim}on${reset} ${purple}${branch}${reset}"
+  line2="${line2} ${dim}on${reset} ${purple}${branch}${reset}"
 fi
 
-line2=""
-if [ -n "$five_hour" ]; then
-  line2="${dim}session${reset} $(percent "$five_hour")$(until_time "$five_hour_reset" '%H:%M')"
-fi
-if [ -n "$seven_day" ]; then
-  week="${dim}week${reset} $(percent "$seven_day")"
-  if [ -n "$model_week" ]; then
-    week="${week} ${dim}[${reset}$(percent "$model_week")${dim}]${reset}"
-  fi
-  week="${week}$(until_time "$seven_day_reset" '%a %H:%M')"
-  line2="${line2:+${line2} ${sep} }${week}"
-fi
-
-if [ -n "$line2" ]; then
-  printf '%s\n%s' "$line1" "$line2"
-else
-  printf '%s' "$line1"
-fi
+printf '%s\n%s' "$line1" "$line2"
