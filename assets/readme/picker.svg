@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="699" height="511" viewBox="0 0 699 511" role="img" aria-labelledby="t d">
+<title id="t">./install.sh</title>
+<desc id="d">The installer&#x27;s checkbox picker, built from the Brewfile sections, with installed packages annotated.</desc>
+<defs><clipPath id="w"><rect width="699" height="511" rx="10"/></clipPath></defs>
+<g clip-path="url(#w)">
+<rect width="699" height="511" fill="#1f2335"/>
+<rect width="699" height="34" fill="#1a1b26"/>
+<line x1="0" y1="33.5" x2="699" y2="33.5" stroke="#2f334d"/>
+<circle cx="20" cy="17.0" r="6" fill="#f7768e"/>
+<circle cx="40" cy="17.0" r="6" fill="#e0af68"/>
+<circle cx="60" cy="17.0" r="6" fill="#9ece6a"/>
+<text x="349.5" y="21.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#565f89">./install.sh</text>
+</g>
+<rect x="0.5" y="0.5" width="698" height="510" rx="9.5" fill="none" stroke="#2f334d"/>
+<g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
+<text y="66.0" xml:space="preserve"><tspan x="22.0" textLength="470.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" font-weight="700">Select applications to install (all selected by default)</tspan></text>
+<text y="87.0" xml:space="preserve"><tspan x="22.0" textLength="470.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">space toggle · ↑/↓ move · a all · n none · enter confirm</tspan></text>
+<text y="129.0" xml:space="preserve"><tspan x="47.2" textLength="134.4" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Terminal &amp; shell</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="336.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> warp — Warp — main terminal (installed)</tspan></text>
+<text y="171.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="579.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> starship — the prompt — configured in settings/starship/ (installed)</tspan></text>
+<text y="192.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="571.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> fzf — fuzzy finder — Ctrl-R history, **&lt;Tab&gt; completion (installed)</tspan></text>
+<text y="213.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zoxide — smarter cd — `z dotf` jumps to ~/Projects/dotfiles (installed)</tspan></text>
+<text y="234.0" xml:space="preserve"><tspan x="47.2" textLength="168.0" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Files, text &amp; system</tspan></text>
+<text y="255.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="562.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> eza — modern ls — git status, icons (aliased in zshrc) (installed)</tspan></text>
+<text y="276.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="487.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> bat — cat with syntax highlighting and paging (installed)</tspan></text>
+<text y="297.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="378.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> tree — print directory trees in the terminal</tspan></text>
+<text y="318.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="436.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> ripgrep — rg — very fast recursive grep (installed)</tspan></text>
+<text y="339.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="378.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> jq — command-line JSON processor (installed)</tspan></text>
+<text y="360.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">›</tspan><tspan x="30.4" textLength="445.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6">  [ ] btop — pretty resource monitor (htop successor)</tspan></text>
+<text y="381.0" xml:space="preserve"><tspan x="47.2" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Editors</tspan></text>
+<text y="402.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="478.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> visual-studio-code — VSCode — primary editor (installed)</tspan></text>
+<text y="423.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="260.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> zed — Zed — fast native editor</tspan></text>
+<text y="444.0" xml:space="preserve"><tspan x="47.2" textLength="151.2" lengthAdjust="spacingAndGlyphs" fill="#7aa2f7" font-weight="700">Git &amp; code hosting</tspan></text>
+<text y="465.0" xml:space="preserve"><tspan x="47.2" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#73daca">[x]</tspan><tspan x="72.4" textLength="554.4" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> git-delta — syntax-highlighted git diff pager (wired per machine)</tspan></text>
+<text y="486.0" xml:space="preserve"><tspan x="22.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">  ↓ more</tspan></text>
+
+</g>
+</svg>

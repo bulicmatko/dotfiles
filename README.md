@@ -1,9 +1,6 @@
-```text
- _         _ _               _   _         __  _     _    __ _ _
-| |__ _  _| (_)__ _ __  __ _| |_| |_____  / /_| |___| |_ / _(_) |___ ___
-| '_ \ || | | / _| '  \/ _` |  _| / / _ \/ / _` / _ \  _|  _| | / -_|_-<
-|_.__/\_,_|_|_\__|_|_|_\__,_|\__|_\_\___/_/\__,_\___/\__|_| |_|_\___/__/
-```
+<p align="center">
+  <img src="assets/readme/banner.svg" alt="bulicmatko/dotfiles" width="806">
+</p>
 
 [![CI](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml)
 
@@ -19,6 +16,28 @@ name/email on first run and stores them in untracked `~/.gitconfig.local`,
 and app choice is a per-machine pick from the Brewfile. Anyone can use these
 dotfiles as-is, customized entirely through the untracked local files.
 
+## Look and feel
+
+Warp, Zed, and VSCode share one Tokyo Night Storm palette, defined for Warp in
+[tokyo_night_storm.yml](settings/warp/themes/tokyo_night_storm.yml).
+
+![The Tokyo Night Storm palette: terminal colors plus background, foreground, and accent](assets/readme/theme.svg)
+
+Claude Code gets a two-line status line from
+[statusline.sh](settings/claude/statusline.sh). The first line shows the
+model, effort, session cost, and context use, then claude.ai plan usage for
+the 5-hour and weekly windows with the local time each one resets. When the
+current model has its own weekly limit, its figure follows in brackets. The
+second line shows the folder and branch.
+
+![Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch](assets/readme/statusline.svg)
+
+- Effort runs from light blue at low to orange at xhigh, and max is a rainbow.
+- Context turns yellow at 40% and red at 70%. Plan usage turns yellow at 75%
+  and red at 95%, where Claude Code shows its own usage warnings.
+- The model's weekly limit comes from the claude.ai usage endpoint, read in
+  the background with the Claude Code login at most once every five minutes.
+
 ## Layout
 
 ```
@@ -28,6 +47,7 @@ dotfiles as-is, customized entirely through the untracked local files.
   workflows/
     ci.yml                    CI — validates scripts and settings on every push
 assets/
+  readme/                     README images (SVG), drawn from real script output
   wallpaper.jpg               desktop background (offered during install)
 bin/
   dotfiles-doctor             health check — symlinks, identity, Brewfile
@@ -100,13 +120,16 @@ re-run it any time (e.g. after adding a new symlinked file). Files that would
 be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
 
 When run from a terminal the installer is **guided**: it shows a banner, walks
-through numbered steps, and asks before each one (Enter = yes). The
-applications step opens a checkbox picker built from the Brewfile — so the
-Brewfile can list _everything_, and each machine installs only what it needs:
+through numbered steps, and asks before each one (Enter = yes).
 
-```
-space toggle · ↑/↓ (or j/k) move · a select all · n select none · enter confirm
-```
+![The guided installer: banner with target, user, and host, then numbered steps that ask before running](assets/readme/installer.svg)
+
+The applications step opens a checkbox picker built from the Brewfile — so the
+Brewfile can list _everything_, and each machine installs only what it needs.
+Space toggles, ↑/↓ (or j/k) move, `a` selects all, `n` selects none, and Enter
+confirms:
+
+![The Brewfile picker: sections as headings, every package checked by default, installed ones annotated](assets/readme/picker.svg)
 
 Already-installed packages are annotated, and everything starts selected.
 Without a TTY (Codespaces, scripted runs) there are no prompts: every step
@@ -204,6 +227,8 @@ repo, git identity set, shell components present — run:
 ```sh
 dotfiles-doctor
 ```
+
+![dotfiles-doctor on a healthy Mac: every symlink, the local overrides and git identity, shell components, Homebrew, and leftover backups](assets/readme/doctor.svg)
 
 ## Machine-specific overrides (not tracked)
 
