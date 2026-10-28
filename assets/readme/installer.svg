@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="553" viewBox="0 0 880 553" role="img" aria-labelledby="t d">
 <title id="t">./install.sh</title>
 <desc id="d">The guided macOS installer: a banner with the target, user and host, then numbered steps that ask before running.</desc>
-<defs><clipPath id="w"><rect width="880" height="553" rx="10"/></clipPath></defs>
+<defs><linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="22" y1="0" x2="626.8" y2="0"><stop offset="0.000" stop-color="#f7768e"/><stop offset="0.167" stop-color="#ff9e64"/><stop offset="0.333" stop-color="#e0af68"/><stop offset="0.500" stop-color="#9ece6a"/><stop offset="0.667" stop-color="#7dcfff"/><stop offset="0.833" stop-color="#7aa2f7"/><stop offset="1.000" stop-color="#bb9af7"/></linearGradient><clipPath id="w"><rect width="880" height="553" rx="10"/></clipPath></defs>
 <g clip-path="url(#w)">
 <rect width="880" height="553" fill="#1f2335"/>
 <rect width="880" height="34" fill="#1a1b26"/>
@@ -15,10 +15,10 @@
 <g font-family="ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="14">
 <text y="66.0" xml:space="preserve"><tspan x="22.0" textLength="25.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6">🚧 </tspan><tspan x="47.2" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#7dcfff" font-weight="700">dotfiles</tspan><tspan x="114.4" textLength="33.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> on </tspan><tspan x="148.0" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">🌵 main</tspan></text>
 <text y="87.0" xml:space="preserve"><tspan x="22.0" textLength="8.4" lengthAdjust="spacingAndGlyphs" fill="#73daca" font-weight="700">❯</tspan><tspan x="30.4" textLength="109.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> ./install.sh</tspan></text>
-<text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="537.6" lengthAdjust="spacingAndGlyphs" fill="#7dcfff"> _         _ _               _   _         __  _     _    __ _ _</tspan></text>
-<text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">| |__ _  _| (_)__ _ __  __ _| |_| |_____  / /_| |___| |_ / _(_) |___ ___</tspan></text>
-<text y="171.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">| &#x27;_ \ || | | / _| &#x27;  \/ _` |  _| / / _ \/ / _` / _ \  _|  _| | / -_|_-&lt;</tspan></text>
-<text y="192.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="#7dcfff">|_.__/\_,_|_|_\__|_|_|_\__,_|\__|_\_\___/_/\__,_\___/\__|_| |_|_\___/__/</tspan></text>
+<text y="129.0" xml:space="preserve"><tspan x="22.0" textLength="537.6" lengthAdjust="spacingAndGlyphs" fill="url(#rainbow)"> _         _ _               _   _         __  _     _    __ _ _</tspan></text>
+<text y="150.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#rainbow)">| |__ _  _| (_)__ _ __  __ _| |_| |_____  / /_| |___| |_ / _(_) |___ ___</tspan></text>
+<text y="171.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#rainbow)">| &#x27;_ \ || | | / _| &#x27;  \/ _` |  _| / / _ \/ / _` / _ \  _|  _| | / -_|_-&lt;</tspan></text>
+<text y="192.0" xml:space="preserve"><tspan x="22.0" textLength="604.8" lengthAdjust="spacingAndGlyphs" fill="url(#rainbow)">|_.__/\_,_|_|_\__|_|_|_\__,_|\__|_\_\___/_/\__,_\___/\__|_| |_|_\___/__/</tspan></text>
 <text y="234.0" xml:space="preserve"><tspan x="38.8" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">target:</tspan><tspan x="97.6" textLength="75.6" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> macOS   </tspan><tspan x="173.2" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">user:</tspan><tspan x="215.2" textLength="58.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> you   </tspan><tspan x="274.0" textLength="42.0" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">host:</tspan><tspan x="316.0" textLength="67.2" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6"> macbook</tspan></text>
 <text y="297.0" xml:space="preserve"><tspan x="22.0" textLength="210.0" lengthAdjust="spacingAndGlyphs" fill="#bb9af7" font-weight="700">── Step 1/7 · Homebrew ──</tspan></text>
 <text y="318.0" xml:space="preserve"><tspan x="22.0" textLength="436.8" lengthAdjust="spacingAndGlyphs" fill="#a9b1d6" fill-opacity="0.55">Package manager used for everything in the Brewfile.</tspan></text>
