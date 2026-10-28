@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Claude Code status line in Tokyo Night colors, on two lines:
-#   model · effort · session cost · context % · 5h usage · weekly usage · model weekly usage · resets left
+#   model: Opus 5.5 · effort: high · cost: $3.04 · context: 12% · session: 33% 17:00 · week: 5% Tue 02:00
 #   folder on branch
+# Session and week show plan usage with the local time each window resets. When the
+# current model has its own weekly limit, such as Fable, it follows the week, and
+# limit resets left out of the total come last.
 # Inside a linked git worktree the folder shows the repo name plus the worktree name.
 # Usage shows only for claude.ai plans, once the session's first response arrives.
 # Claude Code pipes session JSON to stdin; each stdout line is a status line row.
@@ -29,6 +32,12 @@ file_age() {
     return
   }
   echo $(($(date +%s) - mtime))
+}
+
+# Local time for Unix epoch seconds, with BSD date on macOS or GNU date on Linux.
+format_time() {
+  [ -n "$1" ] || return
+  date -r "$1" +"$2" 2>/dev/null || date -d "@$1" +"$2" 2>/dev/null
 }
 
 # The Claude Code login lives in the macOS Keychain, or in a file on Linux.
@@ -67,6 +76,8 @@ if command -v jq >/dev/null 2>&1; then
   cost="$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // empty')"
   five_hour="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty | floor')"
   seven_day="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty | floor')"
+  five_hour_reset="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty | floor')"
+  seven_day_reset="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty | floor')"
 else
   model="Claude"
   effort=""
@@ -76,11 +87,14 @@ else
   cost=""
   five_hour=""
   seven_day=""
+  five_hour_reset=""
+  seven_day_reset=""
 fi
 
 # Plan usage in the input means a claude.ai login, so the usage endpoint applies.
 model_label=""
 model_week=""
+model_week_reset=""
 resets_left=""
 resets_total=""
 if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
@@ -92,16 +106,20 @@ if [ -n "$five_hour$seven_day" ] && command -v curl >/dev/null 2>&1; then
   if [ -r "$usage_file" ] && [ "$(file_age "$usage_file")" -lt "$stale_after" ]; then
     # A weekly limit scoped to one model carries the model's short name, such as Fable,
     # which starts the session's model display name, such as Fable 5.1.
-    IFS=$'\t' read -r model_label model_week resets_left resets_total < <(
+    # Its resets_at is ISO 8601 with fractional seconds, which jq parses once trimmed.
+    # Fields are split on the unit separator, because read merges runs of tabs and
+    # would shift every value after an empty one.
+    IFS=$'\x1f' read -r model_label model_week model_week_reset resets_left resets_total < <(
       jq -r --arg model "$model" '
+        def epoch: (sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601)? // "";
         (first(.limits[]?
           | select(.kind == "weekly_scoped")
           | select((.scope.model.display_name // "") as $name | $name != "" and ($model | startswith($name)))
-          | [.scope.model.display_name, .percent]) // ["", ""]) as $scoped
+          | [.scope.model.display_name, .percent, (.resets_at // "" | epoch)]) // ["", "", ""]) as $scoped
         | [.cedar_ember.grants[]? | select(.paused != true)] as $grants
         | ($grants | map(.resets_total // 0) | add // 0) as $total
         | $scoped + (if $total > 0 then [($grants | map(.resets_left // 0) | add), $total] else ["", ""] end)
-        | map(tostring) | join("\t")
+        | map(tostring) | join("\u001f")
       ' "$usage_file" 2>/dev/null
     )
     model_week="${model_week%%.*}"
@@ -141,27 +159,37 @@ percent_color() {
   fi
 }
 
-line1="${teal}${model}${reset}"
+# A usage percentage followed by its dimmed local reset time, when one is known.
+usage() {
+  local when
+  when="$(format_time "$2" "$3")"
+  printf '%s%s%%%s' "$(percent_color "$1")" "$1" "$reset"
+  if [ -n "$when" ]; then
+    printf ' %s%s%s' "$dim" "$when" "$reset"
+  fi
+}
+
+line1="${dim}model:${reset} ${teal}${model}${reset}"
 if [ -n "$effort" ]; then
-  line1="${line1} ${dim}·${reset} ${orange}${effort}${reset}"
+  line1="${line1} ${dim}· effort:${reset} ${orange}${effort}${reset}"
 fi
 if [ -n "$cost" ]; then
-  line1="${line1} ${dim}·${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
+  line1="${line1} ${dim}· cost:${reset} ${yellow}\$$(printf '%.2f' "$cost")${reset}"
 fi
 if [ -n "$context" ]; then
-  line1="${line1} ${dim}·${reset} $(percent_color "$context")${context}%${reset}"
+  line1="${line1} ${dim}· context:${reset} $(percent_color "$context")${context}%${reset}"
 fi
 if [ -n "$five_hour" ]; then
-  line1="${line1} ${dim}· 5h${reset} $(percent_color "$five_hour")${five_hour}%${reset}"
+  line1="${line1} ${dim}· session:${reset} $(usage "$five_hour" "$five_hour_reset" '%H:%M')"
 fi
 if [ -n "$seven_day" ]; then
-  line1="${line1} ${dim}· wk${reset} $(percent_color "$seven_day")${seven_day}%${reset}"
+  line1="${line1} ${dim}· week:${reset} $(usage "$seven_day" "$seven_day_reset" '%a %H:%M')"
 fi
 if [ -n "$model_week" ]; then
-  line1="${line1} ${dim}· ${model_label}${reset} $(percent_color "$model_week")${model_week}%${reset}"
+  line1="${line1} ${dim}· ${model_label} week:${reset} $(usage "$model_week" "$model_week_reset" '%a %H:%M')"
 fi
 if [ -n "$resets_total" ]; then
-  line1="${line1} ${dim}· resets${reset} ${teal}${resets_left}/${resets_total}${reset}"
+  line1="${line1} ${dim}· limit resets:${reset} ${teal}${resets_left}/${resets_total}${reset}"
 fi
 
 line2="${blue}${folder}${reset}"
