@@ -17,7 +17,8 @@
   "tui": "default",
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
+    "command": "bash ~/.claude/statusline.sh",
+    "refreshInterval": 1
   },
   "spinnerTipsEnabled": false,
   "inputNeededNotifEnabled": true,
