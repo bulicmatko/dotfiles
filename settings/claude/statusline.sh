@@ -164,9 +164,10 @@ context_percent() { percent "$1" 40 70; }
 plan_percent() { percent "$1" 75 95; }
 
 # Effort uses the colors of Claude Code's effort picker, from its dark theme: yellow
-# for low, green for medium, lavender for high and purple for xhigh. Max spreads the
-# picker's rainbow across its letters. The picker animates xhigh and max, but a
-# status line redraws at most once a second, too slow for smooth motion.
+# for low, green for medium, lavender for high and purple for xhigh. Max gives each
+# letter the next color of the picker's rainbow, starting at green, the way the
+# picker draws it. The picker animates xhigh and max, but a status line redraws at
+# most once a second, too slow for smooth motion.
 effort_low=$'\033[38;2;255;193;7m'
 effort_medium=$'\033[38;2;78;186;101m'
 effort_high=$'\033[38;2;177;185;249m'
@@ -182,15 +183,14 @@ effort_rainbow=(
 )
 
 effort_label() {
-  local i last out=""
+  local i out=""
   case "$1" in
     low) printf '%s%s%s' "$effort_low" "$1" "$reset" ;;
     medium) printf '%s%s%s' "$effort_medium" "$1" "$reset" ;;
     xhigh) printf '%s%s%s' "$effort_xhigh" "$1" "$reset" ;;
     max)
-      last=$((${#1} - 1))
-      for ((i = 0; i <= last; i++)); do
-        out="${out}${effort_rainbow[i * 6 / (last > 0 ? last : 1)]}${1:i:1}"
+      for ((i = 0; i < ${#1}; i++)); do
+        out="${out}${effort_rainbow[(3 + i) % 7]}${1:i:1}"
       done
       printf '%s%s' "$out" "$reset"
       ;;
