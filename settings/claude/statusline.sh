@@ -70,7 +70,7 @@ fetch_usage() {
   fi
 }
 
-# The script runs every second, so one jq call reads every field as shell assignments.
+# One jq call reads every field as shell assignments, which keeps each render quick.
 if command -v jq >/dev/null 2>&1; then
   eval "$(printf '%s' "$input" | jq -r '
     def num: numbers | floor;
@@ -140,7 +140,6 @@ purple=$'\033[38;2;187;154;247m'
 green=$'\033[38;2;158;206;106m'
 yellow=$'\033[38;2;224;175;104m'
 red=$'\033[38;2;247;118;142m'
-bold=$'\033[1m'
 dim=$'\033[2m'
 reset=$'\033[0m'
 sep="${dim}·${reset}"
@@ -165,13 +164,13 @@ context_percent() { percent "$1" 40 70; }
 plan_percent() { percent "$1" 75 95; }
 
 # Effort uses the colors of Claude Code's effort picker, from its dark theme: yellow
-# for low, green for medium, lavender for high and purple for xhigh, with a lighter
-# purple shimmering across xhigh and a rainbow moving across max.
+# for low, green for medium, lavender for high and purple for xhigh. Max spreads the
+# picker's rainbow across its letters. The picker animates xhigh and max, but a
+# status line redraws at most once a second, too slow for smooth motion.
 effort_low=$'\033[38;2;255;193;7m'
 effort_medium=$'\033[38;2;78;186;101m'
 effort_high=$'\033[38;2;177;185;249m'
 effort_xhigh=$'\033[38;2;175;135;255m'
-effort_shimmer=$'\033[38;2;208;180;255m'
 effort_rainbow=(
   $'\033[38;2;235;95;87m'
   $'\033[38;2;245;139;87m'
@@ -182,30 +181,16 @@ effort_rainbow=(
   $'\033[38;2;200;130;180m'
 )
 
-# Claude Code re-runs the script every second, so each render draws one frame of the
-# animation, picked by the clock. The shimmer moves one letter per frame and runs off
-# both ends of the word: the letter under it turns bold light purple and its
-# neighbors turn bold. The rainbow shifts one letter to the right per frame.
 effort_label() {
-  local frame i distance out=""
-  frame="$(date +%s)"
+  local i last out=""
   case "$1" in
     low) printf '%s%s%s' "$effort_low" "$1" "$reset" ;;
     medium) printf '%s%s%s' "$effort_medium" "$1" "$reset" ;;
-    xhigh)
-      for ((i = 0; i < ${#1}; i++)); do
-        distance=$((i + 1 - frame % (${#1} + 2)))
-        case "${distance#-}" in
-          0) out="${out}${bold}${effort_shimmer}${1:i:1}${reset}" ;;
-          1) out="${out}${bold}${effort_xhigh}${1:i:1}${reset}" ;;
-          *) out="${out}${effort_xhigh}${1:i:1}" ;;
-        esac
-      done
-      printf '%s%s' "$out" "$reset"
-      ;;
+    xhigh) printf '%s%s%s' "$effort_xhigh" "$1" "$reset" ;;
     max)
-      for ((i = 0; i < ${#1}; i++)); do
-        out="${out}${effort_rainbow[(i + 7 - frame % 7) % 7]}${1:i:1}"
+      last=$((${#1} - 1))
+      for ((i = 0; i <= last; i++)); do
+        out="${out}${effort_rainbow[i * 6 / (last > 0 ? last : 1)]}${1:i:1}"
       done
       printf '%s%s' "$out" "$reset"
       ;;

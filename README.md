@@ -87,8 +87,8 @@ dotfiles-doctor   # check every symlink, the git identity, and shell components
 session cost, and context use, then claude.ai plan usage for the 5-hour and
 weekly windows with the time each one resets, and the folder and branch on a
 second line. Effort takes the colors of Claude Code's effort picker, with
-xhigh shimmering and max in a moving rainbow. Colors turn yellow and red as
-context and usage near their limits.
+max in a rainbow. Colors turn yellow and red as context and usage near their
+limits.
 
 <p align="center">
   <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">
