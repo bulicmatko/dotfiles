@@ -5,7 +5,7 @@
 [![CI](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/bulicmatko/dotfiles/actions/workflows/ci.yml)
 
 Personal dotfiles — the single source of truth for every machine I use:
-macOS laptops, Linux boxes, and devcontainers/Codespaces.
+macOS laptops, Linux boxes, and devcontainers.
 
 Everything is **symlinked** from this repo into place, so editing a setting in
 any tool changes the file _in this repo_. Commit and push on one machine,
@@ -14,105 +14,13 @@ pull on another — done.
 The repo contains **no personal identity**: the installer asks for a git
 name/email on first run and stores them in untracked `~/.gitconfig.local`,
 and app choice is a per-machine pick from the Brewfile. Anyone can use these
-dotfiles as-is, customized entirely through the untracked local files.
-
-## Look and feel
-
-Warp, Zed, and VSCode share one Tokyo Night Storm palette, defined for Warp in
-[tokyo_night_storm.yml](settings/warp/themes/tokyo_night_storm.yml).
+dotfiles as-is.
 
 <p align="center">
-  <img src="assets/readme/theme.svg" alt="The Tokyo Night Storm palette: terminal colors plus background, foreground, and accent" width="100%">
+  <img src="assets/readme/overview.svg" alt="The guided installer and the Brewfile picker beside dotfiles-doctor and the Claude Code status line" width="100%">
 </p>
 
-Claude Code gets a two-line status line from
-[statusline.sh](settings/claude/statusline.sh). The first line shows the
-model, effort, session cost, and context use, then claude.ai plan usage for
-the 5-hour and weekly windows with the local time each one resets. When the
-current model has its own weekly limit, its figure follows in brackets. The
-second line shows the folder and branch.
-
-<p align="center">
-  <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">
-</p>
-
-- Effort takes the colors of Claude Code's effort picker: yellow at low, green
-  at medium, lavender at high, shimmering purple at xhigh, and a moving rainbow
-  at max. The status line redraws every second to animate them.
-- Context turns yellow at 40% and red at 70%. Plan usage turns yellow at 75%
-  and red at 95%, where Claude Code shows its own usage warnings.
-- The model's weekly limit comes from the claude.ai usage endpoint, read in
-  the background with the Claude Code login at most once every five minutes.
-
-## Layout
-
-```
-.github/
-  scripts/
-    jsonc-check.js            JSONC validator used by the CI workflow
-  workflows/
-    ci.yml                    CI — validates scripts and settings on every push
-assets/
-  readme/                     README images (SVG), drawn from real script output
-  wallpaper.jpg               desktop background (offered during install)
-bin/
-  dotfiles-doctor             health check — symlinks, identity, Brewfile
-  dotfiles-update             update everything with one command (on PATH)
-devcontainer/
-  bun/
-    devcontainer.json         Bun project template (official oven/bun image)
-  go/
-    devcontainer.json         Go project template
-  node/
-    devcontainer.json         Node.js LTS project template
-git/
-  gitattributes               global git attributes
-  gitconfig                   aliases + shared config
-  gitconfig.local.template    seed for machine-specific ~/.gitconfig.local
-  gitignore_global            global ignores (OS junk only)
-os/
-  devcontainer/
-    install.sh                devcontainer / Codespaces installer (headless)
-  linux/
-    install.sh                Linux (Debian/Ubuntu) installer
-  macos/
-    defaults.sh               macOS system + Finder settings (defaults write)
-    install.sh                macOS installer
-    screensaver.plist         the screen saver entry defaults.sh writes
-scripts/
-  lib.sh                      shared helpers (linking, cloning, guided UI)
-settings/
-  claude/
-    settings.json             Claude Code settings
-  gh/
-    config.yml                GitHub CLI settings + aliases (no tokens)
-  starship/
-    presets/
-      tokyo-night.toml        alternative prompt look (powerline segments)
-    starship.toml             starship prompt config (defaults = minimal)
-  vscode/
-    extensions.txt            VSCode extension list
-    keybindings.json          VSCode shortcuts
-    settings.json             VSCode settings
-  warp/
-    themes/
-      tokyo_night_storm.yml   custom Warp theme
-    settings.toml             Warp settings
-  zed/
-    keymap.json               Zed shortcuts
-    settings.json             Zed settings
-ssh/
-  config                      keychain-aware, valid on macOS and Linux
-zsh/
-  zshrc                       oh-my-zsh + starship, cross-platform
-.editorconfig                 editor defaults for files in this repo
-Brewfile                      every macOS app/CLI, installed in one call
-install.sh                    entrypoint — detects the platform and dispatches
-LICENSE                       MIT
-README.md                     this file
-```
-
-## Fresh machine setup
+## Setup
 
 ```sh
 git clone https://github.com/bulicmatko/dotfiles.git ~/Projects/dotfiles
@@ -120,187 +28,101 @@ cd ~/Projects/dotfiles
 ./install.sh
 ```
 
-That is the whole setup. `install.sh` detects the platform; you can also force
-one with `./install.sh macos|linux|devcontainer`. Every step is idempotent —
-re-run it any time (e.g. after adding a new symlinked file). Files that would
-be overwritten are backed up as `<name>.backup.<timestamp>`, never deleted.
+`install.sh` detects the platform (or force one with
+`./install.sh macos|linux|devcontainer`), is safe to re-run any time, and
+backs up files it would overwrite as `<name>.backup.<timestamp>`.
 
-When run from a terminal the installer is **guided**: it shows a banner, walks
-through numbered steps, and asks before each one (Enter = yes).
+## Guided installer
+
+Numbered steps that ask before running (Enter = yes). Without a TTY there are
+no prompts: every step runs and the full Brewfile is installed, so unattended
+setups never hang.
 
 <p align="center">
   <img src="assets/readme/installer.svg" alt="The guided installer: banner with target, user, and host, then numbered steps that ask before running" width="100%">
 </p>
 
-The applications step opens a checkbox picker built from the Brewfile — so the
-Brewfile can list _everything_, and each machine installs only what it needs.
-Space toggles, ↑/↓ (or j/k) move, `a` selects all, `n` selects none, and Enter
-confirms:
+On macOS it installs Homebrew and the [Brewfile](Brewfile), oh-my-zsh with
+the starship prompt and nvm, links the zsh, git, ssh, editor, Warp, Claude
+Code, and GitHub CLI config, generates an ed25519 SSH key with its passphrase
+in the Apple keychain (add the printed public key to
+[GitHub](https://github.com/settings/keys)), and applies system settings from
+[os/macos/defaults.sh](os/macos/defaults.sh) — keyboard, Finder, Dock,
+screen saver, login items. Linux gets the same shell, git, and editor setup
+via apt; devcontainers a headless subset (zsh, starship, git).
+
+## App picker
+
+The [Brewfile](Brewfile) lists _every_ app and CLI, and the installer turns
+it into a checkbox picker so each machine installs only what it needs. Space
+toggles, ↑/↓ move, `a` selects all, `n` selects none, Enter confirms.
 
 <p align="center">
   <img src="assets/readme/picker.svg" alt="The Brewfile picker: sections as headings, every package checked by default, installed ones annotated" width="100%">
 </p>
 
-Already-installed packages are annotated, and everything starts selected.
-Without a TTY (Codespaces, scripted runs) there are no prompts: every step
-runs and the full Brewfile is installed, so unattended setups never hang
-waiting for input.
+The selection is saved to `~/.Brewfile.local`, so apps you skipped stay
+skipped on updates. Re-run `./install.sh` to change it.
 
-### What it does on macOS
+## Staying in sync
 
-1. Installs Homebrew if missing, then `brew bundle` with the [Brewfile](Brewfile)
-2. Installs oh-my-zsh (unattended) + the starship prompt +
-   zsh-autosuggestions, and nvm via its official installer
-3. Symlinks zsh, git, and ssh config (see table below), and asks for your
-   git commit name/email — stored in untracked `~/.gitconfig.local`, asked
-   only once per machine
-4. Generates an ed25519 SSH key if missing and stores its passphrase in the
-   **Apple keychain** (`ssh-add --apple-use-keychain`); `ssh/config` has
-   `UseKeychain` + `AddKeysToAgent`, so the key auto-loads forever after
-5. Sets git's credential helper to `osxkeychain` (in `~/.gitconfig.local`)
-6. Symlinks Zed, VSCode, Warp, Claude Code, and GitHub CLI settings; installs
-   VSCode extensions from [extensions.txt](settings/vscode/extensions.txt)
-7. Applies macOS system settings via [os/macos/defaults.sh](os/macos/defaults.sh)
-   — keyboard repeat, tap to click, Finder view/search/hidden files, Dock
-   behavior, the screen saver with its options, and login items (Docker and
-   Moom) — so System Settings never needs a manual walkthrough. Also runs
-   standalone: `./os/macos/defaults.sh` (restarts Dock and Finder; some
-   changes need a logout). Extra opt-in tweaks are included commented out.
-   Also offers to set the desktop wallpaper from [assets/](assets/).
+Tweak a setting inside VSCode, Zed, or Warp and the file in this repo
+changes — commit, push, and `git pull` on the other machine. Keep the tools'
+own settings sync off so the repo stays the source of truth.
 
-### What it does on Linux
-
-Installs `zsh git curl keychain fzf zoxide` via apt, sets up the same
-shell/git/ssh config plus nvm, links editor settings, and makes zsh the
-default shell. `keychain` keeps one ssh-agent alive across sessions (wired
-up in `zsh/zshrc`). Machines without root or sudo skip the apt step and
-still get everything else.
-
-### What it does in devcontainers
-
-Headless subset: zsh + oh-my-zsh + starship + git config only. No SSH keys
-(agent forwarding provides them) and no GUI settings.
-
-## Symlink map
-
-| Repo file                          | Linked to                                                                                                     |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `git/gitattributes`                | `~/.gitattributes`                                                                                            |
-| `git/gitconfig`                    | `~/.gitconfig`                                                                                                |
-| `git/gitignore_global`             | `~/.gitignore_global`                                                                                         |
-| `settings/claude/settings.json`    | `~/.claude/settings.json`                                                                                     |
-| `settings/claude/statusline.sh`    | `~/.claude/statusline.sh`                                                                                     |
-| `settings/gh/config.yml`           | `~/.config/gh/config.yml`                                                                                     |
-| `settings/starship/starship.toml`  | `~/.config/starship.toml`                                                                                     |
-| `settings/vscode/keybindings.json` | same VSCode User dir as settings.json                                                                         |
-| `settings/vscode/settings.json`    | `~/Library/Application Support/Code/User/settings.json` (macOS) / `~/.config/Code/User/settings.json` (Linux) |
-| `settings/warp/themes/`            | `~/.warp/themes` (macOS)                                                                                      |
-| `settings/warp/settings.toml`      | `~/.warp/settings.toml` (macOS)                                                                               |
-| `settings/zed/keymap.json`         | `~/.config/zed/keymap.json`                                                                                   |
-| `settings/zed/settings.json`       | `~/.config/zed/settings.json`                                                                                 |
-| `ssh/config`                       | `~/.ssh/config`                                                                                               |
-| `zsh/zshrc`                        | `~/.zshrc`                                                                                                    |
-
-## Keeping machines in sync
-
-Because everything is symlinked, tweaking a setting inside VSCode/Zed/Warp
-edits this repo directly:
+Two commands live in `bin/`, which `zshrc` puts on PATH:
 
 ```sh
-cd ~/Projects/dotfiles
-git status        # see what changed
-git commit -am "tune zed terminal font"
-git push
-```
-
-On the other laptop: `git pull` — settings apply immediately (restart the app
-if it caches config). Since this repo is the source of truth, consider turning
-the tools' own settings-sync off to avoid tug-of-war.
-
-To update a machine wholesale — repo, Homebrew packages, oh-my-zsh + plugins,
-new config symlinks, missing VSCode extensions, macOS system settings — run
-the one command (it lives in `bin/`, which `zshrc` puts on PATH):
-
-```sh
-dotfiles-update
-```
-
-Homebrew installs come from this machine's picker selection
-(`~/.Brewfile.local`) when one exists, so apps you skipped during install
-stay skipped. Re-run `./install.sh` to change the selection or pick up
-entries newly added to the Brewfile.
-
-Any script dropped into `bin/` is instantly available on every machine.
-To verify a machine is wired up correctly — every symlink pointing into the
-repo, git identity set, shell components present — run:
-
-```sh
-dotfiles-doctor
+dotfiles-update   # pull the repo, update Homebrew, oh-my-zsh, symlinks, extensions, macOS settings
+dotfiles-doctor   # check every symlink, the git identity, and shell components
 ```
 
 <p align="center">
   <img src="assets/readme/doctor.svg" alt="dotfiles-doctor on a healthy Mac: every symlink, the local overrides and git identity, shell components, Homebrew, and leftover backups" width="100%">
 </p>
 
-## Machine-specific overrides (not tracked)
+## Claude Code status line
 
-| File                  | Purpose                                                                                                                            |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `~/.zshrc.local`      | extra shell config, sourced at the end of `zshrc`                                                                                  |
-| `~/.gitconfig.local`  | commit identity (asked during install) + git overrides (work email, credential helper, ...) — included last, wins over `gitconfig` |
-| `~/.ssh/config.local` | private SSH hosts (VPS IPs, work jumphosts) — Included from the synced `ssh/config`                                                |
-| `~/.Brewfile.local`   | this machine's picker selection from the Brewfile — `dotfiles-update` installs from it, so deselected apps never come back         |
+[statusline.sh](settings/claude/statusline.sh) shows the model, effort,
+session cost, and context use, then claude.ai plan usage for the 5-hour and
+weekly windows with the time each one resets, and the folder and branch on a
+second line. Effort takes the colors of Claude Code's effort picker, with
+xhigh shimmering and max in a moving rainbow. Colors turn yellow and red as
+context and usage near their limits.
 
-## Homebrew (macOS apps)
+<p align="center">
+  <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">
+</p>
 
-The [Brewfile](Brewfile) is the app manifest. One call installs everything:
+## Theme
 
-```sh
-brew bundle --file ~/Projects/dotfiles/Brewfile
-```
+Warp, Zed, and VSCode share the Tokyo Night Storm palette, defined for Warp in
+[tokyo_night_storm.yml](settings/warp/themes/tokyo_night_storm.yml).
 
-- Sections group packages by what they are for — a CLI tool beside the GUI app
-  it belongs with — and become the headings in the installer's picker. A
-  third-party tap sits directly above the package it provides.
-- Packages from third-party taps (like `oven-sh/bun`) load only after the tap
-  is trusted on that machine. The installer and `dotfiles-update` ask for
-  every tap the Brewfile lists; Homebrew keeps the answer per machine in
-  `~/.homebrew/trust.json`.
-- After installing something new: `brew bundle dump --file=Brewfile --force`
-  (then review the diff — it will also pick up dependencies you may not want
-  listed) or just add the line by hand.
-- `brew bundle cleanup --file=Brewfile` shows what is installed but not listed.
-- Node versions are managed by **nvm** — installed by the install script
-  (nvm upstream does not support Homebrew installs), with `.nvmrc`
-  auto-switching via nvm's own zsh hook in `zsh/zshrc`.
+<p align="center">
+  <img src="assets/readme/theme.svg" alt="The Tokyo Night Storm palette: terminal colors plus background, foreground, and accent" width="100%">
+</p>
 
 ## Devcontainers
 
-Two pieces make containers feel like home:
+VSCode's `"dotfiles.repository": "bulicmatko/dotfiles"` (already in
+[settings/vscode/settings.json](settings/vscode/settings.json)) clones this
+repo into every container and runs `install.sh`. For the project side, copy
+the [node](devcontainer/node/devcontainer.json),
+[bun](devcontainer/bun/devcontainer.json), or
+[go](devcontainer/go/devcontainer.json) template to
+`<project>/.devcontainer/devcontainer.json`.
 
-1. **Personal config, automatic**: VSCode's
-   `"dotfiles.repository": "bulicmatko/dotfiles"` (already in
-   [settings/vscode/settings.json](settings/vscode/settings.json)) clones this
-   repo into every container and runs `install.sh`. For GitHub Codespaces,
-   enable it once at <https://github.com/settings/codespaces> → _Automatically
-   install dotfiles_ → select this repo.
-2. **Project config, per repo**: copy the matching template —
-   [node](devcontainer/node/devcontainer.json) (Node LTS),
-   [bun](devcontainer/bun/devcontainer.json), or
-   [go](devcontainer/go/devcontainer.json) — to
-   `<project>/.devcontainer/devcontainer.json` and adjust. Keep it
-   team-neutral — personal config arrives via step 1.
+## Machine-specific overrides
 
-## SSH keys on a brand-new Mac
+Untracked files, included last so they win over the synced config:
 
-`os/macos/install.sh` generates `~/.ssh/id_ed25519` if missing and stores the
-passphrase in the Apple keychain. Add the printed public key to
-[GitHub](https://github.com/settings/keys), then switch this repo's remote to
-SSH if it was cloned over HTTPS:
-
-```sh
-git remote set-url origin git@github.com:bulicmatko/dotfiles.git
-```
+| File                  | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `~/.gitconfig.local`  | commit identity + git overrides (work email, credential helper) |
+| `~/.zshrc.local`      | extra shell config, sourced at the end of `zshrc`              |
+| `~/.ssh/config.local` | private SSH hosts (VPS IPs, work jumphosts)                    |
+| `~/.Brewfile.local`   | this machine's app selection from the Brewfile                 |
 
 ## License
 
