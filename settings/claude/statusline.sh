@@ -70,17 +70,21 @@ fetch_usage() {
   fi
 }
 
+# The script runs every second, so one jq call reads every field as shell assignments.
 if command -v jq >/dev/null 2>&1; then
-  model="$(printf '%s' "$input" | jq -r '.model.display_name // "Claude"')"
-  effort="$(printf '%s' "$input" | jq -r '.effort.level // empty')"
-  dir="$(printf '%s' "$input" | jq -r '.workspace.current_dir // "."')"
-  worktree="$(printf '%s' "$input" | jq -r '.workspace.git_worktree // empty')"
-  context="$(printf '%s' "$input" | jq -r '.context_window.used_percentage // 0 | floor')"
-  cost="$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // empty')"
-  five_hour="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty | floor')"
-  seven_day="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty | floor')"
-  five_hour_reset="$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty | floor')"
-  seven_day_reset="$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty | floor')"
+  eval "$(printf '%s' "$input" | jq -r '
+    def num: numbers | floor;
+    @sh "model=\(.model.display_name // "Claude")",
+    @sh "effort=\(.effort.level // "")",
+    @sh "dir=\(.workspace.current_dir // ".")",
+    @sh "worktree=\(.workspace.git_worktree // "")",
+    @sh "context=\(.context_window.used_percentage // 0 | floor)",
+    @sh "cost=\(.cost.total_cost_usd // "")",
+    @sh "five_hour=\(.rate_limits.five_hour.used_percentage | num // "")",
+    @sh "seven_day=\(.rate_limits.seven_day.used_percentage | num // "")",
+    @sh "five_hour_reset=\(.rate_limits.five_hour.resets_at | num // "")",
+    @sh "seven_day_reset=\(.rate_limits.seven_day.resets_at | num // "")"
+  ')"
 else
   model="Claude"
   effort=""
@@ -135,11 +139,8 @@ blue=$'\033[38;2;122;162;247m'
 purple=$'\033[38;2;187;154;247m'
 green=$'\033[38;2;158;206;106m'
 yellow=$'\033[38;2;224;175;104m'
-orange=$'\033[38;2;255;158;100m'
 red=$'\033[38;2;247;118;142m'
-cyan=$'\033[38;2;125;207;255m'
-pale=$'\033[38;2;192;202;245m'
-peach=$'\033[38;2;255;192;140m'
+bold=$'\033[1m'
 dim=$'\033[2m'
 reset=$'\033[0m'
 sep="${dim}·${reset}"
@@ -163,25 +164,52 @@ context_percent() { percent "$1" 40 70; }
 # again at 95%, so plan figures turn yellow and red at those points.
 plan_percent() { percent "$1" 75 95; }
 
-# Effort levels run from cool to warm: light blue for low, pale neutral for medium,
-# peach for high and orange for xhigh. Max is a rainbow, as in Claude Code's
-# effort picker, spread across the letters because a status line cannot animate.
+# Effort uses the colors of Claude Code's effort picker, from its dark theme: yellow
+# for low, green for medium, lavender for high and purple for xhigh, with a lighter
+# purple shimmering across xhigh and a rainbow moving across max.
+effort_low=$'\033[38;2;255;193;7m'
+effort_medium=$'\033[38;2;78;186;101m'
+effort_high=$'\033[38;2;177;185;249m'
+effort_xhigh=$'\033[38;2;175;135;255m'
+effort_shimmer=$'\033[38;2;208;180;255m'
+effort_rainbow=(
+  $'\033[38;2;235;95;87m'
+  $'\033[38;2;245;139;87m'
+  $'\033[38;2;250;195;95m'
+  $'\033[38;2;145;200;130m'
+  $'\033[38;2;130;170;220m'
+  $'\033[38;2;155;130;200m'
+  $'\033[38;2;200;130;180m'
+)
+
+# Claude Code re-runs the script every second, so each render draws one frame of the
+# animation, picked by the clock. The shimmer moves one letter per frame and runs off
+# both ends of the word: the letter under it turns bold light purple and its
+# neighbors turn bold. The rainbow shifts one letter to the right per frame.
 effort_label() {
-  local rainbow=("$red" "$orange" "$yellow" "$green" "$cyan" "$blue" "$purple")
-  local i last out=""
+  local frame i distance out=""
+  frame="$(date +%s)"
   case "$1" in
-    low) printf '%s%s%s' "$cyan" "$1" "$reset" ;;
-    medium) printf '%s%s%s' "$pale" "$1" "$reset" ;;
-    high) printf '%s%s%s' "$peach" "$1" "$reset" ;;
-    xhigh) printf '%s%s%s' "$orange" "$1" "$reset" ;;
-    max)
-      last=$((${#1} - 1))
-      for ((i = 0; i <= last; i++)); do
-        out="${out}${rainbow[i * 6 / (last > 0 ? last : 1)]}${1:i:1}"
+    low) printf '%s%s%s' "$effort_low" "$1" "$reset" ;;
+    medium) printf '%s%s%s' "$effort_medium" "$1" "$reset" ;;
+    xhigh)
+      for ((i = 0; i < ${#1}; i++)); do
+        distance=$((i + 1 - frame % (${#1} + 2)))
+        case "${distance#-}" in
+          0) out="${out}${bold}${effort_shimmer}${1:i:1}${reset}" ;;
+          1) out="${out}${bold}${effort_xhigh}${1:i:1}${reset}" ;;
+          *) out="${out}${effort_xhigh}${1:i:1}" ;;
+        esac
       done
       printf '%s%s' "$out" "$reset"
       ;;
-    *) printf '%s%s%s' "$orange" "$1" "$reset" ;;
+    max)
+      for ((i = 0; i < ${#1}; i++)); do
+        out="${out}${effort_rainbow[(i + 7 - frame % 7) % 7]}${1:i:1}"
+      done
+      printf '%s%s' "$out" "$reset"
+      ;;
+    high | *) printf '%s%s%s' "$effort_high" "$1" "$reset" ;;
   esac
 }
 

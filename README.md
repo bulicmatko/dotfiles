@@ -36,7 +36,9 @@ second line shows the folder and branch.
   <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">
 </p>
 
-- Effort runs from light blue at low to orange at xhigh, and max is a rainbow.
+- Effort takes the colors of Claude Code's effort picker: yellow at low, green
+  at medium, lavender at high, shimmering purple at xhigh, and a moving rainbow
+  at max. The status line redraws every second to animate them.
 - Context turns yellow at 40% and red at 70%. Plan usage turns yellow at 75%
   and red at 95%, where Claude Code shows its own usage warnings.
 - The model's weekly limit comes from the claude.ai usage endpoint, read in
