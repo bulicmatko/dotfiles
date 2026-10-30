@@ -86,9 +86,9 @@ dotfiles-doctor   # check every symlink, the git identity, and shell components
 [statusline.sh](settings/claude/statusline.sh) shows the model, effort,
 session cost, and context use, then claude.ai plan usage for the 5-hour and
 weekly windows with the time each one resets, and the folder and branch on a
-second line. Effort takes the colors of Claude Code's effort picker, with
-max in a rainbow. Colors turn yellow and red as context and usage near their
-limits.
+second line. Effort takes the colors of Claude Code's effort picker, and max
+shows as a flexing ᕦ(ò_óˇ)ᕤ in a rainbow. Colors turn yellow and red as context
+and usage near their limits.
 
 <p align="center">
   <img src="assets/readme/statusline.svg" alt="Claude Code status line under the input box: model, effort, cost, context, 5-hour and weekly usage, then folder and branch" width="100%">

@@ -164,33 +164,39 @@ context_percent() { percent "$1" 40 70; }
 plan_percent() { percent "$1" 75 95; }
 
 # Effort uses the colors of Claude Code's effort picker, from its dark theme: yellow
-# for low, green for medium, lavender for high and purple for xhigh. Max gives each
-# letter the next color of the picker's rainbow, starting at green, the way the
-# picker draws it. The picker animates xhigh and max, but a status line redraws at
-# most once a second, too slow for smooth motion.
+# for low, green for medium, lavender for high and purple for xhigh. Max shows as a
+# flexing ᕦ(ò_óˇ)ᕤ in a rainbow that runs evenly from red to violet, blended from the
+# seven colors of the picker's rainbow. The picker animates xhigh and max, but a
+# status line redraws at most once a second, too slow for smooth motion.
 effort_low=$'\033[38;2;255;193;7m'
 effort_medium=$'\033[38;2;78;186;101m'
 effort_high=$'\033[38;2;177;185;249m'
 effort_xhigh=$'\033[38;2;175;135;255m'
-effort_rainbow=(
-  $'\033[38;2;235;95;87m'
-  $'\033[38;2;245;139;87m'
-  $'\033[38;2;250;195;95m'
-  $'\033[38;2;145;200;130m'
-  $'\033[38;2;130;170;220m'
-  $'\033[38;2;155;130;200m'
-  $'\033[38;2;200;130;180m'
-)
+# The rainbow's red, green and blue channels, red through violet.
+rainbow_r=(235 245 250 145 130 155 200)
+rainbow_g=(95 139 195 200 170 130 130)
+rainbow_b=(87 87 95 130 220 200 180)
+# One character per entry, so splitting the face needs no UTF-8 locale.
+effort_max=(ᕦ '(' ò _ ó ˇ ')' ᕤ)
 
 effort_label() {
-  local i out=""
+  local i n pos k next f out=""
   case "$1" in
     low) printf '%s%s%s' "$effort_low" "$1" "$reset" ;;
     medium) printf '%s%s%s' "$effort_medium" "$1" "$reset" ;;
     xhigh) printf '%s%s%s' "$effort_xhigh" "$1" "$reset" ;;
     max)
-      for ((i = 0; i < ${#1}; i++)); do
-        out="${out}${effort_rainbow[(3 + i) % 7]}${1:i:1}"
+      # Each character sits at an even step along the rainbow, in hundredths of the
+      # gap between two of its colors, and blends the two colors either side.
+      n=${#effort_max[@]}
+      for ((i = 0; i < n; i++)); do
+        pos=$((i * 600 / (n - 1)))
+        k=$((pos / 100))
+        next=$((k < 6 ? k + 1 : 6))
+        f=$((pos % 100))
+        out="${out}"$'\033'"[38;2;$((rainbow_r[k] + (rainbow_r[next] - rainbow_r[k]) * f / 100))"
+        out="${out};$((rainbow_g[k] + (rainbow_g[next] - rainbow_g[k]) * f / 100))"
+        out="${out};$((rainbow_b[k] + (rainbow_b[next] - rainbow_b[k]) * f / 100))m${effort_max[i]}"
       done
       printf '%s%s' "$out" "$reset"
       ;;
