@@ -585,6 +585,11 @@ clone_repo() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 setup_zsh() {
+  # Linked first: the oh-my-zsh installer keeps an existing ~/.zshrc
+  # (KEEP_ZSHRC=yes) and writes its own template only when there is none,
+  # which link_file would then move aside as a leftover backup.
+  link_entry zsh/zshrc
+
   if [ -d "$HOME/.oh-my-zsh" ]; then
     ok "oh-my-zsh already installed"
   else
@@ -606,8 +611,6 @@ setup_zsh() {
   clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
   # zsh-syntax-highlighting — valid commands green, typos red, as you type.
   clone_repo https://github.com/zsh-users/zsh-syntax-highlighting.git "$custom/plugins/zsh-syntax-highlighting"
-
-  link_entry zsh/zshrc
 }
 
 # setup_starship — the prompt. Links the config and makes sure the binary
