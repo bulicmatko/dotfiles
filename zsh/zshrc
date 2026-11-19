@@ -74,7 +74,10 @@ setopt HIST_REDUCE_BLANKS      # strip superfluous whitespace before saving
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # fzf — fuzzy Ctrl-R history search, Ctrl-T file picker, **<Tab> completion.
-if command -v fzf >/dev/null 2>&1; then
+# Key bindings need a terminal, so shells without one ($TTY empty — editors
+# reading the environment via `zsh -i -c`) skip it; fzf's setup would print
+# "can't change option: zle" there.
+if [[ -n $TTY ]] && command -v fzf >/dev/null 2>&1; then
   if fzf --zsh >/dev/null 2>&1; then
     eval "$(fzf --zsh)"
   elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then

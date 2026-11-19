@@ -32,6 +32,10 @@ cd ~/Projects/dotfiles
 `./install.sh macos|linux|devcontainer`), is safe to re-run any time, and
 backs up files it would overwrite as `<name>.backup.<timestamp>`.
 
+Fresh Debian and Ubuntu machines ship without git — install it before cloning
+with `sudo apt-get update && sudo apt-get install -y git` (drop `sudo` when
+logged in as root).
+
 ## Guided installer
 
 Numbered steps that ask before running (Enter = yes). Without a TTY there are
