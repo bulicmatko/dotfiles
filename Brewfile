@@ -79,6 +79,9 @@ cask "lens"           # Kubernetes IDE — browse clusters visually
 tap "hashicorp/tap"   # HashiCorp's own tap — the only source of terraform
 brew "hashicorp/tap/terraform" # infrastructure as code
 
+brew "ansible" # configuration management — playbooks run over SSH
+brew "hcloud"  # Hetzner Cloud CLI — servers, volumes, firewalls
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Web, APIs & databases
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
