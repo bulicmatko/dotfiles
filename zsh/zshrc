@@ -195,7 +195,7 @@ fi
 export VISUAL="$EDITOR"
 
 # Editor that React/Next error overlays open files in.
-export REACT_EDITOR="code"
+export REACT_EDITOR="zed"
 
 # macOS terminals set LC_CTYPE=UTF-8, and ssh forwards it to the server.
 # Linux has no locale named just "UTF-8", so every login there would print
