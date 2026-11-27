@@ -78,17 +78,6 @@ if confirm "Set up git config (links ~/.gitconfig into this repo)?"; then
     ok "git credential.helper set to osxkeychain in ~/.gitconfig.local"
   fi
 
-  # Git's filesystem monitor stays off. It starts a daemon per repository,
-  # and the first command in a repository waits for that daemon to come up —
-  # long enough that the prompt gives up on git and says so. The monitor only
-  # earns its keep on repositories far larger than these, so a machine
-  # carrying the setting has it cleared; `git config --file
-  # ~/.gitconfig.local core.fsmonitor true` turns it back on.
-  if [ "$(git config --file "$HOME/.gitconfig.local" core.fsmonitor || true)" = "true" ]; then
-    git config --file "$HOME/.gitconfig.local" --unset core.fsmonitor || true
-    ok "git core.fsmonitor cleared — its daemon delayed the first command in every repo"
-  fi
-
   # delta — syntax-highlighted diff pager (from the Brewfile). Machine-local
   # so machines without delta keep git's default pager working.
   if [ -z "$(git config --file "$HOME/.gitconfig.local" core.pager || true)" ]; then

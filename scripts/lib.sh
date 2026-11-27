@@ -183,7 +183,7 @@ discard_escape_tail() {
 multiselect() {
   local title="$1"
   local total=${#MS_LABELS[@]}
-  local cursor=0 offset=0 i key seq rows cols window line mark pointer
+  local cursor=0 offset=0 i key seq size rows cols window line mark pointer
 
   # Start on the first real item.
   while [ "${MS_KINDS[$cursor]}" = "header" ] && [ $cursor -lt $((total - 1)) ]; do
@@ -195,8 +195,9 @@ multiselect() {
   printf '\033[?1049h\033[?25l' >/dev/tty
 
   while true; do
-    rows=$(stty size </dev/tty 2>/dev/null | awk '{print $1}'); rows=${rows:-24}
-    cols=$(stty size </dev/tty 2>/dev/null | awk '{print $2}'); cols=${cols:-80}
+    size=$(stty size </dev/tty 2>/dev/null || true)   # "rows cols"
+    rows=${size% *}; rows=${rows:-24}
+    cols=${size#* }; cols=${cols:-80}
     window=$((rows - 6)); [ $window -lt 3 ] && window=3
 
     # Keep the cursor inside the visible window.
@@ -298,7 +299,7 @@ multiselect() {
   trap - INT
 }
 
-# trust_brew_taps [brewfile]
+# trust_brew_taps
 #
 # Homebrew refuses to load formulae and casks from a third-party tap until
 # that tap is trusted, and trust is per-machine (~/.homebrew/trust.json),
@@ -306,17 +307,16 @@ multiselect() {
 # Every tap the Brewfile declares is offered here; without a TTY they are
 # trusted automatically, matching the rest of the unattended install.
 trust_brew_taps() {
-  local brewfile="${1:-$DOTFILES_DIR/Brewfile}" taps trusted tap
+  local brewfile="$DOTFILES_DIR/Brewfile" taps trusted tap
 
   command -v brew >/dev/null 2>&1 || return 0
   [ -f "$brewfile" ] || return 0
-  # Homebrew builds without the trust gate have no `brew trust` command.
-  brew trust --json=v1 >/dev/null 2>&1 || return 0
 
   taps="$(awk '/^[[:space:]]*tap[[:space:]]+"/ { gsub(/^[^"]*"|".*$/, ""); print }' "$brewfile")"
   [ -n "$taps" ] || return 0
 
-  trusted="$(brew trust --json=v1 2>/dev/null || true)"
+  # Homebrew builds without the trust gate have no `brew trust` command.
+  trusted="$(brew trust --json=v1 2>/dev/null)" || return 0
 
   while IFS= read -r tap; do
     [ -n "$tap" ] || continue
@@ -543,9 +543,9 @@ with_heartbeat() {
 # link_file <repo-relative-source> <absolute-target>
 #
 # Idempotent symlink:
-#   - already linked correctly  -> no-op
-#   - stale symlink (old layout)-> replaced
-#   - real file/dir in the way  -> moved to <target>.backup.<timestamp>
+#   - already linked correctly   -> no-op
+#   - symlink pointing elsewhere -> replaced
+#   - real file/dir in the way   -> moved to <target>.backup.<timestamp>
 link_file() {
   local src="$DOTFILES_DIR/$1"
   local dst="$2"

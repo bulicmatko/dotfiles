@@ -9,10 +9,6 @@
 # half second is tight for git in a repository large enough to need a moment,
 # and the warning it prints is noisier than the wait it saves.
 command_timeout = 1000
-#
-# Alternative look: presets/tokyo-night.toml (powerline segments). Try it in
-# one terminal with STARSHIP_CONFIG=<repo>/settings/starship/presets/tokyo-night.toml,
-# or make it permanent by copying it over this file.
 
 # 🚧 before the directory name (default format, plus the prefix).
 [directory]

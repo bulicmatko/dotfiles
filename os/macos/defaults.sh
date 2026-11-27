@@ -17,7 +17,6 @@ set -euo pipefail
 
 # Close System Settings so it does not clobber the values written below.
 osascript -e 'tell application "System Settings" to quit' &>/dev/null || true
-osascript -e 'tell application "System Preferences" to quit' &>/dev/null || true
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # General UI
@@ -139,11 +138,9 @@ defaults -currentHost write com.apple.screensaver showClock -bool true
 # The screen saver is Drift, its appearance following the system, tinted with
 # the same #1f2335 the editors and terminal use.
 #
-# Current macOS keeps that choice and its options in a binary store `defaults`
+# macOS keeps that choice and its options in a binary store `defaults`
 # cannot reach, so the configuration harvested from a working machine is
-# written into the store as-is and WallpaperAgent restarted to load it. The
-# moduleDict below carries the same choice for the older releases that read it.
-defaults -currentHost write com.apple.screensaver moduleDict '<dict><key>moduleName</key><string>Drift</string><key>path</key><string>/System/Library/ExtensionKit/Extensions/Drift.appex</string><key>type</key><integer>0</integer></dict>'
+# written into the store as-is and WallpaperAgent restarted to load it.
 
 WALLPAPER_STORE="$HOME/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
 
@@ -251,7 +248,6 @@ fi
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock tilesize -int 42
 defaults write com.apple.dock magnification -bool false
-defaults write com.apple.dock largesize -int 16
 
 # No recent apps section; minimize into a separate Dock slot
 defaults write com.apple.dock show-recents -bool false
@@ -294,33 +290,6 @@ done <<EOF
 Docker|/Applications/Docker.app
 Moom|/Applications/Moom.app
 EOF
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Opt-ins — not part of the harvested setup, uncomment if wanted
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Expand the save and print dialogs by default
-# defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-# defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-# defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-# defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-
-# Save to disk (not iCloud) by default
-# defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-
-# Stop littering .DS_Store on network shares and USB drives
-# defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-# defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-
-# Screenshots: save to ~/Screenshots as png without window shadows
-# mkdir -p "$HOME/Screenshots"
-# defaults write com.apple.screencapture location -string "$HOME/Screenshots"
-# defaults write com.apple.screencapture type -string "png"
-# defaults write com.apple.screencapture disable-shadow -bool true
-
-# Finder: show path bar and status bar
-# defaults write com.apple.finder ShowPathbar -bool true
-# defaults write com.apple.finder ShowStatusBar -bool true
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Apply

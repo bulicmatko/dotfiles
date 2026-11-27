@@ -23,7 +23,7 @@ jobs:
       - name: Shell syntax under stock bash 3.2
         run: |
           /bin/bash --version | head -1
-          for f in install.sh os/*/*.sh scripts/lib.sh bin/*; do
+          for f in install.sh os/*/*.sh scripts/lib.sh bin/* settings/claude/statusline.sh; do
             /bin/bash -n "$f"
             echo "OK $f"
           done
@@ -31,7 +31,7 @@ jobs:
       - name: ShellCheck
         run: |
           command -v shellcheck >/dev/null || brew install shellcheck
-          shellcheck -x install.sh os/*/*.sh scripts/lib.sh bin/*
+          shellcheck -x install.sh os/*/*.sh scripts/lib.sh bin/* settings/claude/statusline.sh
 
       - name: zshrc syntax
         run: zsh -n zsh/zshrc
