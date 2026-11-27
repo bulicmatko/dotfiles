@@ -35,6 +35,15 @@ detect_target() {
   esac
 }
 
+# detect_sudo — set SUDO to "sudo" when not running as root and sudo exists,
+# empty otherwise, so root-only commands run as `$SUDO cmd` either way.
+detect_sudo() {
+  SUDO=""
+  if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
+    SUDO="sudo"
+  fi
+}
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Guided install UI
 #
@@ -183,7 +192,7 @@ discard_escape_tail() {
 multiselect() {
   local title="$1"
   local total=${#MS_LABELS[@]}
-  local cursor=0 offset=0 i key seq rows cols window line mark pointer
+  local cursor=0 offset=0 i key seq size rows cols window line mark pointer
 
   # Start on the first real item.
   while [ "${MS_KINDS[$cursor]}" = "header" ] && [ $cursor -lt $((total - 1)) ]; do
@@ -195,8 +204,9 @@ multiselect() {
   printf '\033[?1049h\033[?25l' >/dev/tty
 
   while true; do
-    rows=$(stty size </dev/tty 2>/dev/null | awk '{print $1}'); rows=${rows:-24}
-    cols=$(stty size </dev/tty 2>/dev/null | awk '{print $2}'); cols=${cols:-80}
+    size=$(stty size </dev/tty 2>/dev/null || true)   # "rows cols"
+    rows=${size% *}; rows=${rows:-24}
+    cols=${size#* }; cols=${cols:-80}
     window=$((rows - 6)); [ $window -lt 3 ] && window=3
 
     # Keep the cursor inside the visible window.
@@ -298,7 +308,7 @@ multiselect() {
   trap - INT
 }
 
-# trust_brew_taps [brewfile]
+# trust_brew_taps
 #
 # Homebrew refuses to load formulae and casks from a third-party tap until
 # that tap is trusted, and trust is per-machine (~/.homebrew/trust.json),
@@ -306,17 +316,16 @@ multiselect() {
 # Every tap the Brewfile declares is offered here; without a TTY they are
 # trusted automatically, matching the rest of the unattended install.
 trust_brew_taps() {
-  local brewfile="${1:-$DOTFILES_DIR/Brewfile}" taps trusted tap
+  local brewfile="$DOTFILES_DIR/Brewfile" taps trusted tap
 
   command -v brew >/dev/null 2>&1 || return 0
   [ -f "$brewfile" ] || return 0
-  # Homebrew builds without the trust gate have no `brew trust` command.
-  brew trust --json=v1 >/dev/null 2>&1 || return 0
 
   taps="$(awk '/^[[:space:]]*tap[[:space:]]+"/ { gsub(/^[^"]*"|".*$/, ""); print }' "$brewfile")"
   [ -n "$taps" ] || return 0
 
-  trusted="$(brew trust --json=v1 2>/dev/null || true)"
+  # Homebrew builds without the trust gate have no `brew trust` command.
+  trusted="$(brew trust --json=v1 2>/dev/null)" || return 0
 
   while IFS= read -r tap; do
     [ -n "$tap" ] || continue
@@ -339,6 +348,18 @@ trust_brew_taps() {
   done <<EOF
 $taps
 EOF
+}
+
+# active_brewfile — this machine's picker selection (~/.Brewfile.local) when
+# one exists, else the full Brewfile. dotfiles-update installs from it and
+# dotfiles-doctor checks it, so deselected applications are never dragged in
+# and a deliberately trimmed machine is never reported as unhealthy.
+active_brewfile() {
+  if [ -f "$HOME/.Brewfile.local" ]; then
+    printf '%s' "$HOME/.Brewfile.local"
+  else
+    printf '%s' "$DOTFILES_DIR/Brewfile"
+  fi
 }
 
 # choose_brew_packages
@@ -543,9 +564,9 @@ with_heartbeat() {
 # link_file <repo-relative-source> <absolute-target>
 #
 # Idempotent symlink:
-#   - already linked correctly  -> no-op
-#   - stale symlink (old layout)-> replaced
-#   - real file/dir in the way  -> moved to <target>.backup.<timestamp>
+#   - already linked correctly   -> no-op
+#   - symlink pointing elsewhere -> replaced
+#   - real file/dir in the way   -> moved to <target>.backup.<timestamp>
 link_file() {
   local src="$DOTFILES_DIR/$1"
   local dst="$2"
@@ -605,12 +626,24 @@ setup_zsh() {
     [ -d "$HOME/.oh-my-zsh" ] || fail "oh-my-zsh install failed — check your network and re-run ./install.sh"
   fi
 
-  local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  local url dir
+  while IFS=$'\t' read -r url dir; do
+    clone_repo "$url" "$dir"
+  done <<EOF
+$(omz_plugins)
+EOF
+}
 
+# omz_plugins — emit "git-url<TAB>install-dir" for every oh-my-zsh plugin the
+# repo clones. setup_zsh clones them, dotfiles-update pulls them, and
+# dotfiles-doctor checks them, so a plugin added here reaches all three
+# (zsh/zshrc still lists it in `plugins=(...)` to load it).
+omz_plugins() {
+  local custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
   # zsh-autosuggestions — inline gray history suggestions, right-arrow accepts.
-  clone_repo https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
+  printf '%s\t%s\n' https://github.com/zsh-users/zsh-autosuggestions.git "$custom/plugins/zsh-autosuggestions"
   # zsh-syntax-highlighting — valid commands green, typos red, as you type.
-  clone_repo https://github.com/zsh-users/zsh-syntax-highlighting.git "$custom/plugins/zsh-syntax-highlighting"
+  printf '%s\t%s\n' https://github.com/zsh-users/zsh-syntax-highlighting.git "$custom/plugins/zsh-syntax-highlighting"
 }
 
 # setup_starship — the prompt. Links the config and makes sure the binary
@@ -724,6 +757,14 @@ git_email() {
     || printf '%s@%s' "$(id -un)" "$(hostname -s 2>/dev/null || hostname)"
 }
 
+# git_local_default <key> <value> — set <key> in ~/.gitconfig.local unless
+# this machine already has a value for it, so a re-run never overrides a
+# choice made by hand. Returns non-zero when it left an existing value alone.
+git_local_default() {
+  [ -z "$(git config --file "$HOME/.gitconfig.local" "$1" || true)" ] || return 1
+  git config --file "$HOME/.gitconfig.local" "$1" "$2"
+}
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # SSH
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -740,20 +781,45 @@ setup_ssh_config() {
   fi
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# App settings (Zed, VSCode, Warp)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-setup_zed() {
-  link_entry settings/zed/settings.json
-  link_entry settings/zed/keymap.json
+# ensure_ssh_key — make sure ~/.ssh/id_ed25519 exists. An interactive run
+# generates it (ssh-keygen asks for the passphrase) and prints the public key
+# for GitHub; without a TTY a missing key is reported instead.
+ensure_ssh_key() {
+  local key="$HOME/.ssh/id_ed25519" email
+  if [ -f "$key" ]; then
+    return 0
+  fi
+  if is_interactive; then
+    email="$(git_email)"
+    info "generating SSH key for $email (you will be asked for a passphrase)"
+    ssh-keygen -t ed25519 -C "$email" -f "$key"
+    ok "new public key — add it at https://github.com/settings/keys :"
+    cat "$key.pub"
+  else
+    warn "no SSH key at $key and no TTY — skipping key generation"
+  fi
 }
 
-# setup_vscode — targets come from the manifest (vscode_user_dir picks the
-# per-OS settings directory).
-setup_vscode() {
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# App settings (Zed, VSCode, Warp, Claude Code, gh)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# setup_app_settings — link every app's config from the manifest (VSCode's
+# per-OS directory comes from vscode_user_dir). Warp is macOS-only.
+setup_app_settings() {
+  link_entry settings/zed/settings.json
+  link_entry settings/zed/keymap.json
   link_entry settings/vscode/settings.json
   link_entry settings/vscode/keybindings.json
+  link_entry settings/claude/settings.json
+  link_entry settings/claude/statusline.sh
+  # Only gh's config.yml is synced — hosts.yml holds auth tokens and must
+  # never enter the repo.
+  link_entry settings/gh/config.yml
+  if [ "$(uname -s)" = "Darwin" ]; then
+    link_entry settings/warp/settings.toml
+    link_entry settings/warp/themes
+  fi
 }
 
 install_vscode_extensions() {
@@ -773,20 +839,4 @@ install_vscode_extensions() {
       code --install-extension "$extension" || warn "failed to install $extension"
     fi
   done < "$DOTFILES_DIR/settings/vscode/extensions.txt"
-}
-
-setup_warp() {
-  link_entry settings/warp/settings.toml
-  link_entry settings/warp/themes
-}
-
-setup_claude_code() {
-  link_entry settings/claude/settings.json
-  link_entry settings/claude/statusline.sh
-}
-
-# Only gh's config.yml is synced — hosts.yml holds auth tokens and must
-# never enter the repo.
-setup_gh() {
-  link_entry settings/gh/config.yml
 }

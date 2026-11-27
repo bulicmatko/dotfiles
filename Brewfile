@@ -22,16 +22,14 @@
 cask "warp"     # Warp — main terminal
 brew "starship" # the prompt — configured in settings/starship/
 brew "fzf"      # fuzzy finder — Ctrl-R history, **<Tab> completion
-brew "zoxide"   # smarter cd — `z dotf` jumps to ~/Projects/dotfiles
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Files, text & system
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 brew "eza"     # modern ls — git status, icons (aliased in zshrc)
-brew "bat"     # cat with syntax highlighting and paging
 brew "tree"    # print directory trees in the terminal
-brew "ripgrep" # rg — very fast recursive grep
+brew "ripgrep" # rg — fast recursive grep, called constantly by coding agents
 brew "jq"      # command-line JSON processor
 brew "btop"    # pretty resource monitor (htop successor)
 
@@ -39,8 +37,8 @@ brew "btop"    # pretty resource monitor (htop successor)
 # Editors
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cask "visual-studio-code" # VSCode — primary editor
-cask "zed"                # Zed — fast native editor
+cask "zed"                # Zed — primary editor, fast and native
+cask "visual-studio-code" # VSCode — extensions installed from settings/vscode/
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Git & code hosting
@@ -70,7 +68,6 @@ brew "go"              # Go compiler and toolchain
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cask "docker-desktop" # Docker engine + GUI for macOS (ships the docker CLI)
-brew "minikube"       # local single-node Kubernetes cluster
 cask "lens"           # Kubernetes IDE — browse clusters visually
 
 # Terraform ships from HashiCorp's tap rather than homebrew-core, which
@@ -95,10 +92,9 @@ brew "mkcert"        # locally-trusted HTTPS certificates for dev servers
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cask "claude"      # Claude desktop app
-cask "claude-code" # Claude Code desktop app
+cask "claude-code" # Claude Code CLI — `claude` in the terminal
 cask "codex-app"   # OpenAI Codex desktop app
 cask "lm-studio"   # download and run local LLMs with a GUI
-brew "ollama"      # run open-source LLMs locally from the terminal
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Notes, docs & planning
@@ -131,8 +127,7 @@ cask "wireshark-app"   # Wireshark GUI network packet analyzer
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cask "the-unarchiver" # extract rar/7z/... archives Finder cannot open
-brew "mas"            # install Mac App Store apps from this file
-# mas "Xcode", id: 497799835   # example — list App Store apps like this
+cask "moom"           # move and zoom windows from the keyboard (starts at login)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fonts

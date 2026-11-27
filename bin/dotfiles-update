@@ -22,23 +22,14 @@ if command -v brew >/dev/null 2>&1; then
   # Taps added to the Brewfile since the last run need trusting before
   # their packages can be installed below.
   trust_brew_taps
-  # Install anything newly added since the last run — from this machine's
-  # picker selection (~/.Brewfile.local) when one exists, else the full
-  # Brewfile, so deselected applications are never dragged in. Re-run
-  # ./install.sh to change the selection or pick up new Brewfile entries.
-  if [ -f "$HOME/.Brewfile.local" ]; then
-    BREWFILE="$HOME/.Brewfile.local"
-  else
-    BREWFILE="$DOTFILES_DIR/Brewfile"
-  fi
-  brew bundle --file="$BREWFILE" --no-upgrade || warn "brew bundle reported issues"
+  # Install anything newly added since the last run, from this machine's
+  # picker selection when it has one. Re-run ./install.sh to change the
+  # selection or pick up new Brewfile entries.
+  brew bundle --file="$(active_brewfile)" --no-upgrade || warn "brew bundle reported issues"
 fi
 
 info "updating oh-my-zsh and plugins"
-custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-for repo in "$HOME/.oh-my-zsh" \
-            "$custom/plugins/zsh-autosuggestions" \
-            "$custom/plugins/zsh-syntax-highlighting"; do
+while IFS= read -r repo; do
   if [ -d "$repo/.git" ]; then
     if git -C "$repo" pull --ff-only --quiet; then
       ok "updated ${repo##*/}"
@@ -46,7 +37,10 @@ for repo in "$HOME/.oh-my-zsh" \
       warn "could not update ${repo##*/}"
     fi
   fi
-done
+done <<EOF
+$HOME/.oh-my-zsh
+$(omz_plugins | cut -f2)
+EOF
 
 # Re-link every manifest entry so config files added to the repo since the
 # last run get their symlink here too (link_file is a no-op when already

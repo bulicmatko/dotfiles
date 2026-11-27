@@ -73,26 +73,13 @@ step "Git" "Aliases + shared config; machine overrides in ~/.gitconfig.local."
 if confirm "Set up git config (links ~/.gitconfig into this repo)?"; then
   setup_git
   # Store git HTTPS credentials in the macOS keychain (machine-local setting).
-  if [ -z "$(git config --file "$HOME/.gitconfig.local" credential.helper || true)" ]; then
-    git config --file "$HOME/.gitconfig.local" credential.helper osxkeychain
+  if git_local_default credential.helper osxkeychain; then
     ok "git credential.helper set to osxkeychain in ~/.gitconfig.local"
-  fi
-
-  # Git's filesystem monitor stays off. It starts a daemon per repository,
-  # and the first command in a repository waits for that daemon to come up —
-  # long enough that the prompt gives up on git and says so. The monitor only
-  # earns its keep on repositories far larger than these, so a machine
-  # carrying the setting has it cleared; `git config --file
-  # ~/.gitconfig.local core.fsmonitor true` turns it back on.
-  if [ "$(git config --file "$HOME/.gitconfig.local" core.fsmonitor || true)" = "true" ]; then
-    git config --file "$HOME/.gitconfig.local" --unset core.fsmonitor || true
-    ok "git core.fsmonitor cleared — its daemon delayed the first command in every repo"
   fi
 
   # delta — syntax-highlighted diff pager (from the Brewfile). Machine-local
   # so machines without delta keep git's default pager working.
-  if [ -z "$(git config --file "$HOME/.gitconfig.local" core.pager || true)" ]; then
-    git config --file "$HOME/.gitconfig.local" core.pager delta
+  if git_local_default core.pager delta; then
     git config --file "$HOME/.gitconfig.local" interactive.diffFilter "delta --color-only"
     git config --file "$HOME/.gitconfig.local" delta.navigate true
     git config --file "$HOME/.gitconfig.local" delta.line-numbers true
@@ -108,21 +95,9 @@ step "SSH + Apple keychain" "Key generation and automatic passphrase loading."
 
 if confirm "Set up SSH (links ~/.ssh/config, keychain-backed key)?"; then
   setup_ssh_config
+  ensure_ssh_key
 
   SSH_KEY="$HOME/.ssh/id_ed25519"
-
-  if [ ! -f "$SSH_KEY" ]; then
-    if is_interactive; then
-      email="$(git_email)"
-      info "generating SSH key for $email (you will be asked for a passphrase)"
-      ssh-keygen -t ed25519 -C "$email" -f "$SSH_KEY"
-      ok "new public key — add it at https://github.com/settings/keys :"
-      cat "$SSH_KEY.pub"
-    else
-      warn "no SSH key at $SSH_KEY and no TTY — skipping key generation"
-    fi
-  fi
-
   if [ -f "$SSH_KEY" ]; then
     # Stores the passphrase in the Apple keychain; combined with UseKeychain +
     # AddKeysToAgent in ssh/config the key loads automatically from then on.
@@ -133,16 +108,12 @@ else
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "App settings" "Symlink Zed, VSCode, and Warp config; VSCode extensions."
+step "App settings" "Symlink Zed, VSCode, Warp, Claude Code, and gh config; VSCode extensions."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if confirm "Link editor/terminal settings and install VSCode extensions?"; then
-  setup_zed
-  setup_vscode
+  setup_app_settings
   install_vscode_extensions
-  setup_warp
-  setup_claude_code
-  setup_gh
 else
   warn "skipping app settings"
 fi

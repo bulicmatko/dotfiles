@@ -102,10 +102,6 @@
   # Cache untracked-file lookups — faster `git status` in big repos
   untrackedCache = true
 
-# Colored output whenever the target is a terminal.
-[color]
-  ui = auto
-
 # Colors for `git branch` output.
 [color "branch"]
   local = yellow
@@ -139,10 +135,6 @@
 
   # i/ and w/ (index/worktree) prefixes instead of a/ b/ in diff headers
   mnemonicPrefix = true
-
-[diff "bin"]
-  # Use `hexdump` to diff binary files
-  textconv = hexdump -v -C
 
 [fetch]
   # Remote-deleted branches disappear locally on fetch

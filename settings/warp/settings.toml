@@ -10,7 +10,7 @@
 # maximum terminal ligatures.)
 # Double line height. NOTE: Warp adds all extra leading ABOVE the glyphs, so
 # background-painted prompts look bottom-aligned at this height — the
-# starship preset uses plain colored text for exactly that reason.
+# starship prompt uses plain colored text for exactly that reason.
 [appearance]
 spacing = "normal"
 

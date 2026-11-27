@@ -83,10 +83,12 @@ fi
 info "shell components"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-COMPONENTS=("$HOME/.oh-my-zsh"
-            "$custom/plugins/zsh-autosuggestions"
-            "$custom/plugins/zsh-syntax-highlighting")
+COMPONENTS=("$HOME/.oh-my-zsh")
+while IFS=$'\t' read -r _ plugin_dir; do
+  COMPONENTS=("${COMPONENTS[@]}" "$plugin_dir")
+done <<EOF
+$(omz_plugins)
+EOF
 # nvm is only installed by the macOS/Linux installers (containers bring
 # their own Node via the image).
 if [ "$TARGET" != "devcontainer" ]; then
@@ -108,13 +110,8 @@ info "homebrew (informational)"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 if command -v brew >/dev/null 2>&1; then
-  # This machine's picker selection wins over the full catalog, so a
-  # deliberately trimmed install is never reported as unhealthy.
-  if [ -f "$HOME/.Brewfile.local" ]; then
-    BREWFILE="$HOME/.Brewfile.local"
-  else
-    BREWFILE="$DOTFILES_DIR/Brewfile"
-  fi
+  # This machine's picker selection wins over the full catalog.
+  BREWFILE="$(active_brewfile)"
   if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
     ok "$(basename "$BREWFILE") satisfied"
   else
