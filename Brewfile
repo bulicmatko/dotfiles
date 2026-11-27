@@ -27,10 +27,11 @@ brew "fzf"      # fuzzy finder — Ctrl-R history, **<Tab> completion
 # Files, text & system
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-brew "eza"  # modern ls — git status, icons (aliased in zshrc)
-brew "tree" # print directory trees in the terminal
-brew "jq"   # command-line JSON processor
-brew "btop" # pretty resource monitor (htop successor)
+brew "eza"     # modern ls — git status, icons (aliased in zshrc)
+brew "tree"    # print directory trees in the terminal
+brew "ripgrep" # rg — fast recursive grep, called constantly by coding agents
+brew "jq"      # command-line JSON processor
+brew "btop"    # pretty resource monitor (htop successor)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Editors
@@ -126,6 +127,7 @@ cask "wireshark-app"   # Wireshark GUI network packet analyzer
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cask "the-unarchiver" # extract rar/7z/... archives Finder cannot open
+cask "moom"           # move and zoom windows from the keyboard (starts at login)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Fonts
