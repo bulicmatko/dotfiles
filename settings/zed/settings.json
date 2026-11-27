@@ -1,31 +1,16 @@
 // Zed settings — symlinked to ~/.config/zed/settings.json by ./install.sh.
 // Every option carries a short comment. Docs: https://zed.dev/docs/configuring-zed
 {
-  // No minimap column.
-  "minimap": {
-    "show": "never",
-  },
-  // Highlight the current line and its gutter.
-  "current_line_highlight": "all",
   // Fonts tried when the main font misses a glyph.
   "buffer_font_fallbacks": ["FiraCode Nerd Font", "Monaco"],
-  // Treat .env as dotenv and .dockerignore as shell for highlighting.
+  // Highlight .dockerignore like a shell script (comments, globs).
   "file_types": {
-    "dotenv": [".env"],
-    "shellscript": [".dockerignore"],
+    "Shell Script": [".dockerignore"],
   },
-  // Rename paired HTML/JSX tags together.
-  "linked_edits": true,
-  // Show inline (ghost text) edit predictions.
-  "show_edit_predictions": true,
-  // Ensure files end with a newline on save.
-  "ensure_final_newline_on_save": true,
   // Format every file on save.
   "format_on_save": "on",
   // Two-space indentation.
   "tab_size": 2,
-  // Font size of the agent panel UI.
-  "agent_ui_font_size": 13.0,
   // Font size of the markdown preview pane.
   "markdown_preview": {
     "font_size": 13.0,
@@ -43,24 +28,6 @@
   },
   // `zed <path>` from the terminal opens a new window.
   "cli_default_open_behavior": "new_window",
-  // File icon theme (default icons in both appearances).
-  "icon_theme": {
-    "mode": "dark",
-    "light": "Zed (Default)",
-    "dark": "Zed (Default)",
-  },
-  // Collaboration sidebar docked right.
-  "collaboration_panel": {
-    "dock": "right",
-  },
-  // Outline (symbols) sidebar docked right.
-  "outline_panel": {
-    "dock": "right",
-  },
-  // Inline predictions come from Zed's own model (not Copilot).
-  "edit_predictions": {
-    "provider": "zed",
-  },
   // Closing the last tab keeps the window open.
   "when_closing_with_no_tabs": "keep_window_open",
   // Use VSCode-style default shortcuts as the base keymap.
@@ -80,13 +47,8 @@
     "toml": true,
     "xml": true,
   },
-  // Theme pinned to dark: Tokyo Night Storm. (The "light" entry only
-  // applies if "mode" is ever switched to "system".)
-  "theme": {
-    "mode": "dark",
-    "light": "One Light",
-    "dark": "Tokyo Night Storm",
-  },
+  // Theme: Tokyo Night Storm, whatever the system appearance.
+  "theme": "Tokyo Night Storm",
   // Darker background variant + unified hover/selection tint (#1f2335 /
   // #2c324a) to match the VSCode and Warp customizations.
   "theme_overrides": {
@@ -98,7 +60,6 @@
       "ghost_element.background": "#1f2335",
       "ghost_element.hover": "#2c324a",
       "ghost_element.selected": "#2c324a",
-      // "ghost_element.active": "#2c324a",
       "element.hover": "#2c324a",
       "element.selected": "#2c324a",
     },
@@ -147,7 +108,7 @@
   "buffer_line_height": {
     "custom": 2.0,
   },
-  // Vertical guide line at 80 characters.
+  // Vertical guide lines at 80 and 100 characters.
   "wrap_guides": [80, 100],
   // Indent guides colored per indentation level.
   "indent_guides": {
@@ -169,23 +130,19 @@
       "show_commit_summary": true,
     },
   },
-  // Git panel: left dock, tree view, full diffs for untracked files,
-  // status shown by coloring the file label.
+  // Git panel: left dock, tree view grouped by staging, status shown by
+  // coloring the file label.
   "git_panel": {
     "dock": "left",
     "tree_view": true,
     "group_by": "staging",
     "status_style": "label_color",
-    "collapse_untracked_diff": false,
     "default_width": 400,
   },
   // Terminal: right dock, 800px, blinking cursor, small font, double line
-  // height, no breadcrumbs bar.
+  // height.
   "terminal": {
     "blinking": "on",
-    "toolbar": {
-      "breadcrumbs": false,
-    },
     "dock": "right",
     "default_width": 800,
     "font_size": 13.0,
@@ -193,19 +150,12 @@
       "custom": 2.0,
     },
   },
-  // Built-in AI agent panel: fully disabled (button hidden); the remaining
-  // keys only matter if it gets re-enabled.
+  // Built-in AI agent panel: fully disabled (button hidden).
   "agent": {
     "button": false,
     "enabled": false,
-    "dock": "right",
-    "use_modifier_to_send": true,
-    "enable_feedback": false,
-    "default_width": 800,
   },
-  // Font size inside agent conversations.
-  "agent_buffer_font_size": 13.0,
-  // LSP settings defaults.
+  // TypeScript/JavaScript (vtsls): update imports when a file moves.
   "lsp": {
     "vtsls": {
       "settings": {
@@ -220,12 +170,10 @@
           },
         },
       },
-      "enable_lsp_tasks": true,
     },
   },
-  // Telemetry: no usage metrics, crash diagnostics allowed.
+  // Telemetry: no usage metrics (crash diagnostics stay on).
   "telemetry": {
     "metrics": false,
-    "diagnostics": true,
   },
 }
