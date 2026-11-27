@@ -11,10 +11,7 @@ print_banner "devcontainer"
 
 export DEBIAN_FRONTEND=noninteractive
 
-SUDO=""
-if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
-  SUDO="sudo"
-fi
+detect_sudo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Packages (best effort — many devcontainer images already ship these)
