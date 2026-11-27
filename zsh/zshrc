@@ -85,11 +85,6 @@ if [[ -n $TTY ]] && command -v fzf >/dev/null 2>&1; then
   fi
 fi
 
-# zoxide — learned cd: `z <part-of-path>` jumps to the best match.
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-fi
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Prompt
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

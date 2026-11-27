@@ -22,7 +22,7 @@ STEP_TOTAL=6
 print_banner "Linux"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-step "Packages" "zsh, git, curl, keychain, fzf, and zoxide via apt."
+step "Packages" "zsh, git, curl, keychain, and fzf via apt."
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # zsh      — the shell itself
@@ -30,8 +30,7 @@ step "Packages" "zsh, git, curl, keychain, fzf, and zoxide via apt."
 # curl     — fetches the oh-my-zsh installer
 # keychain — keeps one ssh-agent alive across sessions (used in zsh/zshrc)
 # fzf      — fuzzy Ctrl-R history and file finding (wired in zsh/zshrc)
-# zoxide   — learned cd (wired in zsh/zshrc)
-PKGS=(zsh git curl keychain fzf zoxide)
+PKGS=(zsh git curl keychain fzf)
 
 if ! command -v apt-get >/dev/null 2>&1; then
   warn "apt-get not found — install ${PKGS[*]} manually"
